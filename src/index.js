@@ -1,10 +1,12 @@
-const path = require('path');
+const path = require('path')
 const express = require('express')
 const morgan = require('morgan')
 const exphbs = require('express-handlebars')
-const sass = require('node-sass');
+const sass = require('node-sass')
 const app = express()
 const port = 3000
+
+app.use(express.static(path.join(__dirname, 'public')))
 
 // HTTP logger
 app.use(morgan('combined')) 
@@ -18,9 +20,9 @@ app.engine(
 
     }
   })
-);
-app.set('view engine', '.hbs');
-app.set('views', path.join(__dirname, 'resources/views'));
+)
+app.set('view engine', '.hbs')
+app.set('views', path.join(__dirname, 'resources/views'))
 
 
 
