@@ -1,17 +1,62 @@
 <%- include('partials/header'); -%>
 
-<form>
-    <h2>Log in</h2>
-    <label for="email">Email</label>
-    <input type="text" name="email" required>
-    <div class="email error"></div>
-
-    <label for="password">Password</label>
-    <input type="password" name="password" required>
-    <div class="password error"></div>
-
-    <button>Log in</button>
-</form>
+<main>
+    <img class="cat" src="/img/cat.svg" alt="cat">
+    <div class="main-body">
+      <div class="form-container">
+        <div class="col info-content">
+          <h2>Welcome to Veducat</h2>
+          <p>Let's start a new journey on the path of learning!</p>
+        </div>
+        <div class="form-box col">
+          <h2 class="log-title">Login</h2>
+          <form action="#" method="post" name="signin">
+            <div class="input-box">
+              <input type="text" name="" id="" required>
+              <label for="">Username</label>
+              <i class='bx bxs-user-circle'></i>
+            </div>
+            <div class="input-box">
+              <input type="password" name="" id="" required>
+              <label for="">Password</label>
+              <i class='bx bxs-lock-alt' ></i>
+            </div>
+            <div class="input-box">
+              <button class="btn" type="submit" onclick="validateForm()">Login</button>
+            </div>
+            <div class="forgotpw">
+              <a href="#">
+                <p>Forgot your password?</p>
+              </a>
+            </div>
+          </form>
+        </div>
+        
+      </div>
+    </div>
+    <div class="aboutus info" id="about">
+      <h2>About us</h2>
+      <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vel deserunt laudantium voluptatem sint deleniti voluptate. Illo ipsam quasi, voluptate possimus debitis similique optio, nesciunt rerum ipsum quibusdam, illum asperiores perspiciatis?</p>
+    </div>
+    <div class="contactus info" id="contact">
+      <h2>Contact</h2>
+      <p>Contact us via:</p>
+      <ul>
+        <li>
+          <i class='bx bx-home-alt' ></i>
+          <a href="https://maps.app.goo.gl/u35xh8BW7v9SkJ1i7">International University-VNU-HCM</a>
+        </li>
+        <li>
+          <i class='bx bx-envelope' ></i>
+          <a href="mailto:uhphuc611@gmail.com">uhphuc611@gmail.com</a>
+        </li>
+        <li>
+          <i class='bx bx-phone' ></i> 
+          <a>+84 123456789</a>
+        </li>
+      </ul>
+    </div>
+  </main>
 
 <script>
     const form = document.querySelector('form');
