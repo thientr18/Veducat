@@ -41,7 +41,7 @@ header nav a:hover {
   color: white; }
 
 main {
-  background-image: url(background.svg);
+  background-image: url(/img/background.svg);
   background-position: center;
   background-size: cover;
   background-attachment: fixed;
@@ -121,6 +121,12 @@ main {
 .input-box input:focus ~ i,
 .input-box input:valid ~ i {
   color: var(--theme-color); }
+
+.error {
+  color: #ff0099;
+  margin: 10px 2px;
+  font-size: 0.8em;
+  font-weight: bold; }
 
 .forgotpw {
   text-align: center;

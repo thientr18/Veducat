@@ -1,8 +1,9 @@
 const siteRouter = require('./site')
-const testRouter = require('./test')
-function route(app) {
+const { checkUser } = require('../app/middlewares/authNMiddleware');
 
-    app.use('/test', testRouter)
+function route(app) {
+    // routes
+    app.get('*', checkUser) 
     app.use('/', siteRouter)
     
 }
