@@ -30,20 +30,32 @@
     <body>
       <header>
         <nav class=" navbar navbar-expand-sm fixed-top" style="background-color: white;">
-            <a class="navbar-brand" href="#">Veducat</a>
+            <a class="navbar-brand" href="/">Veducat</a>
+            <% if (user) { %>
+              <li class="nav-item">Welcome, <%= user.username %></li>
+            <% } %>
             <button class="navbar-expand-sm d-lg-none extend-btn" type="button" data-toggle="collapse" data-target="#collapsibleNavId" aria-controls="collapsibleNavId"
                 aria-expanded="false" aria-label="Toggle navigation">Menu</button>
             <div class="collapse navbar-collapse" id="collapsibleNavId">
                 <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
                     <li class="nav-item active">
-                        <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#about">About</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#contact" class="nav-link">Contact</a>
+                        <a class="nav-link" href="#contact">Contact</a>
                     </li>
+                    <% if (user) { %>
+                      <li class="nav-item">
+                        <a class="nav-link" href="/logout">Log out</a>
+                      </li>
+                    <% } else { %>
+                      <li class="nav-item">
+                        <a class="nav-link" href="/login">Log in</a>
+                      </li>
+                    <% } %>
                 </ul>
             </div>
         </nav>
