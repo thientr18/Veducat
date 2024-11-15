@@ -3,11 +3,9 @@ const express = require('express')
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan')
-const sass = require('node-sass')
 const route = require('./routes/index')
 
 const app = express()
-const port = 3000
 
 // middleware
 app.use(express.static(path.join(__dirname, 'public')))
@@ -25,10 +23,9 @@ app.use(morgan('combined'))
 route(app)
 
 // Initialize database connection
-const dbURI = 'mongodb+srv://thientr18:thien18803@cluster0.ohxbs.mongodb.net/Veducat';
-mongoose.connect(dbURI)
+mongoose.connect(process.env.MONGO_DB)
   .then((result) => {
     console.log('Connected to MongoDB: http://localhost:3000');
-    app.listen(port)
+    app.listen(process.env.PORT)
   })
   .catch((err) => console.log(err));

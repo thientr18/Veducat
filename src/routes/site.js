@@ -1,7 +1,8 @@
 const express = require('express')
 const siteController = require('../app/controllers/SiteController')
 const authNController = require('../app/controllers/AuthNController')
-const { requireAuth } = require('../app/middlewares/authNMiddleware');
+const { requireAuthN } = require('../app/middlewares/authN');
+const { requireAuthZ } = require('../app/middlewares/authZ');
 const router = express.Router()
 
 // AuthN
@@ -12,7 +13,7 @@ router.post('/login', authNController.login_post);
 router.get('/logout', authNController.logout_get);
 
 // Main
-router.get('/smoothies', requireAuth, (req, res) => res.render('smoothies'));
+router.get('/smoothies', requireAuthN, requireAuthZ(['admin', 'teacher']), (req, res) => res.render('smoothies'));
 router.get('/', siteController.home_get);
 
 module.exports = router;

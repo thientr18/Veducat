@@ -12,6 +12,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please enter a password'],
         minlength: [6, 'Min length is 6 characters'],
+    },
+    role: {
+        type: String,
+        default: 'student',
+        enum: ['student', 'teacher', 'admin']
     }
 });
 
@@ -34,6 +39,6 @@ userSchema.statics.login = async function (username, password) {
     throw new Error('incorrect username');
 }
 
-const User = mongoose.model('user', userSchema);
+const User = mongoose.model('user', userSchema); // 'user' is the name of the collection in the database
 
 module.exports = User;
