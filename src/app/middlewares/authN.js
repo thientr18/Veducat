@@ -1,12 +1,12 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
-const requireAuth = (req, res, next) => {
+const requireAuthN = (req, res, next) => {
     const token = req.cookies.jwt;
 
     // check json web token exists & is verified
     if (token) {
-        jwt.verify(token, 'veducat secret', (err, decodedToken) => {
+        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decodedToken) => {
             if (err) {
                 console.log(err.message);
                 res.redirect('/login')
@@ -20,13 +20,13 @@ const requireAuth = (req, res, next) => {
     }
 }
 
-// check curent user 
+// check curent user (để duy trì đăng nhập)
 const checkUser = (req, res, next) => {
     const token = req.cookies.jwt;
 
     // check json web token exists & is verified
     if (token) {
-        jwt.verify(token, 'veducat secret', async (err, decodedToken) => {
+        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, decodedToken) => {
             if (err) {
                 console.log(err.message);
                 res.locals.user = null;
@@ -44,4 +44,4 @@ const checkUser = (req, res, next) => {
     }
 }
 
-module.exports = { requireAuth, checkUser };
+module.exports = { requireAuthN, checkUser };
