@@ -5,6 +5,9 @@ const cookieParser = require('cookie-parser');
 const morgan = require('morgan')
 const route = require('./routes/index')
 
+const dotenv = require('dotenv');
+dotenv.config();
+
 const app = express()
 
 // middleware
