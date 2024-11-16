@@ -1,10 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
-const dotenv = require('dotenv');
-dotenv.config();
-const { ACCESS_TOKEN_SECRET } = process.env;
-
 const handleErrors = (err) => {
     console.error(err.message, err.code);
     let errors = { username: '', password: '' };
@@ -36,7 +32,7 @@ const handleErrors = (err) => {
 
 const maxAge = 15 * 60 // 15 minutes
 const createToken = (id) => {
-    return jwt.sign({ id }, ACCESS_TOKEN_SECRET, {
+    return jwt.sign({ id }, process.env.ACCESS_TOKEN_SECRET, {
         expiresIn: maxAge
     })
 }
