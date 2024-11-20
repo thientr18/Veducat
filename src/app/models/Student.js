@@ -10,20 +10,30 @@ const studentSchema = new mongoose.Schema({
     name: {
         type: 'string',
         required: [true, 'Please enter a name'],
-        lowercase: true
     },
-    dateOfBirth: {
-        type: Date,
-        required: [true, 'Please enter a date of birth'],
-    },
-    email: {
+    majorID: {
         type: 'string',
-        required: [true, 'Please enter an email'],
+        required: [true, 'Please enter a major ID'],
         lowercase: true
+    },
+    departmentID: {
+        type: 'string',
+        required: [true, 'Please enter a department ID'],
+        lowercase: true
+    },
+    DoB: {
+        type: Date,
     },
     phone: {
         type: 'string',
         lowercase: true
+    },
+    email: {
+        type: 'string',
+        required: [true, 'Please enter an email'],
+        lowercase: true,
+        isEmail: true,
+        unique: true,
     },
 })
 

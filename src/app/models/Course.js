@@ -9,13 +9,7 @@ const courseSchema = new mongoose.Schema({
     },
     name: {
         type: 'string',
-        required: [true, 'Please enter a name'],
-        lowercase: true
-    },
-    description: {
-        type: 'string',
-        required: [true, 'Please enter a description'],
-        lowercase: true
+        required: [true, 'Please enter a name']
     },
     teacherID: {
         type: 'string',
@@ -24,8 +18,23 @@ const courseSchema = new mongoose.Schema({
     },
     students: {
         type: Array,
-        default: []
-    }
+        default: [
+            {
+                studentID: {
+                    type: 'string',
+                    required: [true, 'Please enter a student ID'],
+                    lowercase: true
+                }
+            }
+        ],
+    },
+    description: {
+        type: 'string',
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
 });
 
 const Course = mongoose.model('course', courseSchema); // 'course' is the name of the collection in the database

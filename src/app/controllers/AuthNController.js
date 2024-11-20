@@ -43,6 +43,12 @@ module.exports.signup_get = (req, res) => {
 }
   
 module.exports.login_get = (req, res) => {
+    const roles = ['admin', 'teacher', 'student'];
+    const user = res.locals.user;
+
+    if(user && roles.includes(user.role)) {
+        res.redirect('/');
+    }
     res.render('login');
 }
   
