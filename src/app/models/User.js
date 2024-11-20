@@ -2,12 +2,11 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
-    username: {
+    userID: {
         type: 'string',
-        required: [true, 'Please enter a username'],
+        required: [true, 'Please enter a user ID'],
         unique: true,
-        lowercase: true
-        
+        lowercase: true,
     },
     password: {
         type: String,
@@ -28,8 +27,8 @@ userSchema.pre('save', async function (next) {
 })
 
 // static methods to login user
-userSchema.statics.login = async function (username, password) {
-    const user = await this.findOne({ username });
+userSchema.statics.login = async function (userID, password) {
+    const user = await this.findOne({ userID });
     if (user) {
         const isMatch = await bcrypt.compare(password, user.password);
         if (isMatch) {
@@ -37,7 +36,7 @@ userSchema.statics.login = async function (username, password) {
         }
         throw new Error('incorrect password');
     }
-    throw new Error('incorrect username');
+    throw new Error('incorrect user ID');
 }
 
 const User = mongoose.model('user', userSchema); // 'user' is the name of the collection in the database

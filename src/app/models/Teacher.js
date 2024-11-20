@@ -10,21 +10,30 @@ const teacherSchema = new mongoose.Schema({
     name: {
         type: 'string',
         required: [true, 'Please enter a name'],
+    },
+    majorID: {
+        type: 'string',
+        required: [true, 'Please enter a major ID'],
         lowercase: true
     },
-    dateOfBirth: {
+    departmentID: {
+        type: 'string',
+        required: [true, 'Please enter a department ID'],
+        lowercase: true
+    },
+    DoB: {
         type: Date,
-        required: [true, 'Please enter a date of birth'],
+    },
+    phone: {
+        type: 'string',
+        lowercase: true
     },
     email: {
         type: 'string',
         required: [true, 'Please enter an email'],
-        lowercase: true
-    },
-    phone: {
-        type: 'string',
-        required: [true, 'Please enter a phone number'],
-        lowercase: true
+        lowercase: true,
+        isEmail: true,
+        unique: true,
     },
 });
 

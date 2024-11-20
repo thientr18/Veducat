@@ -12,10 +12,10 @@
           <h2 class="log-title">Login</h2>
           <form action="/login" id="form-login">
             <div class="input-box">
-              <input type="text" name="username"  required>
-              <label for="">Username</label>
+              <input type="text" name="userID"  required>
+              <label for="">User ID</label>
               <i class='bx bxs-user-circle'></i>
-              <div class="username error"></div>
+              <div class="userID error"></div>
             </div>
             <div class="input-box">
               <input type="password" name="password" required>
@@ -62,30 +62,30 @@
 
 <script>
   const form = document.querySelector('#form-login');
-  const usernameError = document.querySelector('.username.error')
+  const userIDError = document.querySelector('.userID.error')
   const passwordError = document.querySelector('.password.error')
   
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
      // reset error message
-    usernameError.textContent = ''
+    userIDError.textContent = ''
     passwordError.textContent = ''
 
     // get values
-    const username = form.username.value;
+    const userID = form.userID.value;
     const password = form.password.value;
 
     try {
       const res = await fetch('/login', {
           method: 'POST',
-          body: JSON.stringify({ username, password}),
+          body: JSON.stringify({ userID, password}),
           headers: {'Content-Type': 'application/json'}
       })
       const data = await res.json();
       console.log(data);
       if (data.errors) {
-          usernameError.textContent = data.errors.username
+          userIDError.textContent = data.errors.userID
           passwordError.textContent = data.errors.password
       }
       if (data.user) {

@@ -2,9 +2,9 @@
 
 <form id="form-signup" action="/signup" style="margin: 100px;">
     <h2>Sign up</h2>
-    <label for="username">Username</label>
-    <input type="text" name="username" required>
-    <div class="username error"></div>
+    <label for="userID">User ID</label>
+    <input type="text" name="userID" required>
+    <div class="userID error"></div>
     <label for="password">Password</label>
     <input type="password" name="password" required>
     <div class="password error"></div>
@@ -15,39 +15,40 @@
 
 <script>
     const form = document.querySelector('#form-signup');
-    const usernameError = document.querySelector('.username.error')
+    const userIDError = document.querySelector('.userID.error')
     const passwordError = document.querySelector('.password.error')
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
         // reset error message
-        usernameError.textContent = ''
+        userIDError.textContent = ''
         passwordError.textContent = ''
 
         // get values
-        const username = form.username.value;
+        const userID = form.userID.value;
         const password = form.password.value;
 
         try {
             const res = await fetch('/signup', {
                 method: 'POST',
-                body: JSON.stringify({ username, password }),
+                body: JSON.stringify({ userID, password }),
                 headers: {'Content-Type': 'application/json'}
             })
+            
             const data = await res.json();
-            console.log(data);
+
             if (data.errors) {
-                usernameError.textContent = data.errors.username
+                userIDError.textContent = data.errors.userID
                 passwordError.textContent = data.errors.password
-                console.log(usernameError, passwordError)
+                console.log(userIDError, passwordError)
             }
             if (data.user) {
                 location.assign('/')
             }
         } catch (err) {
             console.log(err);
-            console.log(usernameError, passwordError)
+            console.log(userIDError, passwordError)
         }
     })
 </script>
