@@ -11,7 +11,6 @@ const requireAuthN = (req, res, next) => {
                 console.log(err.message);
                 res.redirect('/login')
             } else {
-                console.log(decodedToken);
                 next();
             }
         })
