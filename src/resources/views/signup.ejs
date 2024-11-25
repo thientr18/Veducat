@@ -29,16 +29,16 @@
         const userID = form.userID.value;
         const password = form.password.value;
 
+        // click submit to send POST request
         try {
+            // fetch -> JavaScript interface for making HTTP requests and processing the responses.
             const res = await fetch('/signup', {
                 method: 'POST',
                 body: JSON.stringify({ userID, password }),
                 headers: {'Content-Type': 'application/json'}
             })
-            
             const data = await res.json();
-
-            if (data.errors) {
+            if (data.errors) { // errors are set in AuthNController.handleErrors
                 userIDError.textContent = data.errors.userID
                 passwordError.textContent = data.errors.password
                 console.log(userIDError, passwordError)

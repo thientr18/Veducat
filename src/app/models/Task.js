@@ -14,15 +14,8 @@ const taskSchema = new mongoose.Schema({
         type: 'string'
     },
     taskType: {
-        type: Array,
-        default: [
-            {
-                type: {
-                    type: 'string',
-                    required: [true, 'Please enter a type']
-                }
-            }
-        ],
+        type: 'string',
+        required: [true, 'Please enter a task type']
     },
     assignedBy: {
         type: 'string',

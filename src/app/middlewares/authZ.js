@@ -7,16 +7,16 @@ const requireAuthZ = (permission) => (req, res, next) => {
     // check json web token exists & is verified
     if (token) {
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, decodedToken) => {
-            let role = res.locals.user.role;
+            let user = res.locals.user;
             if (err) {
-                console.log(err.message);
+                // console.log(err.message);
                 res.redirect('/login')
             } else {
-                if (!role) {
+                if (!user || !user.role) {
                     res.cookie('jwt', '', { maxAge: 1 });
                     res.redirect('/login')
                 }
-                if (!permission.includes(role)) {
+                if (!user || !permission.includes(user.role)) {
                     res.cookie('jwt', '', { maxAge: 1 });
                     res.redirect('/login')
                 }

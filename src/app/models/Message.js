@@ -1,12 +1,6 @@
 const mongoose = require('mongoose');
 
 const MessageSchema = new mongoose.Schema({
-    messageID: {
-        type: 'string',
-        required: [true, 'Please enter a message ID'],
-        unique: true,
-        lowercase: true
-    },
     discussionID: {
         type: 'string',
         required: [true, 'Please enter a discussion ID'],

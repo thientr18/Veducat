@@ -11,16 +11,16 @@ const studentSchema = new mongoose.Schema({
         type: 'string',
         required: [true, 'Please enter a name'],
     },
-    majorID: {
-        type: 'string',
-        required: [true, 'Please enter a major ID'],
-        lowercase: true
-    },
-    departmentID: {
-        type: 'string',
-        required: [true, 'Please enter a department ID'],
-        lowercase: true
-    },
+    // majorID: {
+    //     type: 'string',
+    //     required: [true, 'Please enter a major ID'],
+    //     lowercase: true
+    // },
+    // departmentID: {
+    //     type: 'string',
+    //     required: [true, 'Please enter a department ID'],
+    //     lowercase: true
+    // },
     DoB: {
         type: Date,
     },
@@ -28,7 +28,7 @@ const studentSchema = new mongoose.Schema({
         type: 'string',
         lowercase: true
     },
-    email: {
+    email: { // email = ID+@student.hcmiu.edu.vn
         type: 'string',
         required: [true, 'Please enter an email'],
         lowercase: true,

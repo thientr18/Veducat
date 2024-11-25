@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student list</title>
+
+    <style>
+        /* Styles for the alert box */
+        .alert-box {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            z-index: 1000;
+        }
+        .alert-box input {
+            display: block;
+            margin: 10px 0;
+            padding: 5px;
+            width: 100%;
+        }
+        .alert-box button {
+            margin: 10px 5px 0 0;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        /* Overlay for background dimming */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+    <h1>Student list</h1>
+    <table>
+        <tr>
+            <th>Student ID</th>
+            <th>Student Name</th>
+            <th>Student Birthday</th>
+            <th>Student Email</th>
+        </tr>
+        <% students.forEach(student => { %>
+            <tr>
+                <td><%= student.studentID.toUpperCase() %></td>
+                <td><%= student.name %></td>
+                <td><%= student.DoB %></td>
+                <td><%= student.email %></td>
+                <td>
+                    <a href="#" onclick="openForm('<%= student.studentID %>', '<%= student.name %>', '<%= student.DoB %>')">Edit</a>
+                    <a href="/admin/manage_student/delete/<%= student.studentID %>">Delete</a>
+                </td>
+            </tr>
+        <% }); %>
+    </table>
+
+    <!-- Alert Box -->
+    <div class="overlay" id="overlay"></div>
+    <div class="alert-box" id="editForm">
+        <h2>Edit Student Information</h2>
+        <form id="editStudentForm">
+            <input type="hidden" name="id" id="studentId">
+            <table>
+                <tr>
+                    <td>Student ID:</td>
+                    <td>
+                        <input type="text" name="studentID" id="studentID">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Name:</td>
+                    <td>
+                        <input type="text" name="name" id="name">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Birthday:</td>
+                    <td>
+                        <input type="date" name="DoB" id="DoB">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="submit" name="" id="" value="Save">
+                    </td>
+                    <td>
+                        <input type="button" name="" id="" onclick="closeEditForm()" value="Cancel">
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById('editStudentForm');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Get updated values from the form
+            const studentID = document.getElementById('studentID').value;
+            const name = document.getElementById('name').value;
+            const DoB = document.getElementById('DoB').value;
+            const email = studentID + '@student.com';
+            const action = '/admin/manage_student/edit/'+studentID
+
+            try {
+                const res = await fetch(action, {
+                    method: 'PUT',
+                    body: JSON.stringify({studentID, name, DoB, email}),
+                    headers: {'Content-Type': 'application/json'},
+                });
+            } catch (error) {
+                console.log(error);
+            }
+        });
+
+
+        // Function to open the edit form
+        openForm = (studentID, name, DoB) => {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('editForm').style.display = 'block';
+
+            document.getElementById('studentID').value = studentID;
+            document.getElementById('name').value = name;
+            document.getElementById('DoB').value = DoB;
+        }
+
+        // Function to close the edit form
+        function closeEditForm() {
+            document.getElementById('editForm').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

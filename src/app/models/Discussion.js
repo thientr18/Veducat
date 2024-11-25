@@ -18,6 +18,9 @@ const discussionSchema = new mongoose.Schema({
                     type: 'string',
                     required: [true, 'Please enter a participant ID'],
                     lowercase: true
+                },
+                joined: {
+                    default: false,
                 }
             }
         ],
