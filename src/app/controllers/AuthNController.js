@@ -43,11 +43,21 @@ module.exports.signup_get = (req, res) => {
 }
   
 module.exports.login_get = (req, res) => {
-    const roles = ['admin', 'teacher', 'student'];
     const user = res.locals.user;
-
-    if(user && roles.includes(user.role)) {
-        res.redirect('/');
+    if (user) {
+        switch (user.role) {
+            case 'admin':
+                res.redirect('/admin');
+                break;
+            case 'teacher':
+                res.redirect('/teacher');
+                break;
+            case 'student':
+                res.redirect('/student');
+                break;
+            default:
+                break;
+        }
     }
     res.render('login');
 }
