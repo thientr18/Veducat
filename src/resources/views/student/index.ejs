@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Interface</title>
+
+    <%- include('../partials/main/header.ejs'); -%>
+    <main class="content">
+        <div class="first-row">
+            <div class="search-bar">
+                <input type="text" placeholder="Search Course">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+            <div class="task-bar">
+                <nav class="navbar">
+                    <a href="#"><i class="fas fa-check-circle"></i><span>Graded</span></a>
+                    <a href="#"><i class="fas fa-bullhorn"></i><span>Announcements</span></a>
+                    <a href="#"><i class="fas fa-tasks"></i><span>Task</span></a>
+                </nav>
+            </div>
+        </div>
+        <div class="second-row">
+            <section class="announcement-list">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Announcement</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul>
+                            <li>
+                                <a href="#">
+                                    Operating Systems_S1_2024-25-Group02
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    Computer Networks_S1_2024-25-Group02
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    Database Management Systems_S1_2024-25-Group02
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            <section class="course-list">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Course</h2>
+                    </div>
+                    <div class="card-content">
+                        <ul>
+                            <li>
+                                <a href="#">
+                                    Operating Systems
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    Computer Networks
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    Database Management Systems
+                                </a>
+                            </li>
+                            <li>
+                                <a href="course.html">
+                                    Web Application Development
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+<%- include('../partials/main/footer.ejs'); -%>
