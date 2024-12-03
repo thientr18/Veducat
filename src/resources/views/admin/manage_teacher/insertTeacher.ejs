@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Insert Teacher API</title>
+
+</head>
+<body>
+  <form class="form-insert-teacher" style="margin: 200px;" method="POST" action="/admin/manage_teacher/insert">
+    <table>
+      <tr>
+        <td>Teacher ID</td>
+        <td><input type="text" name="teacher_id" id="teacher_id" required></td>
+      </tr>
+      <tr>
+        <td>Teacher Name</td>
+        <td><input type="text" name="teacher_name" id="teacher_name" required></td>
+      </tr>
+      <tr>
+        <td>Teacher Birthday</td>
+        <td><input type="date" name="teacher_dob" id="teacher_dob"></td>
+      </tr>
+      <tr>
+        <td><input type="submit" value="Insert"></td>
+        <td><input type="reset" value="Reset"></td>
+    </table>
+  </form>
+
+  <script>
+    const form = document.querySelector('.form-insert-teacher');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const teacherID = document.querySelector('#teacher_id').value;
+      const name = document.querySelector('#teacher_name').value;
+      const DoB = document.querySelector('#teacher_dob').value;
+      const email = teacherID + '@teacher.com';
+      
+      try {
+        const res = await fetch('/admin/manage_teacher/insert', {
+          method: 'POST',
+          body: JSON.stringify({teacherID, name, DoB, email}),
+          headers: {'Content-Type': 'application/json'},
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    });
+  </script>
+</body>
+</html>
