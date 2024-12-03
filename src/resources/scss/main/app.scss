@@ -1,0 +1,632 @@
+@import 'variables.scss';
+body {
+    font-family: "Quicksand", sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--white-color);
+    transition: background-color 0.3s, color 0.5s;
+    padding-top: 60px; /* Adjust this value based on the height of your header */
+    background-image: url(background.svg);
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+html{
+    font-size: 62.5%;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    scroll-padding-top: 8rem;
+}
+a{
+    text-decoration: none;
+    color: var(--href-color);
+    font-weight: bold;
+}
+.header{
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    background-color: var(--secondary-color);
+    border-bottom: solid 0.1rem var(--primary-color);
+}
+.header .flex-header{
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.flex-header{
+    margin: 0 auto;
+    padding: 2rem;
+}
+.header .flex-header .logo{
+    color: var(--primary-color);
+    font-size: 2.5rem;
+    text-decoration: none;
+}
+.logoNUser{
+    display: block;
+    align-items: center;
+}
+.dark .logoNUser .user{
+    color: var(--white-color);
+}
+.logoNUser .user{
+    margin-left: 2rem;
+    color: var(--dark-mode-color);
+    font-size: 2rem;
+    font-weight: bold;
+}
+.header .flex-header .navbar a{
+    margin-left: 2rem;
+    color: var(--dark-mode-color);
+    font-size: 2rem;
+    text-decoration: none;
+    font-weight: bold;
+}
+#darkmode-btn{
+    cursor: pointer;
+    margin-left: 2rem;
+    color: var(--primary-color);
+    font-size: 2rem;
+    transition: 0.2s linear;
+}
+#darkmode-btn.fa-sun{
+    transform: rotate(180deg);
+    transition: 0.3s linear;
+}
+.dark{
+    background-color: var(--dark-mode-color);
+}
+.dark .header .flex-header .navbar a{
+    color: var(--secondary-color);
+}
+
+.header .flex-header .navbar a:hover{
+    color: var(--primary-color);
+}
+#span-btn{
+    cursor: pointer;
+    color: var(--primary-color);
+    font-size: 2.5rem;
+    display: none;
+}
+.first-row, .second-row{
+    width: 100%;
+    display: flex;
+    padding: 2rem 0;
+}
+.first-row .search-bar{
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+.first-row .search-bar input{
+    width: 70%;
+    padding: 1rem;
+    font-size: 2rem;
+    border: solid 0.1rem var(--primary-color);
+    border-radius: 12px;
+    outline: none;
+}
+.first-row .search-bar button{
+    padding: 1rem 2rem;
+    font-size: 2rem;
+    border: none;
+    border-radius: 12px;
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    margin-left: 1rem;
+    cursor: pointer;
+}
+.first-row .task-bar{
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem 0;
+    font-size: 2rem;
+}
+.first-row .task-bar .navbar{
+    width: 75%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem;
+    border: solid 0.1rem var(--primary-color);
+    border-radius: 12px;
+    background-color: var(--primary-color);
+}
+.first-row .task-bar .navbar a{
+    color: var(--dark-mode-color);
+    margin: 0 1rem;
+    text-decoration: none;
+    flex-direction: column;
+    display: flex;
+    text-align: center;
+}
+.first-row .task-bar .navbar a:hover{
+    color: var(--white-color);
+}
+
+.second-row .announcement-list, .course-list{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1.8rem;
+}
+.second-row .card{
+    width: 80%;
+    border: solid 0.1rem var(--primary-color);
+    border-radius: 1rem;
+    background-color: var(--secondary-color);
+}
+.second-row .card .card-header{
+    text-align: center;
+    cursor: pointer;
+    padding: 0.1rem;
+    background-color: var(--primary-color);
+    border-radius: 0.5rem;
+}
+.hide-card{
+    display: none;
+}
+.second-row .card .card-content{
+    padding-right: 2rem;
+}
+.card-content ul{
+    list-style: none;
+    padding-left: 2rem;
+}
+.card-content ul li{
+    margin: 1rem 0;
+    padding-bottom: 1rem;
+    border-bottom: solid 0.1rem var(--primary-color);
+}
+.card-content.hide-card {
+    opacity: 0;
+}
+.see-more{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 1rem;
+    padding-right: 2rem;
+    color: var(--primary-color);
+}
+.see-more:hover{
+    text-decoration: underline;
+    transform:translateX(1rem);
+}
+#main-in-course{
+    display: flex;
+}
+#main-in-course .display-area{
+    min-width: calc(100% - 28rem - 2rem);
+    max-width: calc(100% - 20rem - 2rem);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1.5rem;
+    margin: 2rem;
+}
+.course-name {
+    margin: 2rem;
+    font-size: 1.5rem;
+}
+.display-area .course-announcement, .course-material, .course-contact, .course-homework, .course-discussion, .course-graded, .course-discussions{
+    display: none;
+    position: relative;
+    width: 100%;
+    border: solid 0.1rem var(--primary-color);
+    border-radius: 1rem;
+    background-color: var(--secondary-color);
+}
+.display-area .course-announcement.show, .course-material.show, .course-contact.show, .course-homework.show, .course-graded.show{
+    display: block;
+}
+.display-area .course-discussion.show{
+    display: flex;
+}
+
+.display-area .header-menu-name{
+    text-align: center;
+    cursor: pointer;
+    padding: 0.1rem;
+    background-color: var(--primary-color);
+    border-radius: 0.5rem;
+}
+.announcement-listed ul{
+    list-style: none;
+    padding:0 2rem;
+    padding-bottom: 1rem;
+}
+.announcement-listed ul li{
+    margin: 1rem 0;
+    padding-bottom: 1rem;
+}
+.announcement-listed ul li .announcement-container{
+    border: solid 0.1rem var(--primary-color);
+    border-radius: 1rem;
+    padding: 1rem;
+    
+}
+.announcement-listed ul li a:hover{
+    text-decoration: underline;
+}
+
+.course-material ul, .course-contact ul, .course-homework ul, .course-graded ul{
+    list-style: none;
+    padding: 0 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.course-material ul li, .course-contact ul li, .course-homework ul li, .course-graded ul li{    
+    margin: 1rem 0;
+    padding:0 3rem;
+    text-align: center;
+    flex: 1 1 100;
+}
+.course-material ul li a , .course-homework ul li a{
+    display: block;
+    padding: auto 0.5rem;
+    width: 115px;
+    height: 130px;
+    align-content: center;
+    justify-content: center;
+    border: 1px solid var(--primary-color); 
+    border-radius: 0.5rem; 
+    text-decoration: none;
+    color: var(--black-color);
+    background-color: var(--secondary-color); 
+    transition: background-color 0.3s ease; 
+}
+
+.course-material ul li a:hover, .course-homework ul li a:hover{
+    background-color: var(--primary-color); 
+}
+
+.course-contact ul li a{
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    text-decoration: none;
+    color: var(--black-color);
+}
+.course-contact ul li a i{
+    font-size: 5rem;
+    padding-bottom: 1rem;
+}
+.course-contact ul li a:hover{
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    border-radius: 1rem;
+}
+.course-homework ul li a{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: var(--black-color);
+}
+.course-homework ul li a span{
+    padding-top: 1rem;
+    border-top: solid 0.1rem var(--primary-color);
+}
+
+.homework-status {
+    position: absolute;
+    bottom: 0.1rem;
+    right: 0.1rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-size: 2rem;
+    border: solid 0.1rem var(--black-color);
+}
+
+.homework-status.x {
+    color: var(--red-color);
+}
+
+.homework-status.tick {
+    color: var(--green-color);
+}
+
+.course-discussion, .course-discussions{
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 12rem);
+}
+.left-side{
+    position: relative;
+    flex: 30%;
+    border-right: solid 0.1rem var(--primary-color);
+}
+.left-side .header-menu-name{
+    text-align: center;
+    cursor: pointer;
+    padding: 0.1rem;
+    background-color: var(--primary-color);
+    border-radius: 0.5rem 0 0 0;
+}
+.right-side{
+    position: relative;
+    flex: 70%;
+    background-color: var(--secondary-color);
+}
+.course-discussion .right-side::before, .course-discussions .right-side::before{
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+}
+.course-discussion .discussion-listed, .course-discussions .discussion-listed{
+    position: relative;
+    height: calc(100% - 7rem);
+    overflow-y: auto;
+    scrollbar-color: var(--primary-color) var(--secondary-color);
+    scrollbar-width: thin;
+}
+.course-discussion .discussion-listed ul, .course-discussions .discussion-listed ul{
+    list-style: none;
+    padding: 1rem 0;
+}
+
+.course-discussion .discussion-listed ul li, .course-discussions .discussion-listed ul li{
+    width: 100%;
+    height: 6rem;
+    color: var(--primary-color);
+    display: block;
+    font-weight: bold;
+}
+.course-discussion .discussion-listed ul li:hover, .course-discussions .discussion-listed ul li:hover{
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+    border-radius: 1rem;
+    cursor: pointer;
+}
+.course-discussion .discussion-listed ul li .discussion-name, .course-discussions .discussion-listed ul li .discussion-name{
+    align-items: center;
+    padding: 1rem;
+}
+.discussion-name .position{
+    font-weight: lighter;
+}
+.course-discussion .topic-header, .course-discussions .topic-header{
+    width: 100%;
+    height: 6rem;
+    border-bottom: solid 0.1rem var(--primary-color);
+}
+.course-discussion .topic-header .topic-info, .course-discussions .topic-header .topic-info{
+    margin: 0.5rem 1rem;
+    display: flex;
+    border: solid 0.1rem var(--primary-color);
+    border-radius: 2rem;
+    align-items: center;
+}
+.topic-header .topic-info i, .topic-header .topic-info span{
+    font-size: 2rem;
+    margin: 0.5rem;
+}
+.right-side .chat-form{
+    position: absolute;
+    justify-content: center;
+    bottom: 0;
+    width: 100%;
+    height: 7rem;
+    display: flex;
+    align-items: center;
+    border-top: solid 0.1rem var(--primary-color);
+}
+.chat-form textarea{
+    width: 80%;
+    resize: none;
+    height: 4.5rem;
+    padding-left: 1rem;
+    font-size: 1.5rem;
+    border: solid 0.1rem var(--primary-color);
+    border-radius: 1rem;
+    word-wrap: break-word;
+    outline: none;
+}
+.chat-form button{
+    width: 30%;
+    bottom: 1.5rem;
+    width: 4rem;
+    padding: 1rem;
+    font-size: 1.5rem;
+    border: none;
+    border-radius: 1rem;
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    margin-left: 1rem;
+    cursor: pointer;
+}
+.discussion-board{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 1.5rem;
+    height: calc(100% - 6.5rem - 7rem - 1rem);
+    overflow-y: auto;
+    scrollbar-color: var(--primary-color) var(--secondary-color);
+    scrollbar-width: thin;
+}
+.discussion-board .other-msg{
+    display: flex;
+    flex-direction: column;
+    max-width: 70%;
+    padding: 1rem;
+    margin: 1rem;
+    border: solid 0.1rem var(--primary-color);
+    border-radius: 1rem;
+    background-color: var(--secondary-color);
+    word-wrap: break-word;
+}
+.discussion-board .owner-msg{
+    display: flex;
+    flex-direction: column;
+    max-width: 70%;
+    padding: 1rem;
+    margin: 1rem;
+    align-self: flex-end;
+    border: solid 0.1rem var(--primary-color);
+    border-radius: 1rem;
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    word-wrap: break-word;
+}
+.course-graded .graded-listed {
+    position: relative;
+    width: 100%;
+    display: flex;
+    background-color: var(--secondary-color);
+    align-items: center;
+    font-size: 1.8rem;
+}
+.course-graded .graded-listed ul li a{
+    padding: 1rem auto;
+    justify-content: center;
+    align-content: center;
+    transition: background-color 0.3s ease; 
+}
+
+.course-graded .graded-listed ul li a .homework-name{
+    display: block;
+    width: 115px;
+    height: 115px;
+    padding: 1rem;
+    border: solid 0.1rem var(--primary-color);
+    border-radius: 1rem 1rem 0 0;
+    background-color: var(--secondary-color);
+}
+.course-graded .graded-listed ul li a .grade{
+    text-align: center;
+    width: 115px;
+    padding: 1rem;
+    border: solid 0.1rem var(--primary-color);
+    border-radius: 0 0 1rem 1rem;
+    
+}
+.course-graded .graded-listed ul li a:hover .homeword-name{
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    transition: background-color 0.3s ease;
+}
+
+.discussion-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1.5rem;
+    margin: 2rem;
+}
+.course-discussions{
+    display: flex;
+}
+.homework-genneral{
+    display: flex;
+    position: relative;
+    width: 100%;
+}
+.dropdown{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 0.5rem 1rem 0.1rem var(--primary-color);
+    width: 100px;
+    background-color: var(--secondary-color);
+    transition: height 0.3s ease;
+}
+.dropdown.in-course{
+    height: calc(100vh - 12rem);
+}
+.dropdown.hide{
+    height: 100px;
+    transition: height 0.3s ease;
+}
+.dropdown.hide{
+    height: 100px;
+}
+.dropdown .button-menu{
+    width: 60px;
+    height: 60px;
+    margin: 2rem;
+    border: solid 0.1rem var(--primary-color);
+    border-radius: 2rem;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.dropdown .button-menu i{
+    font-size: 3rem;
+    padding: 1rem;
+}
+.dropdown .dropdown-content{
+    display: block;
+    max-height: 400px;
+    transition : max-height 0.4s ease;
+}
+.dropdown .dropdown-content.hide{
+    display: none;
+    max-height: 0;
+    transition : max-height 0.4s ease;
+}
+.dropdown .dropdown-content a{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+    height: 60px;
+    margin: 5rem 0;
+    font-size: 2rem;
+    color: var(--black-color);
+    border: solid 0.1rem var(--primary-color);
+    border-radius: 2rem;
+    transition: background-color 0.5s ease;
+}
+.dropdown.in-course .dropdown-content a{
+    margin: 2rem 0;
+}
+.dropdown .dropdown-content a:hover, .dropdown .button-menu:hover{
+    transition: background-color 0.3s ease;
+    box-shadow: 0 0.5rem 1rem 0.1rem var(--primary-color);
+}
+.dropdown .dropdown-content span{
+    display: none;
+    position: absolute;
+    left: 8rem;
+    top: 2rem;
+    z-index: 1000;
+    text-align: center;
+    text-decoration: none;
+    background-color: var(--primary-color);
+    padding: 0 1rem;
+    border-radius: 2rem;
+    color: var(--black-color);
+    transition: background-color 0.3s ease;
+}
+.dropdown .dropdown-content a:hover span{
+    display:flex;
+    transition: background-color 0.3s ease;
+}
+@import 'responsive.scss';
