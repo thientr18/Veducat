@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Insert Announcement to teacher API</title>
+
+</head>
+<body>
+  <form class="form-insert-announcement" style="margin: 200px;" method="POST" action="/manage_announcement/insert">
+    <table>
+      <tr>
+        <td>Announcement Title</td>
+        <td><input type="text" name="announcement_title" id="announcement_title" required></td>
+      </tr>
+      <tr>
+        <td>Announcement Content</td>
+        <td><textarea name="announcement_content" id="announcement_content"></textarea></td>
+      </tr>
+        <tr>
+            <td>Announcement Receivers: </td>
+            <td>
+                <p>Nút select all -> Front end tự code</p>
+                <% teachers.forEach(teacher => { %>
+                    <input type="checkbox" id="<%= teacher.teacherID %>" name="teacher_ids" value="<%= teacher.teacherID %>">
+                    <label for="<%= teacher.teacherID %>"><%= teacher.teacherID.toUpperCase() %> | <%= teacher.name %></label><br>
+                <% }); %>
+            </td>
+        </tr>
+      <tr>
+        <td><input type="submit" value="Insert"></td>
+        <td><input type="reset" value="Reset"></td>
+      </tr> 
+      <tr>
+        <td><a href="/admin/announcement/send_to_teacher/list">Go to List</a></td>
+      </tr>
+    </table>
+  </form>
+
+  <script>
+    const form = document.querySelector('.form-insert-announcement');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const courseID = 'admin';
+      const title = document.querySelector('#announcement_title').value;
+      const content = document.querySelector('#announcement_content').value;
+      const teacherIDs = [];
+      const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+      checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+          teacherIDs.push(checkbox.value);
+        }
+      });
+      const sender = "<%= user.userID %>";
+
+      try {
+        const res = await fetch('/admin/announcement/send_to_teacher', {
+          method: 'POST',
+          body: JSON.stringify({ courseID, title, content, teacherIDs, sender }),
+          headers: {'Content-Type': 'application/json'},
+        });
+
+        if (res.status >= 200 && res.status < 300) {
+          console.log("Request successful", res.responseText);
+          location.reload();
+        } else {
+          console.error("Request failed", res.statusText);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    });
+
+  </script>
+</body>
+</html>

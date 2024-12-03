@@ -4,7 +4,7 @@ const authNController = require('../app/controllers/AuthNController');
 // const studentController = require('../app/controllers/StudentController');
 const { requireAuthN } = require('../app/middlewares/authN');
 const { requireAuthZ } = require('../app/middlewares/authZ');
-const router = express.Router()
+const router = express.Router();
 
 // AuthN
 router.get('/signup', authNController.signup_get);

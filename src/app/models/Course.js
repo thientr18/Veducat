@@ -11,23 +11,6 @@ const courseSchema = new mongoose.Schema({
         type: 'string',
         required: [true, 'Please enter a name']
     },
-    teacherID: {
-        type: 'string',
-        required: [true, 'Please enter a teacher ID'],
-        lowercase: true
-    },
-    students: {
-        type: Array,
-        default: [
-            {
-                studentID: {
-                    type: 'string',
-                    required: [true, 'Please enter a student ID'],
-                    lowercase: true
-                }
-            }
-        ],
-    },
     description: {
         type: 'string',
     },

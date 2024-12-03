@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const announcementSchema = new mongoose.Schema({
     courseID: {
         type: 'string',
-        required: [true, 'Please enter a course ID'],
-        lowercase: true
+        lowercase: true,
+        required: [true, 'Please enter a course ID']
     },
     title: {
         type: 'string',
@@ -16,19 +16,17 @@ const announcementSchema = new mongoose.Schema({
     },
     recipents: {
         type: Array,
-        default: [
-            {
-                recipentID: {
-                    type: 'string',
-                    required: [true, 'Please enter a recipent ID'],
-                    lowercase: true
-                }
-            }
-        ],
+        default: [],
+        required: [true, 'Please enter a recipents ID']
     },
-    senderID: {
+    sender: {
         type: 'string',
         required: [true, 'Please enter a sender ID'],
+        lowercase: true
+    },
+    type: {
+        type: 'string',
+        required: [true, 'Please enter a type'],
         lowercase: true
     },
     sentAt: {

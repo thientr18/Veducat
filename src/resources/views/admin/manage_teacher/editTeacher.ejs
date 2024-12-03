@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student list</title>
+    <title>Teacher list</title>
 
     <style>
         /* Styles for the alert box */
@@ -44,23 +44,23 @@
     </style>
 </head>
 <body>
-    <h1>Student list</h1>
+    <h1>Teacher list</h1>
     <table>
         <tr>
-            <th>Student ID</th>
-            <th>Student Name</th>
-            <th>Student Birthday</th>
-            <th>Student Email</th>
+            <th>Teacher ID</th>
+            <th>Teacher Name</th>
+            <th>Teacher Birthday</th>
+            <th>Teacher Email</th>
         </tr>
-        <% students.forEach(student => { %>
+        <% teachers.forEach(teacher => { %>
             <tr>
-                <td><%= student.studentID.toUpperCase() %></td>
-                <td><%= student.name %></td>
-                <td><%= student.DoB %></td>
-                <td><%= student.email %></td>
+                <td><%= teacher.teacherID.toUpperCase() %></td>
+                <td><%= teacher.name %></td>
+                <td><%= teacher.DoB %></td>
+                <td><%= teacher.email %></td>
                 <td>
-                    <a href="#" onclick="openForm('<%= student.studentID %>', '<%= student.name %>', '<%= student.DoB %>')">Edit</a>
-                    <a href="/admin/manage_student/delete/<%= student.studentID %>">Delete</a>
+                    <a href="#" onclick="openForm('<%= teacher.teacherID %>', '<%= teacher.name %>', '<%= teacher.DoB %>')">Edit</a>
+                    <a href="/admin/manage_teacher/delete/<%= teacher.teacherID %>">Delete</a>
                 </td>
             </tr>
         <% }); %>
@@ -69,14 +69,14 @@
     <!-- Alert Box -->
     <div class="overlay" id="overlay"></div>
     <div class="alert-box" id="editForm">
-        <h2>Edit Student Information</h2>
-        <form id="editStudentForm">
-            <input type="hidden" name="id" id="studentId">
+        <h2>Edit Teacher Information</h2>
+        <form id="editteacherForm">
+            <input type="hidden" name="id" id="teacherId">
             <table>
                 <tr>
-                    <td>Student ID:</td>
+                    <td>Teacher ID:</td>
                     <td>
-                        <input type="text" name="studentID" id="studentID" disabled>
+                        <input type="text" name="teacherID" id="teacherID" disabled>
                     </td>
                 </tr>
                 <tr>
@@ -104,35 +104,34 @@
     </div>
 
     <script>
-        const form = document.getElementById('editStudentForm');
+        const form = document.getElementById('editteacherForm');
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
             // Get updated values from the form
-            const studentID = document.getElementById('studentID').value;
+            const teacherID = document.getElementById('teacherID').value;
             const name = document.getElementById('name').value;
             const DoB = document.getElementById('DoB').value;
-            const email = studentID + '@student.com';
-            const action = '/admin/manage_student/edit/'+studentID
+            const email = teacherID + '@teacher.com';
+            const action = '/admin/manage_teacher/edit/'+teacherID
 
             try {
                 const res = await fetch(action, {
                     method: 'PUT',
-                    body: JSON.stringify({studentID, name, DoB, email}),
+                    body: JSON.stringify({teacherID, name, DoB, email}),
                     headers: {'Content-Type': 'application/json'},
                 });
             } catch (error) {
                 console.log(error);
             }
         });
-
-
+        
         // Function to open the edit form
-        openForm = (studentID, name, DoB) => {
+        openForm = (teacherID, name, DoB) => {
             document.getElementById('overlay').style.display = 'block';
             document.getElementById('editForm').style.display = 'block';
 
-            document.getElementById('studentID').value = studentID;
+            document.getElementById('teacherID').value = teacherID;
             document.getElementById('name').value = name;
             document.getElementById('DoB').value = DoB;
         }

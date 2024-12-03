@@ -8,7 +8,7 @@ const route = require('./routes/index')
 const dotenv = require('dotenv');
 dotenv.config();
 
-const app = express()
+const app = express();
 
 // middleware
 app.use(express.static(path.join(__dirname, 'public')))

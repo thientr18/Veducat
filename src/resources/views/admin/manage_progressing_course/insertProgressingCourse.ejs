@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Insert Progressing Course API</title>
+</head>
+<body>
+  <form class="form-insert-progessing-course" style="margin: auto;" method="POST" action="/admin/manage_progressing_course/insert">
+    <table>
+      <tr>
+        <td>Course: </td>
+        <td>
+            <select id="course">
+                <option value="">Select a course</option>
+                <% courses.forEach(course => { %>
+                    <option value="<%= course.courseID %>"><%= course.courseID %> | <%= course.name %></option>
+                <% }); %>
+            </select>
+        </td>
+      </tr>
+      <tr>
+        <td>Teacher: </td>
+        <td>
+            <select id="teacher">
+                <option value="">Select a teacher</option>
+                <% teachers.forEach(teacher => { %>
+                    <option value="<%= teacher.teacherID %>"><%= teacher.teacherID %> | <%= teacher.name %></option>
+                <% }); %>
+            </select>
+        </td>
+      </tr>
+      <tr>
+        <td>Students: </td>
+        <td>                
+            <% students.forEach(student => { %>
+                <input type="checkbox" id="<%= student.studentID %>" name="student_ids" value="<%= student.studentID %>">
+                <label for="<%= student.studentID %>"><%= student.studentID %> | <%= student.name %></label><br>
+            <% }); %>
+        </td>
+      </tr>
+      <tr>
+        <td><input type="submit" value="Insert"></td>
+        <td><input type="reset" value="Reset"></td>
+    </table>
+  </form>
+
+  <script>
+    const form = document.querySelector('.form-insert-progessing-course');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const courseID = document.querySelector('#course').value;
+      const teacherID = document.querySelector('#teacher').value;
+
+      // Collect all checked student IDs
+      const studentCheckboxes = document.querySelectorAll('input[name="student_ids"]:checked');
+      const studentIDs = Array.from(studentCheckboxes).map(checkbox => checkbox.value);
+
+      if (!courseID || !teacherID || studentIDs.length === 0) {
+        alert('Please select a course, teacher, and at least one student.');
+        return;
+      }
+
+      try {
+        const res = await fetch('/admin/manage_progressing_course/insert', {
+          method: 'POST',
+          body: JSON.stringify({ courseID, teacherID, studentIDs }),
+          headers: { 'Content-Type': 'application/json' },
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -7,7 +7,7 @@
 
 </head>
 <body>
-  <form class="form-insert-student" style="margin: 200px;" method="'/admin/manage_student/insert'">
+  <form class="form-insert-student" style="margin: 200px;" method="POST" action="/admin/manage_student/insert">
     <table>
       <tr>
         <td>Student ID</td>
@@ -28,6 +28,9 @@
   </form>
 
   <script>
+    
+    const sender = JSON.stringify(user);
+    console.log(sender);
     const form = document.querySelector('form');
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
