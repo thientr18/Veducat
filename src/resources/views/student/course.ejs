@@ -1,55 +1,425 @@
-<%- include('../partials/header.ejs'); -%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veducat | 
+        <%=  %> 
+    </title> 
+<%- include('../partials/main/header.ejs'); -%>
 
-<div id="courseMenuPalette">
-    <div id="courseMenuPalette_tittleHeading">
-        <!-- tạm thời để dị -->
-        <h4>Course: name <%=  %></h4> 
-    </div>
-    <ul id="courseMenuPalette_contents" class="courseMenu">
-        <li><a href="#">Home Page</a></li>
-        <li><a href="#">Material</a></li>
-        <li><a href="#">Annoucement</a></li>
-        <li><a href="#">Contact</a></li>
-        <li><a href="#">Homework</a></li>
-        <li><a href="#">Discussion</a></li>
-        <li><a href="#">My Grade</a></li>
-    </ul>
+<div class="course-name">
+    <a href="/link/<%= COURSEID %> ">
+        <%= "Web Application Development_Group02_2024-25" %>
+    </a>
 </div>
-
-<div id="courseDisplay">
-    <div id="courseDisplay_tittleHeading">
-        <h4>Course: name <%=  %></h4>
+<main id="main-in-course">
+    <div class="dropdown in-course">
+            <div class="button-menu" id="dropdown-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="dropdown-content">
+                <a href="#" id="announcement-selected">
+                    <i class="fa-regular fa-bell"></i>
+                    <span>Annoucement</span>
+                </a>
+                <a href="#" id="material-selected">
+                    <i class="fa-regular fa-folder"></i>
+                    <span>Material</span>
+                </a>
+                <a href="#" id="contact-selected">
+                    <i class="fa-regular fa-envelope"></i>
+                    <span>Contact</span>
+                </a>
+                <a href="#" id="homework-selected">
+                    <i class="fas fa-tasks"></i>
+                    <span>Homework</span>
+                </a>
+                <a href="#" id="discussion-selected">
+                    <i class="fa-regular fa-comments"></i>
+                    <span>Discussion</span>
+                </a>
+                <a href="#" id="grade-selected">
+                    <i class="fa-solid fa-marker"></i>
+                    <span>Graded</span>
+                </a>
+            </div>
+        </div>
+    <div class="display-area">
+        <section class="course-announcement">
+            <div class="header-menu-name">
+                <h2>
+                    Announcement
+                </h2>
+            </div>
+            <div class="announcement-listed">
+                <ul>
+                    <li>
+                        <div class="announcement-container">
+                            <a href="#">
+                                System maintaining: New course has been added.
+                            </a>
+                            <div class="description">
+                                <span>
+                                    Dear Students, we have added a new course to the system. Please check it out.
+                                    Best regards, Admin.
+                                </span>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="announcement-container">
+                            <a href="#">
+                                No OS class on Fri & Sat, 15 & 16/11/2024
+                            </a>
+                            <div class="description">
+                                <span>
+                                    Dear Students, there will be no Operating System class on Friday and Saturday, 15th and 16th of November, 2024.
+                                    Best regards, Instructor.
+                                </span>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="announcement-container">
+                            <a href="#">
+                                New assignment for Computer Networks
+                            </a>
+                            <div class="description">
+                                <span>
+                                    Dear Students, a new assignment has been uploaded for Computer Networks. Please check it out.
+                                    Best regards, Instructor.
+                                </span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+        <section class="course-material">
+            <div class="header-menu-name">
+                <h2>
+                    Material
+                </h2>
+            </div>
+            <div class="material-listed">
+                <ul>
+                    <li>
+                        <a href="#" class="title-book">
+                            Lecture 1: Introduction to Web Development
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            Lecture 2: HTML
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            Lecture 3: CSS
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            Lecture 4: JavaScript
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+        <section class="course-contact">
+            <div class="header-menu-name">
+                <h2>
+                    Contact
+                </h2>
+            </div>
+            <div class="contact-listed">
+                <ul>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-user-circle"></i>
+                            Teacher 1:
+                            </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fas fa-user-circle"></i>
+                            Teacher 2:
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+        <section class="course-homework">
+            <div class="header-menu-name">
+                <h2>
+                    Homework
+                </h2>
+            </div>
+            <div class="homework-listed">
+                <ul>
+                    <li>
+                        <a href="#">
+                            Homework 1: HTML
+                            <span>
+                                Deadline: 10/11/2024
+                            </span>
+                            <div class="homework-status x">
+                                <i class="fa-solid fa-x"></i>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            Homework 2: CSS
+                            <span>
+                                Deadline: 15/11/2024
+                            </span>
+                            <div class="homework-status tick">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            Homework 3: JavaScript
+                            <span>
+                                Deadline: 20/11/2024
+                            </span>
+                            <div class="homework-status"></div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+        <!-- this is a container -->
+        <section class="course-discussion"> 
+            <div class="left-side">
+                <div class="header-menu-name">
+                    <h2>
+                        Discussion
+                    </h2>
+                </div>
+                <div class="discussion-listed">
+                    <ul>
+                        <li>
+                            <div class="discussion-name">
+                                <i class="fas fa-comments"></i>
+                                <span class="discussion-brief">Discussion 1</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="discussion-name">
+                                <i class="fas fa-comments"></i>
+                                <span class="discussion-brief">Discussion 2</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="discussion-name">
+                                <i class="fas fa-comments"></i>
+                                <span class="discussion-brief">Discussion 1</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="discussion-name">
+                                <i class="fas fa-comments"></i>
+                                <span class="discussion-brief">Discussion 2</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="discussion-name">
+                                <i class="fas fa-comments"></i>
+                                <span class="discussion-brief">Discussion 1</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="discussion-name">
+                                <i class="fas fa-comments"></i>
+                                <span class="discussion-brief">Discussion 2</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="discussion-name">
+                                <i class="fas fa-comments"></i>
+                                <span class="discussion-brief">Discussion 1</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="discussion-name">
+                                <i class="fas fa-comments"></i>
+                                <span class="discussion-brief">Discussion 2</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="discussion-name">
+                                <i class="fas fa-comments"></i>
+                                <span class="discussion-brief">Discussion 1</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="discussion-name">
+                                <i class="fas fa-comments"></i>
+                                <span class="discussion-brief">Discussion 2</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="discussion-name">
+                                <i class="fas fa-comments"></i>
+                                <span class="discussion-brief">Discussion 1</span>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="discussion-name">
+                                <i class="fas fa-comments"></i>
+                                <span class="discussion-brief">Discussion 2</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Container -->
+            <div class="right-side">
+                <div class="topic-header">
+                    <div class="topic-info">
+                        <i class="fas fa-comments"></i>
+                        <p>Discussion 1: Something</p>
+                    </div>
+                </div>
+                <div class="discussion-board">
+                    <div class="other-msg">
+                        <div class="user-name">
+                            <i class="fas fa-user-circle"></i>
+                            <span>Student 1</span>
+                        </div>
+                        <div class="msg">
+                            <p>Hi, I have a question about the homework.</p>
+                        </div>
+                        <div class="time">
+                            <span>10:00 AM</span>
+                        </div>
+                    </div>
+                    <div class="owner-msg">
+                        <div class="user-name">
+                            <i class="fas fa-user-circle"></i>
+                            <span>Teacher 1</span>
+                        </div>
+                        <div class="msg">
+                            <p>What is your question?</p>
+                        </div>
+                        <div class="time">
+                            <span>10:05 AM</span>
+                        </div>
+                    </div>
+                    <div class="other-msg">
+                        <div class="user-name">
+                            <i class="fas fa-user-circle"></i>
+                            <span>Student 1</span>
+                        </div>
+                        <div class="msg">
+                            <p>How do I do this?</p>
+                        </div>
+                        <div class="time">
+                            <span>10:10 AM</span>
+                        </div>
+                    </div>
+                    <div class="owner-msg">
+                        <div class="user-name">
+                            <i class="fas fa-user-circle"></i>
+                            <span>Teacher 1</span>
+                        </div>
+                        <div class="msg">
+                            <p>Do this and that.</p>
+                        </div>
+                        <div class="time">
+                            <span>10:15 AM</span>
+                        </div>
+                    </div>
+                    <div class="other-msg">
+                        <div class="user-name">
+                            <i class="fas fa-user-circle"></i>
+                            <span>Student 1</span>
+                        </div>
+                        <div class="msg">
+                            <p>Thank you.</p>
+                        </div>
+                        <div class="time">
+                            <span>10:20 AM</span>
+                        </div>
+                    </div>
+                    <div class="other-msg">
+                        <div class="user-name">
+                            <i class="fas fa-user-circle"></i>
+                            <span>Student 2</span>
+                        </div>
+                        <div class="msg">
+                            <p>Hi, I have a question about the homework.</p>
+                        </div>
+                        <div class="time">
+                            <span>10:00 AM</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-form">
+                    <form action="" class="chat-form">
+                        <textarea placeholder="Type your message here..."></textarea>
+                        <button type="submit">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+        <section class="course-graded">
+            <div class="header-menu-name">
+                <h2>
+                    Graded
+                </h2>
+            </div>
+            <div class="graded-listed">
+                <ul>
+                    <li>
+                        <a href="#">
+                            <div class="homework-name">
+                                Homework 1: HTML
+                            </div>
+                            <div class="grade">
+                                10/10
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <div class="homework-name">
+                                Homework 2: CSS
+                            </div>
+                            <div class="grade">
+                                8/10
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <div class="homework-name">
+                                Homework 3: JavaScript
+                            </div>
+                            <div class="grade">
+                                9/10
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <div class="homework-name">
+                                Homework 4: PHP
+                            </div>
+                            <div class="grade">
+                                not graded
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+        </section>
     </div>
-    <div id="courseDisplay_contents">
-        <div id="courseDisplay_contents_homePage">
-            <h4>Home Page</h4>
-            <p>Content of Home Page</p>
-        </div>
-        <div id="courseDisplay_contents_material">
-            <h4>Material</h4>
-            <p>Content of Material</p>
-        </div>
-        <div id="courseDisplay_contents_annoucement">
-            <h4>Annoucement</h4>
-            <p>Content of Annoucement</p>
-        </div>
-        <div id="courseDisplay_contents_contact">
-            <h4>Contact</h4>
-            <p>Content of Contact</p>
-        </div>
-        <div id="courseDisplay_contents_homework">
-            <h4>Homework</h4>
-            <p>Content of Homework</p>
-        </div>
-        <div id="courseDisplay_contents_discussion">
-            <h4>Discussion</h4>
-            <p>Content of Discussion</p>
-        </div>
-        <div id="courseDisplay_contents_myGrade">
-            <h4>My Grade</h4>
-            <p>Content of My Grade</p>
-        </div>
-    </div>
-</div>
+</main>
 
 <%- include('../partials/footer'); -%>
