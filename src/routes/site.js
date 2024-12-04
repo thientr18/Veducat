@@ -21,12 +21,12 @@ router.get('/home', requireAuthN, siteController.home_get);
 router.get('/', requireAuthN, (req, res) => {
     const role = res.locals.user.role;
     switch (role) {
-        // case 'student':
-        //     res.redirect('/student');
-        //     break;
-        // case 'teacher':
-        //     res.redirect('/teacher');
-        //     break;
+        case 'student':
+            res.redirect('/student');
+            break;
+        case 'teacher':
+            res.redirect('/teacher');
+            break;
         case 'admin':
             res.redirect('/admin');
             break;
