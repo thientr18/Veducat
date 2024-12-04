@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
+/* Root */
 @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
 :root {
   --secondary-color: #fff2c9;
@@ -19,7 +19,7 @@ body {
   transition: background-color 0.3s, color 0.5s;
   padding-top: 60px;
   /* Adjust this value based on the height of your header */
-  background-image: url(background.svg);
+  background-image: url(/img/background.svg);
   background-position: center;
   background-size: cover;
   background-attachment: fixed;
@@ -90,6 +90,17 @@ a {
 #darkmode-btn.fa-sun {
   transform: rotate(180deg);
   transition: 0.3s linear; }
+
+.fa-angles-right {
+  transform: rotateX(-180deg);
+  transition: transform 0.3s linear; }
+
+.fa-angles-left {
+  transform: rotateY(180deg);
+  transition: transform 0.3s linear; }
+
+#icon {
+  transition: transform 0.3s linear; }
 
 .dark {
   background-color: var(--dark-mode-color); }
@@ -219,13 +230,99 @@ a {
   display: flex; }
 
 #main-in-course .display-area {
-  min-width: calc(100% - 28rem - 2rem);
-  max-width: calc(100% - 20rem - 2rem);
+  width: 100%;
+  min-width: calc(100% - 10% - 28rem - 2rem);
+  max-width: calc(100% -10% - 20rem - 2rem);
   display: flex;
   flex-direction: column;
   align-items: center;
   font-size: 1.5rem;
   margin: 2rem; }
+
+.dropdown {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 0.5rem 1rem 0.1rem var(--primary-color);
+  width: 100px;
+  background-color: var(--secondary-color);
+  transition: width 0.3s ease; }
+
+.dropdown.in-course {
+  height: calc(100vh - 20rem); }
+
+.dropdown.hide {
+  width: 2%;
+  margin: 0;
+  transition: width 0.3s ease; }
+
+.dropdown .button-menu {
+  width: 60px;
+  height: 40px;
+  margin: 2rem;
+  border: solid 0.1rem var(--primary-color);
+  border-radius: 2rem;
+  background-color: var(--secondary-color);
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  cursor: pointer; }
+
+.dropdown .button-menu i {
+  font-size: 3rem;
+  padding: 1rem; }
+
+.dropdown .dropdown-content {
+  display: block;
+  max-height: 400px;
+  transition: max-height 0.4s ease; }
+
+.dropdown .dropdown-content.hide {
+  display: none;
+  max-height: 0;
+  transition: max-height 0.4s ease; }
+
+.dropdown .dropdown-content a {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60px;
+  height: 60px;
+  margin: 5rem 0;
+  font-size: 2rem;
+  color: var(--black-color);
+  border: solid 0.1rem var(--primary-color);
+  border-radius: 2rem;
+  transition: background-color 0.5s ease; }
+
+.dropdown.in-course .dropdown-content a {
+  margin: 2rem 0; }
+
+.dropdown .dropdown-content a:hover, .dropdown .button-menu:hover {
+  transition: background-color 0.3s ease;
+  box-shadow: 0 0.5rem 1rem 0.1rem var(--primary-color); }
+
+.dropdown .dropdown-content span {
+  display: none;
+  position: absolute;
+  left: 8rem;
+  top: 2rem;
+  z-index: 1000;
+  text-align: center;
+  text-decoration: none;
+  background-color: var(--primary-color);
+  padding: 0 1rem;
+  border-radius: 2rem;
+  color: var(--black-color);
+  transition: background-color 0.3s ease; }
+
+.dropdown .dropdown-content a:hover span {
+  display: flex;
+  transition: background-color 0.3s ease; }
 
 .course-name {
   margin: 2rem;
@@ -284,7 +381,7 @@ a {
 
 .course-material ul li a, .course-homework ul li a {
   display: block;
-  padding: auto 0.5rem;
+  padding: auto 1rem;
   width: 115px;
   height: 130px;
   align-content: center;
@@ -296,8 +393,187 @@ a {
   background-color: var(--secondary-color);
   transition: background-color 0.3s ease; }
 
-.course-material ul li a:hover, .course-homework ul li a:hover {
+.course-homework ul li a p {
+  padding: 1rem; }
+
+.create-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 1rem;
+  margin: 1rem;
+  font-size: 2rem;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  border: solid 0.1rem var(--white-color);
+  border-radius: 1rem;
+  color: var(--white-color);
+  transition: all 0.3s ease; }
+
+.create-btn:hover {
+  color: var(--green-color);
+  background-color: var(--white-color);
+  border: solid 0.1rem var(--white-color);
+  transition: all 0.3s ease; }
+
+.course-material ul li a:hover, .course-homework ul li a:hover, .course-material ul li .create-header-material:hover {
   background-color: var(--primary-color); }
+
+.new-form {
+  display: none;
+  position: relative;
+  width: 100%;
+  height: 100%; }
+
+.new-form .form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000; }
+
+.exit-btn {
+  position: absolute;
+  border: solid 0.1rem var(--red-color);
+  border-radius: 1rem;
+  padding: 0 1rem;
+  color: var(--red-color);
+  top: 2rem;
+  right: 3rem;
+  font-size: 3rem;
+  cursor: pointer;
+  transition: all 0.3s ease; }
+
+.exit-btn:hover {
+  background-color: var(--red-color);
+  color: var(--white-color);
+  transition: all 0.3s ease; }
+
+.new-form .form-container form {
+  position: relative;
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  border: solid 0.1rem var(--primary-color);
+  border-radius: 2rem;
+  padding: 2rem;
+  background-color: var(--secondary-color); }
+
+.new-form .form-container form h2 {
+  text-align: center;
+  font-size: 2rem;
+  border-bottom: solid 0.1rem var(--primary-color);
+  padding-bottom: 2rem; }
+
+.new-form .form-container form input[type="text"] {
+  display: flex;
+  width: 90%;
+  margin: 0 auto;
+  padding: 1rem;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 12px;
+  outline-color: var(--primary-color); }
+
+.new-form .form-container form input[type="datetime-local"] {
+  display: flex;
+  width: 90%;
+  margin: 0 auto;
+  padding: 1rem;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 12px;
+  outline-color: var(--primary-color); }
+
+.new-form .form-container form input[type="file"] {
+  display: none; }
+
+.new-form .form-container form #add-btn {
+  display: flex;
+  width: calc(90% - 1rem);
+  padding: 1rem;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  border: solid 0.1rem var(--primary-color);
+  border-radius: 12px;
+  outline-color: var(--primary-color);
+  cursor: pointer; }
+
+.new-form .form-container form #add-btn:hover {
+  background-color: var(--primary-color);
+  color: var(--white-color); }
+
+.new-form .form-container form .display-file ul {
+  list-style: none;
+  padding: 1rem;
+  margin: 1rem; }
+
+.new-form .form-container form .display-file ul li {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem; }
+
+.display-file ul li a i {
+  font-size: 2rem;
+  color: var(--red-color);
+  cursor: pointer;
+  padding-right: 1rem; }
+
+.new-form .form-container form textarea {
+  display: flex;
+  width: 90%;
+  height: 10rem;
+  padding: 1rem;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 12px;
+  outline-color: var(--primary-color);
+  resize: none; }
+
+.new-form .form-container form label {
+  margin: 1rem;
+  font-size: 1.5rem;
+  font-weight: bold; }
+
+.new-form .form-container form .button-form {
+  display: flex;
+  justify-content: space-around; }
+
+.new-form .form-container form .button-form button {
+  padding: 1rem 2rem;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 12px;
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  margin: 1rem 2rem;
+  cursor: pointer; }
+
+.new-form .form-container form .button-form button:hover {
+  background-color: var(--white-color);
+  transform: scale(1.1); }
+
+.new-form .form-container form .button-form button[type="submit"]:hover {
+  border: solid 0.1rem var(--green-color);
+  color: var(--green-color); }
+
+.new-form .form-container form .button-form button[type="reset"]:hover {
+  border: solid 0.1rem var(--red-color);
+  color: var(--red-color); }
 
 .course-contact ul li a {
   display: flex;
@@ -357,12 +633,18 @@ a {
   flex: 30%;
   border-right: solid 0.1rem var(--primary-color); }
 
+.left-side.hide {
+  display: none; }
+
 .left-side .header-menu-name {
   text-align: center;
   cursor: pointer;
   padding: 0.1rem;
   background-color: var(--primary-color);
   border-radius: 0.5rem 0 0 0; }
+
+.right-side.hide {
+  display: none; }
 
 .right-side {
   position: relative;
@@ -493,6 +775,19 @@ a {
   color: var(--white-color);
   word-wrap: break-word; }
 
+.fullscreen {
+  position: absolute;
+  right: 3rem;
+  bottom: calc(7rem + 1rem);
+  z-index: 1000;
+  padding: 0.5rem;
+  border: solid 0.1rem var(--primary-color);
+  border-radius: 50%;
+  background-color: var(--white-color); }
+
+.fullscreen:hover {
+  transform: scale(1.2); }
+
 .course-graded .graded-listed {
   position: relative;
   width: 100%;
@@ -523,7 +818,7 @@ a {
   border: solid 0.1rem var(--primary-color);
   border-radius: 0 0 1rem 1rem; }
 
-.course-graded .graded-listed ul li a:hover .homeword-name {
+.course-graded .graded-listed ul li a:hover .homework-name {
   background-color: var(--primary-color);
   color: var(--white-color);
   transition: background-color 0.3s ease; }
@@ -543,95 +838,101 @@ a {
   position: relative;
   width: 100%; }
 
-.dropdown {
+.new-announcement {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin: 2rem;
-  border-radius: 1rem;
-  box-shadow: 0 0.5rem 1rem 0.1rem var(--primary-color);
-  width: 100px;
-  background-color: var(--secondary-color);
-  transition: height 0.3s ease; }
+  width: 100%;
+  margin-top: 2rem; }
 
-.dropdown.in-course {
-  height: calc(100vh - 12rem); }
-
-.dropdown.hide {
-  height: 100px;
-  transition: height 0.3s ease; }
-
-.dropdown.hide {
-  height: 100px; }
-
-.dropdown .button-menu {
-  width: 60px;
-  height: 60px;
-  margin: 2rem;
-  border: solid 0.1rem var(--primary-color);
-  border-radius: 2rem;
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  justify-content: center;
+.new-announcement .form-header-announcement h2:hover {
   cursor: pointer; }
 
-.dropdown .button-menu i {
-  font-size: 3rem;
-  padding: 1rem; }
-
-.dropdown .dropdown-content {
-  display: block;
-  max-height: 400px;
-  transition: max-height 0.4s ease; }
-
-.dropdown .dropdown-content.hide {
-  display: none;
-  max-height: 0;
-  transition: max-height 0.4s ease; }
-
-.dropdown .dropdown-content a {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 60px;
-  height: 60px;
-  margin: 5rem 0;
-  font-size: 2rem;
-  color: var(--black-color);
-  border: solid 0.1rem var(--primary-color);
-  border-radius: 2rem;
-  transition: background-color 0.5s ease; }
-
-.dropdown.in-course .dropdown-content a {
-  margin: 2rem 0; }
-
-.dropdown .dropdown-content a:hover, .dropdown .button-menu:hover {
-  transition: background-color 0.3s ease;
-  box-shadow: 0 0.5rem 1rem 0.1rem var(--primary-color); }
-
-.dropdown .dropdown-content span {
-  display: none;
-  position: absolute;
-  left: 8rem;
-  top: 2rem;
-  z-index: 1000;
+.new-announcement h2 {
   text-align: center;
-  text-decoration: none;
+  font-size: 2rem;
+  margin: 0 2rem;
   background-color: var(--primary-color);
-  padding: 0 1rem;
-  border-radius: 2rem;
-  color: var(--black-color);
-  transition: background-color 0.3s ease; }
+  border-radius: 1rem 1rem 0 0;
+  padding: 2rem; }
 
-.dropdown .dropdown-content a:hover span {
+.new-announcement .form-create-announcement {
   display: flex;
-  transition: background-color 0.3s ease; }
+  max-height: 0;
+  overflow: hidden;
+  flex-direction: column;
+  width: 100%; }
 
-@media (max-width: 991px) {
+.new-announcement .form-create-announcement.show {
+  max-height: 100%; }
+
+.new-announcement .form-create-announcement form {
+  margin: 2rem;
+  margin-top: 0;
+  display: flex;
+  flex-direction: column;
+  border: solid 0.1rem var(--primary-color);
+  border-radius: 0 0 1rem 1rem; }
+
+.new-announcement form input {
+  width: 90%;
+  padding: 1rem;
+  margin: 1rem 2rem;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 12px;
+  outline: none; }
+
+.new-announcement form textarea {
+  width: 90%;
+  height: 10rem;
+  padding: 1rem;
+  margin: 0 2rem 1rem 2rem;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 12px;
+  outline: none;
+  resize: none; }
+
+.new-announcement form label {
+  margin: 1rem;
+  font-size: 1.5rem;
+  font-weight: bold; }
+
+.new-announcement button {
+  width: 10%;
+  padding: 1rem 2rem;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 12px;
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  margin: 1rem 2rem;
+  cursor: pointer; }
+
+.header-menu-name.teacher-dcs {
+  display: flex;
+  padding-right: 1rem;
+  align-items: center;
+  justify-content: center; }
+
+.header-menu-name.teacher-dcs h2 {
+  width: calc(100% - 1rem); }
+
+.header-menu-name.teacher-dcs i {
+  width: 1rem;
+  padding: 1rem;
+  font-size: 2rem;
+  margin: 0 auto;
+  color: var(--white-color);
+  cursor: pointer; }
+
+.header-menu-name.teacher-dcs i:hover {
+  color: var(--green-color);
+  transition: color 0.3s ease; }
+
+@media (max-width: 1080px) {
   html {
-    font-size: 52%; } }
+    font-size: 55%; } }
 
 @media (max-width: 768px) {
   html {
@@ -683,7 +984,7 @@ a {
     width: 100%;
     height: 100%;
     border: none; }
-  .homework-general .dropdown.hide i {
+  .dropdown.hide .button-menu i {
     display: none; } }
 
 @media (max-width: 450px) {

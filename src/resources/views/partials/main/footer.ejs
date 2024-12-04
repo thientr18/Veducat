@@ -1,3 +1,19 @@
-<script src="script.js"></script>
+    <script>
+        let spanBtn = document.querySelector('#span-btn');
+        let darkmodeBtn = document.querySelector('#darkmode-btn');
+        let navbar = document.querySelector('.header .flex-header .navbar');
+        let headerBar = document.querySelector('.header');
+
+        spanBtn.onclick = () => {
+        spanBtn.classList.toggle('fa-times');
+        navbar.classList.toggle('active');
+        };
+
+        darkmodeBtn.onclick = () => {
+        darkmodeBtn.classList.toggle('fa-sun');
+        document.body.classList.toggle('dark');
+        headerBar.classList.toggle('dark');
+        };
+    </script>
 </body>
 </html>

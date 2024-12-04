@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <%- include ('../partials/main/header.ejs'); -%>
+    <div class="course-name">
+        <a>Web Application Development_Group02_2025-26</a>
+    </div>
+    <main id="main-in-course">
+        <div class="dropdown in-course">
+                <div class="button-menu" id="dropdown-btn">
+                    <i class="fas fa-angles-right" id="icon"></i>
+                </div>
+                <div class="dropdown-content">
+                    <a href="#" id="announcement-selected">
+                        <i class="fa-regular fa-bell"></i>
+                        <span>Annoucement</span>
+                    </a>
+                    <a href="#" id="material-selected">
+                        <i class="fa-regular fa-folder"></i>
+                        <span>Material</span>
+                    </a>
+                    <a href="#" id="contact-selected">
+                        <i class="fa-regular fa-envelope"></i>
+                        <span>Contact</span>
+                    </a>
+                    <a href="#" id="homework-selected">
+                        <i class="fas fa-tasks"></i>
+                        <span>Homework</span>
+                    </a>
+                    <a href="#" id="discussion-selected">
+                        <i class="fa-regular fa-comments"></i>
+                        <span>Discussion</span>
+                    </a>
+                    <a href="#" id="grade-selected">
+                        <i class="fa-solid fa-marker"></i>
+                        <span>Graded</span>
+                    </a>
+                </div>
+            </div>
+        <div class="display-area">
+            <section class="course-announcement">
+                <div class="header-menu-name">
+                    <h2>
+                        Announcement
+                    </h2>
+                </div>
+                <div class="announcement-listed">
+                    <div class="new-announcement">
+                        <div class="form-header-announcement">
+                            <h2 id="new-announcement">
+                                Create Announcement
+                            </h2>
+                        </div>
+                        <script>
+                            document.getElementById("new-announcement").addEventListener("click", function() {
+                                document.querySelector(".form-create-announcement").classList.toggle("show");
+                            });
+                        </script>
+                        <div class="form-create-announcement">
+                            <form action="">
+                                <label for="title">Title</label>
+                                <input type="text" name="title" id="" placeholder="Title of Announcement" required>
+                                <label for="description">Description</label>
+                                <textarea placeholder="Type your announcement here..."></textarea>
+                                <div class="button-form">
+                                    <button type="submit">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </button>
+                                    <button type="reset">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <ul>
+                        <li>
+                            <div class="announcement-container">
+                                <a href="#">
+                                    System maintaining: New course has been added.
+                                </a>
+                                <div class="description">
+                                    <span>
+                                        Dear Students, we have added a new course to the system. Please check it out.
+                                        Best regards, Admin.
+                                    </span>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="announcement-container">
+                                <a href="#">
+                                    No OS class on Fri & Sat, 15 & 16/11/2024
+                                </a>
+                                <div class="description">
+                                    <span>
+                                        Dear Students, there will be no Operating System class on Friday and Saturday, 15th and 16th of November, 2024.
+                                        Best regards, Instructor.
+                                    </span>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="announcement-container">
+                                <a href="#">
+                                    New assignment for Computer Networks
+                                </a>
+                                <div class="description">
+                                    <span>
+                                        Dear Students, a new assignment has been uploaded for Computer Networks. Please check it out.
+                                        Best regards, Instructor.
+                                    </span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+            <section class="course-material">
+                <div class="header-menu-name">
+                    <h2>
+                        Material
+                    </h2>
+                </div>
+                <div class="create-btn" id="material-form">
+                    <i class="fas fa-plus"></i>
+                </div>
+                <div class="material-listed">
+                    <ul>
+                        <li>
+                            <a href="#" class="title-book">
+                                Lecture 1: Introduction to Web Development
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                Lecture 2: HTML
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                Lecture 3: CSS
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                Lecture 4: JavaScript
+                            </a>
+                        </li>
+                        <script>
+                            document.querySelector("#material-form").addEventListener("click", function() {
+                                document.querySelector(".new-material-form").style.display = "block";
+                            });
+                        </script>
+                    </ul>
+                </div>
+            </section>
+            <!-- FORM CREATE A NEW MATERIAL -->
+            <section class="new-form new-material-form">
+                <div class="form-container">
+                    <form action="">
+                        <div class="exit-btn" id="exit-material">
+                            <i class="fas fa-times"></i>
+                        </div>
+                        <script>
+                            document.querySelector("#exit-material").addEventListener("click", function() {
+                                document.querySelector(".new-material-form").style.display = "none";
+                            });
+                        </script>
+                        <h2>Upload Material Form</h2>
+                        <label for="title">Title</label>
+                        <input type="text" name="title" id="" placeholder="Title of Material" required>
+                        <label for="description">Description</label>
+                        <textarea placeholder="Type your material here..."></textarea>
+                        <label for="file">File</label>
+                        <label for="file-upload-material" id="add-btn">Browse Local File</label>
+                        <input type="file" name="file" id="file-upload-material" multiple>
+                        <div class="display-file" id="display-file-material">
+                           <ul>
+                            <li>
+                                <a href="">
+                                    <i></i>
+                                    <span></span>
+                                </a>
+                            </li>
+                           </ul>
+                        </div>
+                        <script>
+                            document.getElementById("file-upload-material").addEventListener("change", function() {
+                                var file = document.getElementById("file-upload-material").files;
+                                var displayFile = document.querySelector("#display-file-material ul");
+                                displayFile.innerHTML = "";
+                                for (var i = 0; i < file.length; i++) {
+                                    var li = document.createElement("li");
+                                    var a = document.createElement("a");
+                                    var icon = document.createElement("i");
+                                    var span = document.createElement("span");
+                                    icon.classList.add("fas", "fa-file-pdf");
+                                    span.textContent = file[i].name;
+                                    a.appendChild(icon);
+                                    a.appendChild(span);
+                                    li.appendChild(a);
+                                    displayFile.appendChild(li);
+                                }
+                            });
+                        </script>
+                        <div class="button-form">
+                            <button type="submit">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                            <button type="reset" class="reset-btn" id="reset-material">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <script>
+                            document.querySelector("#reset-material").addEventListener("click", function() {
+                                document.querySelector("#display-file-material ul").innerHTML = "";
+                            });
+                        </script>
+                    </form>
+                </div>
+            </section>
+            <section class="course-contact">
+                <div class="header-menu-name">
+                    <h2>
+                        Contact
+                    </h2>
+                </div>
+                <div class="contact-listed">
+                    <ul>
+                        <li>
+                            <a href="#">
+                                <i class="fas fa-user-circle"></i>
+                                Teacher 1:
+                                </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fas fa-user-circle"></i>
+                                Teacher 2:
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+            <section class="course-homework">
+                <div class="header-menu-name">
+                    <h2>
+                        Homework
+                    </h2>
+                    <div class="create-btn" id="homework-form">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                </div>
+                <div class="homework-listed">
+                    <ul>
+                        <li>
+                            <a href="#">
+                                <p>Homework 1: HTML</p>
+                                <span>
+                                    Deadline: 10/11/2024
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <p>Homework 2: CSS</p>
+                                <span>
+                                    Deadline: 15/11/2024
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <p>Homework 3: JavaScript</p>
+                                <span>
+                                    Deadline: 20/11/2024
+                                </span>
+                            </a>
+                        </li>
+                        <script>
+                            document.querySelector("#homework-form").addEventListener("click", function() {
+                                document.querySelector(".new-homework-form").style.display = "block";
+                            });
+                        </script>
+                    </ul>
+                </div>
+            </section>
+            <!-- FORM FOR CREATE A HOMEWORK -->
+            <section class="new-form new-homework-form">
+                <div class="form-container">
+                    <form action="">
+                        <div class="exit-btn" id="exit-homework">
+                            <i class="fas fa-times"></i>
+                        </div>
+                        <script>
+                            document.querySelector("#exit-homework").addEventListener("click", function() {
+                                document.querySelector(".new-homework-form").style.display = "none";
+                            });
+                        </script>
+                        <h2>Create Homework Form</h2>
+                        <label for="title">Title</label>
+                        <input type="text" name="title" id="" placeholder="Title of the homework" required>
+                        <label for="description">Description</label>
+                        <textarea placeholder="Type the description here..."></textarea>
+                        <label for="deadline">Deadline</label>
+                        <input type="datetime-local" name="deadline" id="deadline" required>
+                        <label for="file">File</label>
+                        <label for="file-upload-homework" id="add-btn">Browse Local File</label>
+                        <input type="file" name="file" id="file-upload-homework" multiple placeholder="Upload yourfile">
+                        <div class="display-file" id="display-file-homework">
+                           <ul>
+                            <li>
+                                <a href="">
+                                    <i></i>
+                                    <span></span>
+                                </a>
+                            </li>
+                           </ul>
+                        </div>
+                        <script>
+                            document.getElementById("file-upload-homework").addEventListener("change", function() {
+                                var file = document.getElementById("file-upload-homework").files;
+                                var displayFile = document.querySelector("#display-file-homework ul");
+                                displayFile.innerHTML = "";
+                                for (var i = 0; i < file.length; i++) {
+                                    var li = document.createElement("li");
+                                    var a = document.createElement("a");
+                                    var icon = document.createElement("i");
+                                    var span = document.createElement("span");
+                                    icon.classList.add("fas", "fa-file-pdf");
+                                    span.textContent = file[i].name;
+                                    a.appendChild(icon);
+                                    a.appendChild(span);
+                                    li.appendChild(a);
+                                    displayFile.appendChild(li);
+                                }
+                            });
+                        </script>
+                        <div class="button-form">
+                            <button type="submit">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                            <button type="reset" class="reset-btn" id="reset-homework">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <script>
+                            document.querySelector("#reset-homework").addEventListener("click", function() {
+                                document.querySelector("#display-file-homework ul").innerHTML = "";
+                            });
+                        </script>
+                    </form>
+                </div>
+            </section>
+            <!-- this is a container -->
+            <section class="course-discussion"> 
+                <div class="left-side">
+                    <div class="header-menu-name teacher-dcs" >
+                        <h2 id="hide-chatbox">
+                            Discussion
+                        </h2>
+                        <div class="create" id="discussion-form">
+                            <i class="fas fa-plus"></i> 
+                        </div>
+                    </div>
+                    <script>
+                        document.querySelector("#hide-chatbox").addEventListener("click", function() {
+                            document.querySelector(".right-side").classList.toggle("hide");
+                        });
+                        document.querySelector("#discussion-form").addEventListener("click", function() {
+                            document.querySelector(".new-discussion-form").style.display = "block";
+                        });
+                    </script>
+
+                    <div class="discussion-listed">
+                        <ul>
+                            <li id="discussion-id">
+                                <div class="discussion-name">
+                                    <i class="fas fa-comments"></i>
+                                    <span class="discussion-brief">Discussion 1</span>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="discussion-name">
+                                    <i class="fas fa-comments"></i>
+                                    <span class="discussion-brief">Discussion 2</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <script>
+                        document.querySelector("#discussion-id").addEventListener("click", function() {
+                            document.querySelector("#discussion-content-id").classList.remove("hide");
+                            document.querySelector("#discussion-content-id").classList.add("show");
+                        });
+                    </script>
+                </div>
+                <!-- Container -->
+                <div class="right-side" id="discussion-content-id">
+                    <div class="topic-header">
+                        <div class="topic-info">
+                            <i class="fas fa-comments"></i>
+                            <p>Discussion 1: Something</p>
+                        </div>
+                    </div>
+                    <div class="discussion-board">
+                        <div class="other-msg">
+                            <div class="user-name">
+                                <i class="fas fa-user-circle"></i>
+                                <span>Student 1</span>
+                            </div>
+                            <div class="msg">
+                                <p>Hi, I have a question about the homework.</p>
+                            </div>
+                            <div class="time">
+                                <span>10:00 AM</span>
+                            </div>
+                        </div>
+                        <div class="owner-msg">
+                            <div class="user-name">
+                                <i class="fas fa-user-circle"></i>
+                                <span>Teacher 1</span>
+                            </div>
+                            <div class="msg">
+                                <p>What is your question?</p>
+                            </div>
+                            <div class="time">
+                                <span>10:05 AM</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fullscreen" id="fullscreen">
+                        <i class="fa-solid fa-expand" id="screen"></i>
+                    </div>
+                    <script>
+                        document.querySelector("#fullscreen").addEventListener("click", function() {
+                            document.querySelector(".left-side").classList.toggle("hide");
+                            var icon = document.querySelector("#screen");
+                            if (icon.classList.contains("fa-expand")) {
+                                icon.classList.remove("fa-expand");
+                                icon.classList.add("fa-compress");
+                            } else {
+                                icon.classList.remove("fa-compress");
+                                icon.classList.add("fa-expand");
+                            }
+                        });
+                    </script>
+                    <div class="chat-form">
+                        <form action="" class="chat-form">
+                            <textarea placeholder="Type your message here..."></textarea>
+                            <button type="submit">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+            <section class="new-form new-discussion-form">
+                <div class="form-container">
+                    <form action="">
+                        <div class="exit-btn" id="exit-discussion">
+                            <i class="fas fa-times"></i>
+                        </div>
+                        <script>
+                            document.querySelector("#exit-discussion").addEventListener("click", function() {
+                                document.querySelector(".new-discussion-form").style.display = "none";
+                            });
+                        </script>
+                        <h2>Discussion Creation Form</h2>
+                        <label for="title">Title</label>
+                        <input type="text" name="title" id="" placeholder="Title of discussion (Ex: Discussion 1)" required>
+                        <label for="description">Topic</label>
+                        <textarea placeholder="Type the topic here..."></textarea>
+                        <label for="deadline">Deadline</label>
+                        <input type="datetime-local" name="deadline" id="deadline" required>
+                        <label for="file">File</label>
+                        <label for="file-upload-discussion" id="add-btn">Browse Local File</label>
+                        <input type="file" name="file" id="file-upload-discussion" multiple placeholder="Upload yourfile">
+                        <div class="display-file" id="display-file-discussion">
+                           <ul>
+                            <li>
+                                <a href="">
+                                    <i></i>
+                                    <span></span>
+                                </a>
+                            </li>
+                           </ul>
+                        </div>
+                        <script>
+                            document.getElementById("file-upload-discussion").addEventListener("change", function() {
+                                var file = document.getElementById("file-upload-discussion").files;
+                                var displayFile = document.querySelector("#display-file-discussion ul");
+                                displayFile.innerHTML = "";
+                                for (var i = 0; i < file.length; i++) {
+                                    var li = document.createElement("li");
+                                    var a = document.createElement("a");
+                                    var icon = document.createElement("i");
+                                    var span = document.createElement("span");
+                                    icon.classList.add("fas", "fa-file-pdf");
+                                    span.textContent = file[i].name;
+                                    a.appendChild(icon);
+                                    a.appendChild(span);
+                                    li.appendChild(a);
+                                    displayFile.appendChild(li);
+                                }
+                            });
+                        </script>
+                        <div class="button-form">
+                            <button type="submit">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                            <button type="reset" class="reset-btn" id="reset-discussion">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <script>
+                            document.querySelector("#reset-discussion").addEventListener("click", function() {
+                                document.querySelector("#display-file-discussion ul").innerHTML = "";
+                            });
+                        </script>
+                    </form>
+                </div>
+            </section>
+            <section class="course-graded">
+                <div class="header-menu-name">
+                    <h2>
+                        Graded
+                    </h2>
+                </div>
+                <div class="graded-listed">
+                    <ul>
+                        <li>
+                            <a href="#">
+                                <div class="homework-name">
+                                    Homework 1: HTML
+                                </div>
+                                <div class="grade">
+                                    10/10
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <div class="homework-name">
+                                    Homework 2: CSS
+                                </div>
+                                <div class="grade">
+                                    8/10
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <div class="homework-name">
+                                    Homework 3: JavaScript
+                                </div>
+                                <div class="grade">
+                                    9/10
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <div class="homework-name">
+                                    Homework 4: PHP
+                                </div>
+                                <div class="grade">
+                                    not graded
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+            </section>
+        </div>
+    </main>
+    <%- include ('../partials/main/footer.ejs'); -%>
