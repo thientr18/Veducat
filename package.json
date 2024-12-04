@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon --inspect src/index.js",
-    "css": "node-sass src/resources/scss/app.scss src/public/css/login.css",
+    "css": "node-sass src/resources/scss/login/app.scss src/public/css/login.css",
     "build-css" : "node-sass src/resources/scss/main/app.scss src/public/css/app.css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

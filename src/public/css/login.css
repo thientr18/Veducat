@@ -1,0 +1,245 @@
+/* google fonts */
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
+@media (max-width: 575px) {
+  .extend-btn {
+    display: flex; }
+  .form-container {
+    flex-direction: column; }
+  .form-box {
+    width: 100%; }
+  .info-content {
+    width: 100%;
+    text-align: center;
+    border-radius: 40px 40px 80px 80px;
+    border-left: none;
+    border-top: solid 3px var(--theme-color);
+    margin-bottom: 3dvi; } }
+
+:root {
+  --theme-color: #ee9b3c; }
+
+header nav {
+  font-weight: bold;
+  border-bottom: solid 3px var(--theme-color); }
+
+header nav a {
+  color: var(--theme-color); }
+
+header nav a:hover {
+  color: #ff8800; }
+
+.extend-btn {
+  background-color: white;
+  color: var(--theme-color);
+  border: solid 2px var(--theme-color);
+  border-radius: 25px;
+  display: none; }
+
+.extend-btn:hover {
+  border: solid 3px var(--theme-color);
+  background-color: var(--theme-color);
+  color: white; }
+
+main {
+  background-image: url(/img/background.svg);
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat; }
+
+.main-body {
+  display: flex;
+  min-height: 90vh;
+  margin-top: 50px;
+  justify-content: center;
+  padding: 0 20px; }
+
+.cat {
+  position: relative;
+  bottom: -115px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150px;
+  height: 150px;
+  z-index: -1; }
+
+.form-container {
+  position: relative;
+  margin-top: 30px;
+  display: flex;
+  width: 1000px;
+  height: 600px;
+  border: 3px solid var(--theme-color);
+  border-radius: 40px;
+  backdrop-filter: blur(50px);
+  align-items: center; }
+
+.form-box {
+  width: 50%;
+  padding: 30px; }
+
+.log-title {
+  text-align: center; }
+
+.input-box {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  margin: 30px 0; }
+
+.input-box input {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  color: black;
+  font-weight: 600;
+  border-bottom: 3px solid var(--theme-color); }
+
+.input-box label {
+  position: absolute;
+  color: black;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  transition: .5s; }
+
+.input-box input:focus ~ label,
+.input-box input:valid ~ label {
+  top: -5px;
+  font-size: 14px;
+  color: var(--theme-color); }
+
+.input-box i {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  font-size: 20px; }
+
+.input-box input:focus ~ i,
+.input-box input:valid ~ i {
+  color: var(--theme-color); }
+
+.error {
+  color: #ff0099;
+  margin: 10px 2px;
+  font-size: 0.8em;
+  font-weight: bold; }
+
+.forgotpw {
+  text-align: center;
+  font-size: 14px;
+  height: 25px;
+  margin-bottom: 10px; }
+
+.btn {
+  position: relative;
+  width: 100%;
+  height: 45px;
+  border-radius: 40px;
+  border: solid 2px black;
+  font-weight: bold;
+  font-size: 18px; }
+
+.btn:hover {
+  border-color: var(--theme-color);
+  color: var(--theme-color); }
+
+.info-content {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  height: 100%;
+  justify-content: center;
+  text-align: right;
+  background-color: var(--theme-color);
+  color: white;
+  /* background-image: url(background.svg);
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat; */
+  border-radius: 40px 80px 80px 40px;
+  border-left: solid 3px var(--theme-color); }
+
+.aboutus {
+  padding: 10px 30px; }
+
+.aboutus p {
+  margin-bottom: 0; }
+
+.contactus {
+  padding: 0 30px 10px; }
+
+.contactus ul {
+  list-style: none; }
+
+.info {
+  background-color: #393d41;
+  color: white; }
+
+a {
+  color: var(--theme-color); }
+
+a:hover {
+  color: orangered; }
+
+footer {
+  background-color: #5c5959;
+  padding-bottom: 10px;
+  text-align: center;
+  color: white; }
+
+/* Start student/course */
+#courseMenuPalette {
+  background-color: var(--theme-color);
+  color: white;
+  width: 210px;
+  padding: 0 12px 20px 12px;
+  margin: 66.67px 0 0;
+  display: inline-block; }
+
+#courseMenuPalette_tittleHeading {
+  width: 100%;
+  height: 50px;
+  display: block;
+  margin: 0;
+  padding: 0;
+  line-height: 50px; }
+
+#courseMenuPalette_tittleHeading h4 {
+  line-height: 50px;
+  vertical-align: middle; }
+
+#courseMenuPalette_contents {
+  display: block;
+  list-style-type: none;
+  margin: 0;
+  padding: 0; }
+
+#courseMenuPalette_contents li {
+  display: block;
+  border-top: solid 1px white;
+  padding: 12px;
+  margin: 0 -12px;
+  width: calc(100%+24px); }
+
+#courseMenuPalette_contents li a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+  width: 100%; }
+
+#courseMenuPalette_contents li a:hover {
+  opacity: 0.7; }
+
+#courseDisplay {
+  width: calc(100% - 210px);
+  margin: 66.67px 0 0 210px;
+  padding: 0 12px;
+  display: inline-block; }
+
+/* End student/course */
