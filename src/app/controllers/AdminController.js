@@ -26,7 +26,7 @@ class AdminController {
     // POST /admin/manage_student/insert
     async admin_insert_student_post(req, res) {
         const {studentID, name, DoB, email} = req.body;
-    
+        console.log(studentID, name, DoB, email)
         try {
             await User.create({ userID: studentID})
             await Student.create({ studentID: studentID,
@@ -34,6 +34,7 @@ class AdminController {
                                     DoB: DoB, 
                                     email: email })
             console.log('Insert student successfully')
+            res.status(200).json( { message: 'Insert student successfully' })
         }
         catch (err) {
             res.status(400).json( {err} )
@@ -85,7 +86,7 @@ class AdminController {
     async admin_insert_teacher_post(req, res) {
         const {teacherID, name, DoB, email} = req.body;
         try {
-            await User.create({ userID: teacherID})
+            await User.create({ userID: teacherID, role: 'teacher' })
             await Teacher.create({teacherID: teacherID,
                                     name: name,
                                     DoB: DoB,

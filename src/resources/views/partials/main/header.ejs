@@ -1,5 +1,5 @@
-<link rel="stylesheet" href="/css/app.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/css/app.css">
 </head>
 <body>
     <header class="header">
@@ -7,13 +7,19 @@
             <nav class="logoNUser">
                 <a href="#home" class="logo">Veducat</a>
                 <span class="user">
-                    <span>Hello, John Doe</span>
+                    <% if (user.role = 'student') { %>
+                        <span>Hello, <%= student.name %></span>
+                    <% } else if (user.role = 'teacher') { %>
+                        <span>Hello, <%= teacher.name %></span>
+                    <% } else if (user.role = 'admin') { %>
+                        <span>Hello, <%= user.userID %></span>
+                    <% } %>
                     <i class="fas fa-user-circle"></i>
                 </span>
             </nav>
             <nav class="navbar">
-                <a href="index.html">Home</a>
-                <a href="homework.html">Homework</a>
+                <a href="/">Home</a>
+                <a href="homework.html">Homework</a> <!-- /student/homwork/:id (đây là courseID) -->
                 <a href="discussion.html">Discussion</a>
                 <div id="darkmode-btn" class="fas fa-moon"></div>
             </nav>
