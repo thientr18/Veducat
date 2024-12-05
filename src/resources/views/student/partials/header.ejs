@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veducat | 
+        <%=  %> 
+    </title> 
+<%- include('../../partials/main/header.ejs'); -%>
+
+<div class="course-name">
+    <a href="/link/<%= COURSEID %> ">
+        <%= "Web Application Development_Group02_2024-25" %>
+    </a>
+</div>
+<main id="main-in-course">
+    <div class="dropdown in-course">
+            <div class="button-menu" id="dropdown-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+            <div class="dropdown-content">
+                <a href="#" id="announcement-selected">
+                    <i class="fa-regular fa-bell"></i>
+                    <span>Annoucement</span>
+                </a>
+                <a href="#" id="material-selected">
+                    <i class="fa-regular fa-folder"></i>
+                    <span>Material</span>
+                </a>
+                <a href="#" id="contact-selected">
+                    <i class="fa-regular fa-envelope"></i>
+                    <span>Contact</span>
+                </a>
+                <a href="#" id="homework-selected">
+                    <i class="fas fa-tasks"></i>
+                    <span>Homework</span>
+                </a>
+                <a href="#" id="discussion-selected">
+                    <i class="fa-regular fa-comments"></i>
+                    <span>Discussion</span>
+                </a>
+                <a href="#" id="grade-selected">
+                    <i class="fa-solid fa-marker"></i>
+                    <span>Graded</span>
+                </a>
+            </div>
+        </div>
+    <div class="display-area">
