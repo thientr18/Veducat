@@ -28,9 +28,6 @@
                     </div>
                     <div class="card-content">
                         <ul>
-                            <li>
-
-                            </li>
                         </ul>
                     </div>
                 </div>
@@ -49,22 +46,6 @@
         </div>
     </main>
     <script>
-        // Courses
-        let studentCourses = '<%- JSON.stringify(studentCourses) %>';
-        studentCourses = JSON.parse(studentCourses);
-
-        const courseSection = document.querySelector('.course-list');
-        const courseUl = courseSection.querySelector('ul');
-        
-        studentCourses.forEach(course => {
-            const li = document.createElement('li');
-            const a = document.createElement('a');
-            a.href = `/student/course/${course._id}`;
-            a.textContent = `Course: ${course.name}`;
-            li.appendChild(a);
-            courseUl.appendChild(li);
-        });
-        
         // Announcements
         let announcements = '<%- JSON.stringify(announcements) %>';
         announcements = JSON.parse(announcements);
@@ -79,6 +60,22 @@
             a.textContent = `${announcement.courseName}: ${announcement.title}`;
             li.appendChild(a);
             announcementUl.appendChild(li);
+        });
+        
+        // Courses
+        let studentCourses = '<%- JSON.stringify(studentCourses) %>';
+        studentCourses = JSON.parse(studentCourses);
+
+        const courseSection = document.querySelector('.course-list');
+        const courseUl = courseSection.querySelector('ul');
+        
+        studentCourses.forEach(course => {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            a.href = `/student/course/${course._id}`;
+            a.textContent = `Course: ${course.name}`;
+            li.appendChild(a);
+            courseUl.appendChild(li);
         });
     </script>
 <%- include('../partials/main/footer.ejs'); -%>

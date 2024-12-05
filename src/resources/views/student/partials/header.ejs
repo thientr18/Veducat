@@ -9,7 +9,7 @@
 <%- include('../../partials/main/header.ejs'); -%>
 
 <div class="course-name">
-    <a href="/link/<%= COURSEID %> ">
+    <a href="">
         <%= "Web Application Development_Group02_2024-25" %>
     </a>
 </div>
@@ -19,27 +19,27 @@
                 <i class="fas fa-bars"></i>
             </div>
             <div class="dropdown-content">
-                <a href="#" id="announcement-selected">
+                <a href="/student/course/<%= progressingCourse._id %>/announcement" id="announcement-selected">
                     <i class="fa-regular fa-bell"></i>
                     <span>Annoucement</span>
                 </a>
-                <a href="#" id="material-selected">
+                <a href="/student/course/<%= progressingCourse._id %>/material" id="material-selected">
                     <i class="fa-regular fa-folder"></i>
                     <span>Material</span>
                 </a>
-                <a href="#" id="contact-selected">
+                <a href="/student/course/<%= progressingCourse._id %>/contact" id="contact-selected">
                     <i class="fa-regular fa-envelope"></i>
                     <span>Contact</span>
                 </a>
-                <a href="#" id="homework-selected">
+                <a href="/student/course/<%= progressingCourse._id %>/homework" id="homework-selected">
                     <i class="fas fa-tasks"></i>
                     <span>Homework</span>
                 </a>
-                <a href="#" id="discussion-selected">
+                <a href="/student/course/<%= progressingCourse._id %>/discussion" id="discussion-selected">
                     <i class="fa-regular fa-comments"></i>
                     <span>Discussion</span>
                 </a>
-                <a href="#" id="grade-selected">
+                <a href="/student/course/<%= progressingCourse._id %>/grade" id="grade-selected">
                     <i class="fa-solid fa-marker"></i>
                     <span>Graded</span>
                 </a>
