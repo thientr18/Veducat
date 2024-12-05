@@ -325,10 +325,10 @@ a{
     border-radius: 1rem;
     background-color: var(--secondary-color);
 }
-.display-area .course-announcement.show, .course-material.show, .course-contact.show, .course-homework.show, .course-graded.show{
+.display-area .course-announcement, .course-material, .course-contact, .course-homework, .course-graded{
     display: block;
 }
-.display-area .course-discussion.show{
+.display-area .course-discussion{
     display: flex;
 }
 
