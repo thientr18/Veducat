@@ -41,7 +41,7 @@
     const form = document.querySelector('.form-insert-announcement');
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const courseID = 'admin';
+      const courseID = '675131e566d7d835b17c61a9'; // _id of admin course
       const title = document.querySelector('#announcement_title').value;
       const content = document.querySelector('#announcement_content').value;
       const studentIDs = [];
@@ -52,8 +52,6 @@
         }
       });
       const sender = "<%= user.userID %>";
-
-      console.log(typeof studentIDs);
       try {
         const res = await fetch('/admin/announcement/send_to_student', {
           method: 'POST',

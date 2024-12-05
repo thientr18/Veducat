@@ -92,6 +92,7 @@ class AdminController {
                                     DoB: DoB,
                                     email: email})
             console.log('Insert teacher successfully')
+            res.status(201).json( { message: 'Insert teacher successfully' })
         }
         catch (err) {
             res.status(400).json( {err} )

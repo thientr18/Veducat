@@ -9,48 +9,200 @@ class StudentController {
     async index_get(req, res, next) {
         const user = res.locals.user; // Access the user from res.locals
         try {
+            // Find the student based on the logged-in user's ID
             const student = await Student.findOne({ studentID: user.userID });
             if (!student) {
                 return res.status(404).json({ message: "Student not found" });
             }
 
-            // Find ProgressingCourses that include the student's ID in the students array
+            // Fetch ProgressingCourses that include this student's ID
             const progressingCourses = await ProgressingCourse.find({ students: student.studentID });
-            const progressingCourseIDs = progressingCourses.map(course => course.courseID);
+            if (!progressingCourses.length) {
+                return res.render('student/index', { 
+                    user, 
+                    student, 
+                    studentCourses: [], 
+                    announcements: [] 
+                });
+            }
 
-            // Find ProgressingCourses that include the student's ID in the students array
-            const courses = await Course.find({ courseID: { $in: progressingCourseIDs } });
+            // Extract all course IDs from the progressing courses
+            const progressingCourseIDs = progressingCourses.map(course => course._id.toString());
 
+            // Fetch corresponding Course details
+            const courses = await Course.find({ courseID: { $in: progressingCourses.map(c => c.courseID) } });
+
+            // Enrich progressing courses with course names and descriptions
             const studentCourses = progressingCourses.map(pCourse => {
-                // Find the matching course from the Course array
                 const course = courses.find(c => c.courseID === pCourse.courseID);
                 return {
-                    ...pCourse._doc, // Include all existing fields from ProgressingCourse
+                    ...pCourse._doc, // Include all fields from ProgressingCourse
                     name: course?.name || null, // Add name from Course
                     description: course?.description || null // Add description from Course
                 };
             });
-            
-            // Find announcements sent to the student
+
+            // Fetch announcements where the student is listed as a recipient
             const announcements = await Announcement.find({ recipents: student.studentID });
-            console.log(announcements.map(a => a.courseID));
-            // Extract unique courseIDs from announcements
+
+            if (!announcements.length) {
+                return res.render('student/index', { 
+                    user, 
+                    student, 
+                    studentCourses, 
+                    announcements: [] 
+                });
+            }
+
+            // Extract unique progressing course IDs from announcements
             const announcementCourseIDs = [...new Set(announcements.map(a => a.courseID))];
 
-            // Fetch courses corresponding to announcement courseIDs
-            const announcementCourses = await Course.find({ courseID: { $in: announcementCourseIDs } });
-
-            // Enrich announcements with courseName
+            // Match announcements to progressing courses and their associated courses
             const enrichedAnnouncements = announcements.map(announcement => {
-                const course = announcementCourses.find(c => c.courseID === announcement.courseID);
+                const pCourse = progressingCourses.find(pc => pc._id.toString() === announcement.courseID);
+                const course = courses.find(c => c.courseID === pCourse?.courseID);
                 return {
-                    ...announcement._doc, // Include all fields from Announcement
-                    courseName: course?.name || null // Add courseName from Course
+                    ...announcement._doc,
+                    courseName: course?.name || null, // Add the name of the associated Course
+                    courseDescription: course?.description || null // Add the description of the associated Course
                 };
             });
-            res.render('student/index', { user, student, studentCourses, announcements: enrichedAnnouncements });
+
+            // Render the student dashboard with enriched data
+            res.render('student/index', { 
+                user, 
+                student, 
+                studentCourses, 
+                announcements: enrichedAnnouncements 
+            });
         } catch (error) {
-            res.status(500).send(error);
+            console.error(error);
+            res.status(500).send({ message: "An error occurred", error });
+        }
+    }
+    async course_get(req, res, next) {
+        const user = res.locals.user;
+        const { _id } = req.params;
+        try {
+            const student = await Student.findOne({ studentID: user.userID });
+            if (!student) {
+                return res.status(404).json({ message: "Student not found" });
+            }
+
+            const progressingCourse = await ProgressingCourse.findById(_id);
+
+            res.render('student/course', { user, student, progressingCourse });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send({ message: "An error occurred", error });
+        }
+    }
+
+    async announcement_get(req, res, next) {
+        const user = res.locals.user;
+        const { _id } = req.params;
+        try {
+            const student = await Student.findOne({ studentID: user.userID });
+            if (!student) {
+                return res.status(404).json({ message: "Student not found" });
+            }
+
+            const progressingCourse = await ProgressingCourse.findById(_id);
+
+            res.render('student/course_announcement', { user, student, progressingCourse});
+        } catch {
+            console.error(error);
+            res.status(500).send({ message: "An error occurred", error });
+        }
+    }
+
+    async material_get(req, res, next) {
+        const user = res.locals.user;
+        const { _id } = req.params;
+        try {
+            const student = await Student.findOne({ studentID: user.userID });
+            if (!student) {
+                return res.status(404).json({ message: "Student not found" });
+            }
+
+            const progressingCourse = await ProgressingCourse.findById(_id);
+
+            res.render('student/course_material', { user, student, progressingCourse});
+        } catch {
+            console.error(error);
+            res.status(500).send({ message: "An error occurred", error });
+        }
+    }
+
+    async contact_get(req, res, next) {
+        const user = res.locals.user;
+        const { _id } = req.params;
+        try {
+            const student = await Student.findOne({ studentID: user.userID });
+            if (!student) {
+                return res.status(404).json({ message: "Student not found" });
+            }
+
+            const progressingCourse = await ProgressingCourse.findById(_id);
+
+            res.render('student/course_contact', { user, student, progressingCourse});
+        } catch {
+            console.error(error);
+            res.status(500).send({ message: "An error occurred", error });
+        }
+    }
+
+    async homework_get(req, res, next) {
+        const user = res.locals.user;
+        const { _id } = req.params;
+        try {
+            const student = await Student.findOne({ studentID: user.userID });
+            if (!student) {
+                return res.status(404).json({ message: "Student not found" });
+            }
+
+            const progressingCourse = await ProgressingCourse.findById(_id);
+
+            res.render('student/course_homework', { user, student, progressingCourse});
+        } catch {
+            console.error(error);
+            res.status(500).send({ message: "An error occurred", error });
+        }
+    }
+
+    async discussion_get(req, res, next) {
+        const user = res.locals.user;
+        const { _id } = req.params;
+        try {
+            const student = await Student.findOne({ studentID: user.userID });
+            if (!student) {
+                return res.status(404).json({ message: "Student not found" });
+            }
+
+            const progressingCourse = await ProgressingCourse.findById(_id);
+
+            res.render('student/course_discussion', { user, student, progressingCourse});
+        } catch {
+            console.error(error);
+            res.status(500).send({ message: "An error occurred", error });
+        }
+    }
+
+    async grade_get(req, res, next) {
+        const user = res.locals.user;
+        const { _id } = req.params;
+        try {
+            const student = await Student.findOne({ studentID: user.userID });
+            if (!student) {
+                return res.status(404).json({ message: "Student not found" });
+            }
+
+            const progressingCourse = await ProgressingCourse.findById(_id);
+
+            res.render('student/course_grade', { user, student, progressingCourse});
+        } catch {
+            console.error(error);
+            res.status(500).send({ message: "An error occurred", error });
         }
     }
 }
