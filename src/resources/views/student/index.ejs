@@ -56,7 +56,7 @@
         announcements.forEach(announcement => {
             const li = document.createElement('li');
             const a = document.createElement('a');
-            a.href = `/student/announcement/${announcement._id}`;
+            a.href = `/student/course/${announcement.courseID}/announcement`;
             a.textContent = `${announcement.courseName}: ${announcement.title}`;
             li.appendChild(a);
             announcementUl.appendChild(li);
