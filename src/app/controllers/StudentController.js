@@ -63,12 +63,7 @@ class StudentController {
             });
 
             // Render the student dashboard with enriched data
-            res.render('student/index', { 
-                user, 
-                student, 
-                studentCourses, 
-                announcements: enrichedAnnouncements 
-            });
+            res.render('student/index', { user, student, studentCourses, announcements: enrichedAnnouncements });
         } catch (error) {
             console.error(error);
             res.status(500).send({ message: "An error occurred", error });
@@ -107,7 +102,9 @@ class StudentController {
             const course = await Course.findOne({ courseID: progressingCourse.courseID });
             progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
 
-            res.render('student/course_announcement', { user, student, progressingCourse});
+            const announcements = await Announcement.find({ courseID: progressingCourse._id });
+
+            res.render('student/course_announcement', { user, student, progressingCourse, announcements});
         } catch {
             console.error(error);
             res.status(500).send({ message: "An error occurred", error });
