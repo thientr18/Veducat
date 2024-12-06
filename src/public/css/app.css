@@ -251,7 +251,7 @@ a {
   transition: width 0.3s ease; }
 
 .dropdown.in-course {
-  height: calc(100vh - 20rem); }
+  height: calc(6 * (60px + 3rem) + 40px + 4rem); }
 
 .dropdown.hide {
   width: 2%;

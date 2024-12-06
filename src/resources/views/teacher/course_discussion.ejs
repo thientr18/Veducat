@@ -1,0 +1,170 @@
+<%- include('./partials/header.ejs'); -%>
+<section class="course-discussion"> 
+    <div class="left-side">
+        <div class="header-menu-name teacher-dcs" >
+            <h2 id="hide-chatbox">
+                Discussion
+            </h2>
+            <div class="create" id="discussion-form">
+                <i class="fas fa-plus"></i> 
+            </div>
+        </div>
+        <script>
+            document.querySelector("#hide-chatbox").addEventListener("click", function() {
+                document.querySelector(".right-side").classList.toggle("hide");
+            });
+            document.querySelector("#discussion-form").addEventListener("click", function() {
+                document.querySelector(".new-discussion-form").style.display = "block";
+            });
+        </script>
+
+        <div class="discussion-listed">
+            <ul>
+                <li id="discussion-id">
+                    <div class="discussion-name">
+                        <i class="fas fa-comments"></i>
+                        <span class="discussion-brief">Discussion 1</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="discussion-name">
+                        <i class="fas fa-comments"></i>
+                        <span class="discussion-brief">Discussion 2</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <script>
+            document.querySelector("#discussion-id").addEventListener("click", function() {
+                document.querySelector("#discussion-content-id").classList.remove("hide");
+                document.querySelector("#discussion-content-id").classList.add("show");
+            });
+        </script>
+    </div>
+    <!-- Container -->
+    <div class="right-side" id="discussion-content-id">
+        <div class="topic-header">
+            <div class="topic-info">
+                <i class="fas fa-comments"></i>
+                <p>Discussion 1: Something</p>
+            </div>
+        </div>
+        <div class="discussion-board">
+            <div class="other-msg">
+                <div class="user-name">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Student 1</span>
+                </div>
+                <div class="msg">
+                    <p>Hi, I have a question about the homework.</p>
+                </div>
+                <div class="time">
+                    <span>10:00 AM</span>
+                </div>
+            </div>
+            <div class="owner-msg">
+                <div class="user-name">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Teacher 1</span>
+                </div>
+                <div class="msg">
+                    <p>What is your question?</p>
+                </div>
+                <div class="time">
+                    <span>10:05 AM</span>
+                </div>
+            </div>
+        </div>
+        <div class="fullscreen" id="fullscreen">
+            <i class="fa-solid fa-expand" id="screen"></i>
+        </div>
+        <script>
+            document.querySelector("#fullscreen").addEventListener("click", function() {
+                document.querySelector(".left-side").classList.toggle("hide");
+                var icon = document.querySelector("#screen");
+                if (icon.classList.contains("fa-expand")) {
+                    icon.classList.remove("fa-expand");
+                    icon.classList.add("fa-compress");
+                } else {
+                    icon.classList.remove("fa-compress");
+                    icon.classList.add("fa-expand");
+                }
+            });
+        </script>
+        <div class="chat-form">
+            <form action="" class="chat-form">
+                <textarea placeholder="Type your message here..."></textarea>
+                <button type="submit">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+<section class="new-form new-discussion-form">
+    <div class="form-container">
+        <form action="">
+            <div class="exit-btn" id="exit-discussion">
+                <i class="fas fa-times"></i>
+            </div>
+            <script>
+                document.querySelector("#exit-discussion").addEventListener("click", function() {
+                    document.querySelector(".new-discussion-form").style.display = "none";
+                });
+            </script>
+            <h2>Discussion Creation Form</h2>
+            <label for="title">Title</label>
+            <input type="text" name="title" id="" placeholder="Title of discussion (Ex: Discussion 1)" required>
+            <label for="description">Topic</label>
+            <textarea placeholder="Type the topic here..."></textarea>
+            <label for="deadline">Deadline</label>
+            <input type="datetime-local" name="deadline" id="deadline" required>
+            <label for="file">File</label>
+            <label for="file-upload-discussion" id="add-btn">Browse Local File</label>
+            <input type="file" name="file" id="file-upload-discussion" multiple placeholder="Upload yourfile">
+            <div class="display-file" id="display-file-discussion">
+               <ul>
+                <li>
+                    <a href="">
+                        <i></i>
+                        <span></span>
+                    </a>
+                </li>
+               </ul>
+            </div>
+            <script>
+                document.getElementById("file-upload-discussion").addEventListener("change", function() {
+                    var file = document.getElementById("file-upload-discussion").files;
+                    var displayFile = document.querySelector("#display-file-discussion ul");
+                    displayFile.innerHTML = "";
+                    for (var i = 0; i < file.length; i++) {
+                        var li = document.createElement("li");
+                        var a = document.createElement("a");
+                        var icon = document.createElement("i");
+                        var span = document.createElement("span");
+                        icon.classList.add("fas", "fa-file-pdf");
+                        span.textContent = file[i].name;
+                        a.appendChild(icon);
+                        a.appendChild(span);
+                        li.appendChild(a);
+                        displayFile.appendChild(li);
+                    }
+                });
+            </script>
+            <div class="button-form">
+                <button type="submit">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+                <button type="reset" class="reset-btn" id="reset-discussion">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <script>
+                document.querySelector("#reset-discussion").addEventListener("click", function() {
+                    document.querySelector("#display-file-discussion ul").innerHTML = "";
+                });
+            </script>
+        </form>
+    </div>
+</section>
+<%- include('./partials/footer.ejs'); -%>
