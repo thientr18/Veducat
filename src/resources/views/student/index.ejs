@@ -49,14 +49,16 @@
         // Announcements
         let announcements = '<%- JSON.stringify(announcements) %>';
         announcements = JSON.parse(announcements);
-        
+        // SORT ANNOUNCEMENTS BY DATE: newest to oldest
+        announcements.sort((a, b) => new Date(b.sentAt).getTime() - new Date(a.sentAt).getTime());
+
         const announcementSection = document.querySelector('.announcement-list');
         const announcementUl = announcementSection.querySelector('ul');
 
         announcements.forEach(announcement => {
             const li = document.createElement('li');
             const a = document.createElement('a');
-            a.href = `/student/announcement/${announcement._id}`;
+            a.href = `/student/course/${announcement.courseID}/announcement`;
             a.textContent = `${announcement.courseName}: ${announcement.title}`;
             li.appendChild(a);
             announcementUl.appendChild(li);
@@ -65,7 +67,9 @@
         // Courses
         let studentCourses = '<%- JSON.stringify(studentCourses) %>';
         studentCourses = JSON.parse(studentCourses);
-
+        // SORT COURSES BY NAME: A-Z
+        studentCourses.sort((a, b) => a.name.localeCompare(b.name));
+        
         const courseSection = document.querySelector('.course-list');
         const courseUl = courseSection.querySelector('ul');
         

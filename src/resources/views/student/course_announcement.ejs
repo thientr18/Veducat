@@ -7,46 +7,38 @@
     </div>
     <div class="announcement-listed">
         <ul>
-            <li>
-                <div class="announcement-container">
-                    <a href="#">
-                        System maintaining: New course has been added.
-                    </a>
-                    <div class="description">
-                        <span>
-                            Dear Students, we have added a new course to the system. Please check it out.
-                            Best regards, Admin.
-                        </span>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="announcement-container">
-                    <a href="#">
-                        No OS class on Fri & Sat, 15 & 16/11/2024
-                    </a>
-                    <div class="description">
-                        <span>
-                            Dear Students, there will be no Operating System class on Friday and Saturday, 15th and 16th of November, 2024.
-                            Best regards, Instructor.
-                        </span>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="announcement-container">
-                    <a href="#">
-                        New assignment for Computer Networks
-                    </a>
-                    <div class="description">
-                        <span>
-                            Dear Students, a new assignment has been uploaded for Computer Networks. Please check it out.
-                            Best regards, Instructor.
-                        </span>
-                    </div>
-                </div>
-            </li>
         </ul>
     </div>
 </section>
+
+<script>
+    // Announcements
+    let announcements = '<%- JSON.stringify(announcements) %>';
+    announcements = JSON.parse(announcements);
+    // SORT ANNOUNCEMENTS BY DATE: newest to oldest
+    announcements.sort((a, b) => new Date(b.sentAt).getTime() - new Date(a.sentAt).getTime());
+
+    const announcementList = document.querySelector('.announcement-listed');
+    const announcementUl = announcementList.querySelector('ul');
+
+    announcements.forEach(announcement => {
+        const li = document.createElement('li');
+        const div = document.createElement('div');
+        div.classList.add('announcement-container');
+        const a = document.createElement('a');
+        a.href = '#';
+        a.textContent = `${announcement.title}`;
+        const description = document.createElement('div');
+        description.classList.add('description');
+        const span = document.createElement('span');
+        span.textContent = `${announcement.content}`;
+        description.appendChild(span);
+        div.appendChild(a);
+        div.appendChild(description);
+        li.appendChild(div);
+        announcementUl.appendChild(li);
+
+    });
+</script>
+
 <%- include('./partials/footer.ejs'); -%>
