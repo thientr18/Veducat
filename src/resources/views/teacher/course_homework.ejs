@@ -1,0 +1,112 @@
+<%- include('./partials/header.ejs'); -%>
+<section class="course-homework">
+    <div class="header-menu-name">
+        <h2>
+            Homework
+        </h2>
+        <div class="create-btn" id="homework-form">
+            <i class="fas fa-plus"></i>
+        </div>
+    </div>
+    <div class="homework-listed">
+        <ul>
+            <li>
+                <a href="#">
+                    <p>Homework 1: HTML</p>
+                    <span>
+                        Deadline: 10/11/2024
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <p>Homework 2: CSS</p>
+                    <span>
+                        Deadline: 15/11/2024
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <p>Homework 3: JavaScript</p>
+                    <span>
+                        Deadline: 20/11/2024
+                    </span>
+                </a>
+            </li>
+            <script>
+                document.querySelector("#homework-form").addEventListener("click", function() {
+                    document.querySelector(".new-homework-form").style.display = "block";
+                });
+            </script>
+        </ul>
+    </div>
+</section>
+<!-- FORM FOR CREATE A HOMEWORK -->
+<section class="new-form new-homework-form">
+    <div class="form-container">
+        <form action="">
+            <div class="exit-btn" id="exit-homework">
+                <i class="fas fa-times"></i>
+            </div>
+            <script>
+                document.querySelector("#exit-homework").addEventListener("click", function() {
+                    document.querySelector(".new-homework-form").style.display = "none";
+                });
+            </script>
+            <h2>Create Homework Form</h2>
+            <label for="title">Title</label>
+            <input type="text" name="title" id="" placeholder="Title of the homework" required>
+            <label for="description">Description</label>
+            <textarea placeholder="Type the description here..."></textarea>
+            <label for="deadline">Deadline</label>
+            <input type="datetime-local" name="deadline" id="deadline" required>
+            <label for="file">File</label>
+            <label for="file-upload-homework" id="add-btn">Browse Local File</label>
+            <input type="file" name="file" id="file-upload-homework" multiple placeholder="Upload yourfile">
+            <div class="display-file" id="display-file-homework">
+               <ul>
+                <li>
+                    <a href="">
+                        <i></i>
+                        <span></span>
+                    </a>
+                </li>
+               </ul>
+            </div>
+            <script>
+                document.getElementById("file-upload-homework").addEventListener("change", function() {
+                    var file = document.getElementById("file-upload-homework").files;
+                    var displayFile = document.querySelector("#display-file-homework ul");
+                    displayFile.innerHTML = "";
+                    for (var i = 0; i < file.length; i++) {
+                        var li = document.createElement("li");
+                        var a = document.createElement("a");
+                        var icon = document.createElement("i");
+                        var span = document.createElement("span");
+                        icon.classList.add("fas", "fa-file-pdf");
+                        span.textContent = file[i].name;
+                        a.appendChild(icon);
+                        a.appendChild(span);
+                        li.appendChild(a);
+                        displayFile.appendChild(li);
+                    }
+                });
+            </script>
+            <div class="button-form">
+                <button type="submit">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+                <button type="reset" class="reset-btn" id="reset-homework">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <script>
+                document.querySelector("#reset-homework").addEventListener("click", function() {
+                    document.querySelector("#display-file-homework ul").innerHTML = "";
+                });
+            </script>
+        </form>
+    </div>
+</section>
+<%- include('./partials/footer.ejs'); -%>
