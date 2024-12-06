@@ -78,6 +78,7 @@ class StudentController {
                 return res.status(404).json({ message: "Student not found" });
             }
 
+            // Current course
             let progressingCourse = await ProgressingCourse.findById(_id);
             const course = await Course.findOne({ courseID: progressingCourse.courseID });
             progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
@@ -98,6 +99,7 @@ class StudentController {
                 return res.status(404).json({ message: "Student not found" });
             }
 
+            // Current course
             let progressingCourse = await ProgressingCourse.findById(_id);
             const course = await Course.findOne({ courseID: progressingCourse.courseID });
             progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
@@ -120,6 +122,7 @@ class StudentController {
                 return res.status(404).json({ message: "Student not found" });
             }
 
+            // Current course
             let progressingCourse = await ProgressingCourse.findById(_id);
             const course = await Course.findOne({ courseID: progressingCourse.courseID });
             progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
@@ -140,6 +143,7 @@ class StudentController {
                 return res.status(404).json({ message: "Student not found" });
             }
 
+            // Current course
             let progressingCourse = await ProgressingCourse.findById(_id);
             const course = await Course.findOne({ courseID: progressingCourse.courseID });
             progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
@@ -161,10 +165,10 @@ class StudentController {
                 return res.status(404).json({ message: "Student not found" });
             }
 
+            // Current course
             let progressingCourse = await ProgressingCourse.findById(_id);
             const course = await Course.findOne({ courseID: progressingCourse.courseID });
             progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
-
 
             res.render('student/course_homework', { user, student, progressingCourse});
         } catch {
@@ -182,10 +186,10 @@ class StudentController {
                 return res.status(404).json({ message: "Student not found" });
             }
 
+            // Current course
             let progressingCourse = await ProgressingCourse.findById(_id);
             const course = await Course.findOne({ courseID: progressingCourse.courseID });
             progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
-
 
             res.render('student/course_discussion', { user, student, progressingCourse});
         } catch {
@@ -203,10 +207,10 @@ class StudentController {
                 return res.status(404).json({ message: "Student not found" });
             }
 
+            // Current course
             let progressingCourse = await ProgressingCourse.findById(_id);
             const course = await Course.findOne({ courseID: progressingCourse.courseID });
             progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
-
 
             res.render('student/course_grade', { user, student, progressingCourse});
         } catch {
