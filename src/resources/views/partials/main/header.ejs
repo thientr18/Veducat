@@ -8,13 +8,13 @@
                 <a href="/" class="logo">Veducat</a>
                 <span class="user">
                     <i class="fas fa-user-circle"></i>
-                    <% if (user.role = 'student') { %>
+                    <% if (user.role === 'student') { %>
                         <span><%= student.name %></span>
-                    <% } else if (user.role = 'teacher') { %>
+                    <% } else if (user.role === 'teacher') { %>
                         <span><%= teacher.name %></span>
-                    <% } else if (user.role = 'admin') { %>
+                    <% } else if (user.role === 'admin') { %>
                         <span><%= user.userID %></span>
-                    <% } %>
+                    <% } %>                    
                 </span>
             </nav>
             <nav class="navbar">

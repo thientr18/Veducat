@@ -52,7 +52,9 @@
 
       const courseID = document.querySelector('#course').value;
       const teacherID = document.querySelector('#teacher').value;
-
+      if(courseID === "admin") {
+        teacherID = "admin";
+      }
       // Collect all checked student IDs
       const studentCheckboxes = document.querySelectorAll('input[name="student_ids"]:checked');
       const studentIDs = Array.from(studentCheckboxes).map(checkbox => checkbox.value);

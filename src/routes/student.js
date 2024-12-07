@@ -1,7 +1,10 @@
 const express = require('express');
 const studentController = require('../app/controllers/StudentController');
 const { requireAuthZ } = require('../app/middlewares/authZ');
+const { checkUser } = require('../app/middlewares/authN');
 const router = express.Router()
+
+router.use(checkUser);
 
 // GET /student
 router.get('/course/:_id/announcement', requireAuthZ('student'), studentController.announcement_get);
