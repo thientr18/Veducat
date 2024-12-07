@@ -1,20 +1,5 @@
 /* google fonts */
 @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
-@media (max-width: 575px) {
-  .extend-btn {
-    display: flex; }
-  .form-container {
-    flex-direction: column; }
-  .form-box {
-    width: 100%; }
-  .info-content {
-    width: 100%;
-    text-align: center;
-    border-radius: 40px 40px 80px 80px;
-    border-left: none;
-    border-top: solid 3px var(--theme-color);
-    margin-bottom: 3dvi; } }
-
 :root {
   --theme-color: #ee9b3c; }
 
@@ -242,5 +227,20 @@ footer {
   margin: 66.67px 0 0 210px;
   padding: 0 12px;
   display: inline-block; }
+
+@media (max-width: 575px) {
+  .extend-btn {
+    display: flex; }
+  .form-container {
+    flex-direction: column; }
+  .form-box {
+    width: 100%; }
+  .info-content {
+    width: 100%;
+    text-align: center;
+    border-radius: 40px 40px 80px 80px;
+    border-left: none;
+    border-top: solid 3px var(--theme-color);
+    margin-bottom: 3dvi; } }
 
 /* End student/course */
