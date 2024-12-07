@@ -35,15 +35,14 @@
       const name = document.querySelector('#student_name').value;
       const DoB = document.querySelector('#student_dob').value;
       const email = studentID + '@student.com';
-
-      console.log(studentID, name, DoB, email);
       try {
         const res = await fetch('/admin/manage_student/insert', {
           method: 'POST',
           body: JSON.stringify({ studentID, name, DoB, email }),
           headers: {'Content-Type': 'application/json'},
         });
-        if (res.status === 200) {
+        if (res.status >= 200 && res.status < 300) {
+          console.log("Request successful", res.responseText);
           location.reload();
         }
       } catch (error) {

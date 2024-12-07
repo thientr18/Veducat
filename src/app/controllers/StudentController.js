@@ -18,24 +18,17 @@ class StudentController {
             // Fetch ProgressingCourses that include this student's ID
             const progressingCourses = await ProgressingCourse.find({ students: student.studentID });
             if (!progressingCourses.length) {
-                return res.render('student/index', { 
-                    user, 
-                    student, 
-                    studentCourses: [], 
-                    announcements: [] 
-                });
+                return res.render('student/index', { user, student, studentCourses: [], announcements: [] });
             }
-
-            // Fetch corresponding Course details
             const courses = await Course.find({ courseID: { $in: progressingCourses.map(c => c.courseID) } });
 
             // Enrich progressing courses with course names and descriptions
             const studentCourses = progressingCourses.map(pCourse => {
                 const course = courses.find(c => c.courseID === pCourse.courseID);
                 return {
-                    ...pCourse._doc, // Include all fields from ProgressingCourse
-                    name: course?.name || null, // Add name from Course
-                    description: course?.description || null // Add description from Course
+                    ...pCourse._doc,
+                    name: course?.name || null,
+                    description: course?.description || null
                 };
             });
 
@@ -43,12 +36,7 @@ class StudentController {
             const announcements = await Announcement.find({ recipents: student.studentID });
 
             if (!announcements.length) {
-                return res.render('student/index', { 
-                    user, 
-                    student, 
-                    studentCourses, 
-                    announcements: [] 
-                });
+                return res.render('student/index', { user, student, studentCourses, announcements: [] });
             }
 
             // Match announcements to progressing courses and their associated courses
