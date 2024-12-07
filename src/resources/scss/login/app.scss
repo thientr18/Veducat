@@ -1,6 +1,5 @@
 /* google fonts */
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
-@import 'responsive.scss';
 @import 'variables.scss';
 
 
@@ -240,4 +239,5 @@ footer{
   padding: 0 12px;
   display: inline-block;
 }
+@import 'responsive.scss';
 /* End student/course */
