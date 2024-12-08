@@ -3,6 +3,9 @@ const Teacher = require('../models/Teacher');
 const Course = require('../models/Course');
 const ProgressingCourse = require('../models/ProgressingCourse');
 const Announcement = require('../models/Announcement');
+const Material = require('../models/Material');
+const multer = require('multer');
+// const path = require('../../storage');
 
 class TeacherController {
 
@@ -101,6 +104,7 @@ class TeacherController {
     async material_get (req, res, next) {
         const user = res.locals.user;
         const { _id } = req.params;
+        const { title, description } = req.body;
         try {
             const teacher = await Teacher.findOne({ teacherID: user.userID });
             if (!teacher) {
@@ -117,6 +121,43 @@ class TeacherController {
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
+    }
+    // POST /teacher/course/:_id/material
+    async material_post (req, res, next) {
+        const user = res.locals.user;
+        const { _id } = req.params;
+        
+        upload(req, res, async (err) => {
+            if (err) {
+                return res.status(400).json({ message: err.message });
+            }
+
+            try {
+                const teacher = await Teacher.findOne({ teacherID: user.userID });
+                if (!teacher) {
+                    return res.status(404).json({ message: "Teacher not found" });
+                }
+
+                let progressingCourse = await ProgressingCourse.findById(_id);
+                const course = await Course.findOne({ courseID: progressingCourse.courseID });
+
+                const material = req.file.map(file => ({
+                    courseID: progressingCourse.courseID,
+                    title: req.body.title,
+                    description: req.body.description,
+                    filePath: file.path,
+                    fileType: file.mimetype,
+                    fileSize: file.size,
+                    uploadedBy: teacher.teacherID,
+                }));
+                
+                await Material.create(material);
+                res.status(201).json({ message: "Material uploaded successfully" });
+                
+            } catch (error) {
+                res.status(500).json({ message: error.message });
+            }
+        });
     }
 
     // GET /teacher/course/:_id/contact
@@ -185,5 +226,28 @@ class TeacherController {
         }
     }
 }
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './storage');
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, `${uniqueSuffix}-${file.originalname}`);
+    }
+});
+const upload = multer({ 
+    storage: storage,
+    limits: {
+        fileSize: 1024 * 1024 * 10 // 10MB
+    },
+    fileFilter: (req, file, cb) => {
+        const allowedTypes = ['application/pdf', 'image/png', 'image/jpeg', 'application/zip', 'application/x-rar-compressed'];
+        if (allowedTypes.includes(file.mimetype)) {
+            cb(null, true);
+        } else {
+            cb(null, false);
+        }
+    }
+}).array('files', 10);
 
 module.exports = new TeacherController();

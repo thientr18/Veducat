@@ -9,6 +9,7 @@ router.use(checkUser);
 // GET /teacher
 router.get('/course/:_id/announcement', requireAuthZ('teacher'), teacherController.announcement_get);
 router.get('/course/:_id/material', requireAuthZ('teacher'), teacherController.material_get);
+router.post('/course/:_id/material', requireAuthZ('teacher'), teacherController.material_post);
 router.get('/course/:_id/contact', requireAuthZ('teacher'), teacherController.contact_get);
 router.get('/course/:_id/homework', requireAuthZ('teacher'), teacherController.homework_get);
 router.get('/course/:_id/discussion', requireAuthZ('teacher'), teacherController.discussion_get);

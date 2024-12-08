@@ -4,7 +4,7 @@ const materialSchema = new mongoose.Schema({
     courseID: {
         type: 'string',
         required: [true, 'Please enter a course ID'],
-        lowercase: true
+        lowercase: true,
     },
     title: {
         type: 'string',
