@@ -19,7 +19,7 @@ body {
   transition: background-color 0.3s, color 0.5s;
   padding-top: 60px;
   /* Adjust this value based on the height of your header */
-  background-image: url(/img/background.svg);
+  background-image: url(background.svg);
   background-position: center;
   background-size: cover;
   background-attachment: fixed;
@@ -32,6 +32,11 @@ html {
   scroll-padding-top: 8rem; }
 
 a {
+  text-decoration: none;
+  color: var(--href-color);
+  font-weight: bold; }
+
+ul li p {
   text-decoration: none;
   color: var(--href-color);
   font-weight: bold; }
@@ -226,7 +231,7 @@ a {
   text-decoration: underline;
   transform: translateX(1rem); }
 
-#main-in-course {
+#main-in-course, #main-in-announcement {
   display: flex; }
 
 #main-in-course .display-area {
@@ -248,15 +253,14 @@ a {
   box-shadow: 0 0.5rem 1rem 0.1rem var(--primary-color);
   width: 100px;
   background-color: var(--secondary-color);
-  transition: width 0.3s ease; }
-
-.dropdown.in-course {
-  height: calc(6 * (60px + 3rem) + 40px + 4rem); }
+  transition: width 0.3s ease;
+  height: calc(6 * 60px + 6 * 3rem + 40px + 4rem); }
 
 .dropdown.hide {
   width: 2%;
   margin: 0;
-  transition: width 0.3s ease; }
+  transition: width 0.3s ease;
+  height: calc(6 * 60px + 6 * 3rem + 40px + 4rem); }
 
 .dropdown .button-menu {
   width: 60px;
@@ -328,7 +332,7 @@ a {
   margin: 2rem;
   font-size: 1.5rem; }
 
-.display-area .course-announcement, .course-material, .course-contact, .course-homework, .course-discussion, .course-graded, .course-discussions {
+.display-area .course-announcement, .course-material, .course-contact, .course-homework, .course-discussion, .course-graded, .course-discussions, .homework-detail, .material-detail {
   display: none;
   position: relative;
   width: 100%;
@@ -336,7 +340,7 @@ a {
   border-radius: 1rem;
   background-color: var(--secondary-color); }
 
-.display-area .course-announcement, .course-material, .course-contact, .course-homework, .course-graded {
+.display-area .course-announcement, .course-material, .course-contact, .course-homework, .course-graded, .homework-detail, .material-detail {
   display: block; }
 
 .display-area .course-discussion {
@@ -514,12 +518,12 @@ a {
   background-color: var(--primary-color);
   color: var(--white-color); }
 
-.new-form .form-container form .display-file ul {
+.display-file ul {
   list-style: none;
   padding: 1rem;
   margin: 1rem; }
 
-.new-form .form-container form .display-file ul li {
+.display-file ul li {
   display: flex;
   justify-content: space-between;
   padding: 1rem; }
@@ -549,11 +553,11 @@ a {
   font-size: 1.5rem;
   font-weight: bold; }
 
-.new-form .form-container form .button-form {
+.button-form {
   display: flex;
   justify-content: space-around; }
 
-.new-form .form-container form .button-form button {
+.button-form button {
   padding: 1rem 2rem;
   font-size: 1.5rem;
   border: none;
@@ -563,15 +567,15 @@ a {
   margin: 1rem 2rem;
   cursor: pointer; }
 
-.new-form .form-container form .button-form button:hover {
+.button-form button:hover {
   background-color: var(--white-color);
   transform: scale(1.1); }
 
-.new-form .form-container form .button-form button[type="submit"]:hover {
+.button-form button[type="submit"]:hover {
   border: solid 0.1rem var(--green-color);
   color: var(--green-color); }
 
-.new-form .form-container form .button-form button[type="reset"]:hover {
+.button-form button[type="reset"]:hover {
   border: solid 0.1rem var(--red-color);
   color: var(--red-color); }
 
@@ -929,6 +933,126 @@ a {
 .header-menu-name.teacher-dcs i:hover {
   color: var(--green-color);
   transition: color 0.3s ease; }
+
+.homework-submission-form {
+  width: 70%;
+  display: flex;
+  flex-direction: column; }
+
+.homework-submission-form label {
+  font-size: 1.5rem;
+  font-weight: bold; }
+
+.homework-submission-form textarea {
+  width: 100%;
+  height: 10rem;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 1.5rem;
+  border: solid 0.1rem var(--primary-color);
+  border-radius: 12px;
+  outline-color: var(--primary-color);
+  resize: none; }
+
+.homework-submission-form input[type="file"] {
+  display: none; }
+
+.homework-submission-form label.upload-file {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 1.5rem;
+  border: solid 0.1rem var(--primary-color);
+  border-radius: 12px;
+  cursor: pointer; }
+
+.homework-submission-form label.upload-file i {
+  font-size: 2rem;
+  padding-right: 1rem; }
+
+.homework-submission-form label.upload-file:hover {
+  background-color: var(--primary-color);
+  color: var(--white-color); }
+
+.homework-title, .material-title {
+  width: calc(100% - 4rem);
+  padding: 2rem;
+  padding-top: 0;
+  border-bottom: solid 0.1rem var(--primary-color); }
+
+.homework-information {
+  padding: 2rem;
+  padding-top: 0;
+  width: calc(100% - 4rem);
+  padding-bottom: 1rem;
+  border-bottom: solid 0.1rem var(--primary-color); }
+
+.homework-submission {
+  padding: 2rem;
+  padding-top: 0;
+  width: calc(100% - 1rem);
+  padding-bottom: 1rem;
+  border-bottom: solid 0.1rem var(--primary-color); }
+
+.material-contents {
+  padding: 2rem;
+  padding-top: 0;
+  width: calc(100% - 4rem);
+  padding-bottom: 1rem;
+  border-bottom: solid 0.1rem var(--primary-color); }
+
+.material-contents i {
+  font-size: 1.5rem;
+  padding-right: 1rem;
+  color: var(--red-color); }
+
+#main-in-announcement {
+  display: flex;
+  width: 100%; }
+
+#main-in-announcement .container {
+  padding: 2rem;
+  padding-top: 0;
+  margin: 2rem auto;
+  margin-top: 3rem;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: solid 0.1rem var(--primary-color);
+  border-radius: 1.2rem;
+  background-color: var(--secondary-color); }
+
+#main-in-announcement .container .header-announcement {
+  width: 100%;
+  text-align: center;
+  font-size: 2rem;
+  margin: 0 2rem;
+  background-color: var(--primary-color);
+  border-radius: 1rem 1rem 0 0;
+  padding: 0 2rem; }
+
+#main-in-announcement .container .announcement-list {
+  width: 100%;
+  display: block;
+  font-size: 1.5rem; }
+
+#main-in-announcement .container .announcement-list ul {
+  list-style: none;
+  padding: 1rem; }
+
+#main-in-announcement .container .announcement-list ul li {
+  margin: 1rem 0;
+  padding: 1rem;
+  border: solid 0.1rem var(--primary-color);
+  border-radius: 1rem; }
+
+#main-in-announcement .container .announcement-list ul li .announcement-script {
+  text-decoration: none;
+  color: var(--black-color); }
 
 @media (max-width: 1080px) {
   html {
