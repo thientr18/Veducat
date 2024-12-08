@@ -80,7 +80,7 @@ class StudentController {
 
     async announcement_get(req, res, next) {
         const user = res.locals.user;
-        const { _id } = req.params;
+        const { id } = req.params;
         try {
             const student = await Student.findOne({ studentID: user.userID });
             if (!student) {
@@ -88,7 +88,7 @@ class StudentController {
             }
 
             // Current course
-            let progressingCourse = await ProgressingCourse.findById(_id);
+            let progressingCourse = await ProgressingCourse.findById(id);
             const course = await Course.findOne({ courseID: progressingCourse.courseID });
             progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
 

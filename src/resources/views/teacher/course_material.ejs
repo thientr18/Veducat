@@ -41,7 +41,7 @@
 <!-- FORM CREATE A NEW MATERIAL -->
 <section class="new-form new-material-form">
     <div class="form-container">
-        <form action="">
+        <form action="" enctype="multipart/form-data">
             <div class="exit-btn" id="exit-material">
                 <i class="fas fa-times"></i>
             </div>
@@ -103,4 +103,43 @@
         </form>
     </div>
 </section>
+
+<script> 
+        let progressingCourse = '<%- JSON.stringify(progressingCourse) %>';
+        progressingCourse = JSON.parse(progressingCourse);
+// Get the form container and form
+    const formContainer = document.querySelector('.form-container');
+    const form = formContainer.querySelector('form');
+    console.log(form);
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const title = form.querySelector('input[name="title"]').value;
+        const description = form.querySelector('textarea').value;
+        const file = form.querySelector('input[type="file"]').files;
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('description', description);
+
+
+        for (let i = 0; i < file.length; i++) {
+            formData.append('file', file[i]);
+        }
+        try {
+            
+            const res = await fetch(`/teacher/course/${progressingCourse._id}/material`, {
+                method: 'POST',
+                body: {formData},
+                
+            });
+            const data = await res.json();
+            if(res.status >= 200 && res.status < 300) {
+                location.reload();
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    });
+
+
+</script>
 <%- include('./partials/footer.ejs'); -%>
