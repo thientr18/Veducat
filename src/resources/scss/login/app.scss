@@ -3,241 +3,996 @@
 @import 'variables.scss';
 
 
-header nav{
-  font-weight: bold;
-  border-bottom: solid 3px var(--theme-color);
-}
-header nav a{
-  color: var(--theme-color);
-}
-header nav a:hover{
-  color: #ff8800;
-}
-
-.extend-btn{
-  background-color: white;
-  color: var(--theme-color);
-  border: solid 2px var(--theme-color);
-  border-radius: 25px;
-  display: none;
-}
-.extend-btn:hover{
-  border: solid 3px var(--theme-color);
-  background-color: var(--theme-color);
-  color: white;
-}
-main{
-  background-image: url(/img/background.svg);
+body {
+  font-family: "Quicksand", sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--white-color);
+  transition: background-color 0.3s, color 0.5s;
+  padding-top: 60px; /* Adjust this value based on the height of your header */
+  background-image: url(background.svg);
   background-position: center;
   background-size: cover;
   background-attachment: fixed;
   background-repeat: no-repeat;
 }
-.main-body{
 
-  display: flex;
-  min-height: 90vh;
-  margin-top: 50px;
-  justify-content: center;
-  padding: 0 20px;
-}
-.cat{
-  position: relative;
-  bottom: -115px; 
-  left: 50%;
-  transform: translateX(-50%);
-  width: 150px; 
-  height: 150px; 
-  z-index: -1; 
-}
-.form-container{
-  position: relative;
-  margin-top: 30px;
-  display: flex;
-  width: 1000px;
-  height: 600px;
-  border: 3px solid var(--theme-color);
-  border-radius: 40px;
-  -webkit-backdrop-filter: blur(50px);
-  backdrop-filter: blur(50px);
-  align-items: center;
-}
-.form-box{
-  width: 50%;
-  padding: 30px;
-}
-.log-title{
-  text-align: center;
-}
-.input-box{
-  position: relative;
-  width: 100%;
-  height: 50px;
-  margin: 30px 0;
-}
-.input-box input{
-  width: 100%;
-  height: 100%;
-  background: transparent;
-  border: none;
-  outline: none;
-  font-size: 16px;
-  color: black;
-  font-weight: 600;
-  border-bottom: 3px solid var(--theme-color);
-}
-.input-box label{
-  position: absolute;
-  color: black;
-  top: 50%;
-  left: 0;
-  transform: translateY(-50%);
-  transition: .5s;
-}
-.input-box input:focus ~ label,
-.input-box input:valid ~ label{
-  top:-5px;
-  font-size: 14px;
-  color: var(--theme-color);
-}
-.input-box i{
-  position: absolute;
-  top: 50%;
-  right: 0;
-  font-size: 20px;
-}
-.input-box input:focus ~ i,
-.input-box input:valid ~ i{
-  color: var(--theme-color);
-}
-.error{
-  color: #ff0099;
-  margin: 10px 2px;
-  font-size: 0.8em;
-  font-weight: bold;
-}
-.forgotpw{
-  text-align: center;
-  font-size: 14px;
-  height: 25px;
-  margin-bottom: 10px;
-}
-.btn{
-  position: relative;
-  width: 100%;
-  height: 45px;
-  border-radius: 40px;
-  border: solid 2px black;
-  font-weight: bold;
-  font-size: 18px;
-}
-.btn:hover{
-  border-color: var(--theme-color);
-  color: var(--theme-color);
-}
-
-.info-content{
-  display: flex;
-  flex-direction: column;
-  width: 50%;
-  height: 100%;
-  justify-content: center;
-  text-align: right;
-  background-color: var(--theme-color);
-  color: white;
-  /* background-image: url(background.svg);
-  background-attachment: fixed;
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat; */
-  border-radius: 40px 80px 80px 40px;
-  border-left: solid 3px var(--theme-color);
-}
-.aboutus{
-  padding:10px 30px;
-}
-.aboutus p{
-  margin-bottom: 0;
-}
-.contactus{
-  padding: 0 30px 10px;
-}
-.contactus ul{
-  list-style: none;
-}
-.info{
-  background-color: rgb(57, 61, 65);
-  color: white;
+html{
+  font-size: 62.5%;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  scroll-padding-top: 8rem;
 }
 a{
-  color: var(--theme-color);
-}
-a:hover{
-  color: orangered;
-}
-footer{
-  background-color: rgb(92, 89, 89);
-  padding-bottom: 10px;
-  text-align: center;
-  color: white;
-}
-
-
-/* Start student/course */
-#courseMenuPalette {
-  background-color: var(--theme-color);
-  color: white;
-  width: 210px;
-  padding: 0 12px 20px 12px;
-  margin: 66.67px 0 0;
-  display: inline-block;
-}
-
-#courseMenuPalette_tittleHeading {
-  width: 100%;
-  height: 50px;
-  display: block;
-  margin: 0;
-  padding: 0;
-  line-height: 50px;
-}
-
-#courseMenuPalette_tittleHeading h4 {
-  line-height: 50px;
-  vertical-align: middle;
-}
-#courseMenuPalette_contents {
-  display: block;
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-#courseMenuPalette_contents li {
-  display: block;
-  border-top: solid 1px white;
-  padding: 12px;
-  margin: 0 -12px;
-  width: calc(100%+24px);
-}
-
-#courseMenuPalette_contents li a {
-  display: block;
-  color: white;
   text-decoration: none;
+  color: var(--href-color);
+  font-weight: bold;
+}
+.header{
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  background-color: var(--secondary-color);
+  border-bottom: solid 0.1rem var(--primary-color);
+}
+.header .flex-header{
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.flex-header{
+  margin: 0 auto;
+  padding: 2rem;
+}
+.header .flex-header .logo{
+  color: var(--primary-color);
+  font-size: 2.5rem;
+  text-decoration: none;
+}
+.logoNUser{
+  display: block;
+  align-items: center;
+}
+.dark .logoNUser .user{
+  color: var(--white-color);
+}
+.logoNUser .user{
+  margin-left: 2rem;
+  color: var(--dark-mode-color);
+  font-size: 2rem;
+  font-weight: bold;
+}
+.header .flex-header .navbar a{
+  margin-left: 2rem;
+  color: var(--dark-mode-color);
+  font-size: 2rem;
+  text-decoration: none;
+  font-weight: bold;
+}
+#darkmode-btn{
   cursor: pointer;
+  margin-left: 2rem;
+  color: var(--primary-color);
+  font-size: 2rem;
+  transition: 0.2s linear;
+}
+#darkmode-btn.fa-sun{
+  transform: rotate(180deg);
+  transition: 0.3s linear;
+}
+.fa-angles-right{
+  transform: rotateX(-180deg);
+  transition: transform 0.3s linear;
+}
+.fa-angles-left{
+  transform: rotateY(180deg);
+  transition: transform 0.3s linear;
+}
+#icon{
+  transition: transform 0.3s linear;
+}
+.dark{
+  background-color: var(--dark-mode-color);
+}
+.dark .header .flex-header .navbar a{
+  color: var(--secondary-color);
+}
+
+.header .flex-header .navbar a:hover{
+  color: var(--primary-color);
+}
+#span-btn{
+  cursor: pointer;
+  color: var(--primary-color);
+  font-size: 2.5rem;
+  display: none;
+}
+.first-row, .second-row{
+  width: 100%;
+  display: flex;
+  padding: 2rem 0;
+}
+.first-row .search-bar{
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+.first-row .search-bar input{
+  width: 70%;
+  padding: 1rem;
+  font-size: 2rem;
+  border: solid 0.1rem var(--primary-color);
+  border-radius: 12px;
+  outline: none;
+}
+.first-row .search-bar button{
+  padding: 1rem 2rem;
+  font-size: 2rem;
+  border: none;
+  border-radius: 12px;
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  margin-left: 1rem;
+  cursor: pointer;
+}
+.first-row .task-bar{
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 0;
+  font-size: 2rem;
+}
+.first-row .task-bar .navbar{
+  width: 75%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem;
+  border: solid 0.1rem var(--primary-color);
+  border-radius: 12px;
+  background-color: var(--primary-color);
+}
+.first-row .task-bar .navbar a{
+  color: var(--dark-mode-color);
+  margin: 0 1rem;
+  text-decoration: none;
+  flex-direction: column;
+  display: flex;
+  text-align: center;
+}
+.first-row .task-bar .navbar a:hover{
+  color: var(--white-color);
+}
+
+.second-row .announcement-list, .course-list{
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1.8rem;
+}
+.second-row .card{
+  width: 80%;
+  border: solid 0.1rem var(--primary-color);
+  border-radius: 1rem;
+  background-color: var(--secondary-color);
+}
+.second-row .card .card-header{
+  text-align: center;
+  cursor: pointer;
+  padding: 0.1rem;
+  background-color: var(--primary-color);
+  border-radius: 0.5rem;
+}
+.hide-card{
+  display: none;
+}
+.second-row .card .card-content{
+  padding-right: 2rem;
+}
+.card-content ul{
+  list-style: none;
+  padding-left: 2rem;
+}
+.card-content ul li{
+  margin: 1rem 0;
+  padding-bottom: 1rem;
+  border-bottom: solid 0.1rem var(--primary-color);
+}
+.card-content.hide-card {
+  opacity: 0;
+}
+.see-more{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 1rem;
+  padding-right: 2rem;
+  color: var(--primary-color);
+}
+.see-more:hover{
+  text-decoration: underline;
+  transform:translateX(1rem);
+}
+#main-in-course{
+  display: flex;
+}
+#main-in-course .display-area{
+  width: 100%;
+  min-width: calc(100% - 10% - 28rem - 2rem);
+  max-width: calc(100% -10% - 20rem - 2rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1.5rem;
+  margin: 2rem;
+}
+.dropdown {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 0.5rem 1rem 0.1rem var(--primary-color);
+  width: 100px;
+  background-color: var(--secondary-color);
+  transition: width 0.3s ease;
+  height: calc(6 * 60px + 6 * 3rem + 40px + 4rem);
+}
+.dropdown.hide {
+  width: 2%;
+  margin: 0;
+  transition: width 0.3s ease;
+  height: calc(6 * 60px + 6 * 3rem + 40px + 4rem);
+}
+.dropdown .button-menu {
+  width: 60px;
+  height: 40px;
+  margin: 2rem;
+  border: solid 0.1rem var(--primary-color);
+  border-radius: 2rem;
+  background-color: var(--secondary-color);
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.dropdown .button-menu i{
+  font-size: 3rem;
+  padding: 1rem;
+}
+.dropdown .dropdown-content{
+  display: block;
+  max-height: 400px;
+  transition : max-height 0.4s ease;
+}
+.dropdown .dropdown-content.hide{
+  display: none;
+  max-height: 0;
+  transition : max-height 0.4s ease;
+}
+.dropdown .dropdown-content a{
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60px;
+  height: 60px;
+  margin: 5rem 0;
+  font-size: 2rem;
+  color: var(--black-color);
+  border: solid 0.1rem var(--primary-color);
+  border-radius: 2rem;
+  transition: background-color 0.5s ease;
+}
+.dropdown.in-course .dropdown-content a{
+  margin: 2rem 0;
+}
+.dropdown .dropdown-content a:hover, .dropdown .button-menu:hover{
+  transition: background-color 0.3s ease;
+  box-shadow: 0 0.5rem 1rem 0.1rem var(--primary-color);
+}
+.dropdown .dropdown-content span{
+  display: none;
+  position: absolute;
+  left: 8rem;
+  top: 2rem;
+  z-index: 1000;
+  text-align: center;
+  text-decoration: none;
+  background-color: var(--primary-color);
+  padding: 0 1rem;
+  border-radius: 2rem;
+  color: var(--black-color);
+  transition: background-color 0.3s ease;
+}
+.dropdown .dropdown-content a:hover span{
+  display:flex;
+  transition: background-color 0.3s ease;
+}
+.course-name {
+  margin: 2rem;
+  font-size: 1.5rem;
+}
+.display-area .course-announcement, .course-material, .course-contact, .course-homework, .course-discussion, .course-graded, .course-discussions, .homework-detail{
+  display: none;
+  position: relative;
+  width: 100%;
+  border: solid 0.1rem var(--primary-color);
+  border-radius: 1rem;
+  background-color: var(--secondary-color);
+}
+.display-area .course-announcement, .course-material, .course-contact, .course-homework, .course-graded, .homework-detail{
+  display: block;
+}
+.display-area .course-discussion{
+  display: flex;
+}
+
+.display-area .header-menu-name{
+  text-align: center;
+  cursor: pointer;
+  padding: 0.1rem;
+  background-color: var(--primary-color);
+  border-radius: 0.5rem;
+}
+.announcement-listed ul{
+  list-style: none;
+  padding:0 2rem;
+  padding-bottom: 1rem;
+}
+.announcement-listed ul li{
+  margin: 1rem 0;
+  padding-bottom: 1rem;
+}
+.announcement-listed ul li .announcement-container{
+  border: solid 0.1rem var(--primary-color);
+  border-radius: 1rem;
+  padding: 1rem;
+  
+}
+.announcement-listed ul li a:hover{
+  text-decoration: underline;
+}
+
+.course-material ul, .course-contact ul, .course-homework ul, .course-graded ul{
+  list-style: none;
+  padding: 0 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.course-material ul li, .course-contact ul li, .course-homework ul li, .course-graded ul li{    
+  margin: 1rem 0;
+  padding:0 3rem;
+  text-align: center;
+  flex: 1 1 100;
+}
+.course-material ul li a , .course-homework ul li a{
+  display: block;
+  padding: auto 1rem;;
+  width: 115px;
+  height: 130px;
+  align-content: center;
+  justify-content: center;
+  border: 1px solid var(--primary-color); 
+  border-radius: 0.5rem; 
+  text-decoration: none;
+  color: var(--black-color);
+  background-color: var(--secondary-color); 
+  transition: background-color 0.3s ease; 
+}
+.course-homework ul li a p{
+  padding: 1rem;
+}
+.create-btn{
+  position: absolute;
+  top: 0.5rem;
+  right: 1rem;
+  margin: 1rem;
+  font-size: 2rem;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  border: solid 0.1rem var(--white-color);
+  border-radius: 1rem;
+  color: var(--white-color);
+  transition: all 0.3s ease;
+}
+.create-btn:hover{
+  color: var(--green-color);
+  background-color: var(--white-color);
+  border: solid 0.1rem var(--white-color);
+  transition: all 0.3s ease;
+}
+.course-material ul li a:hover, .course-homework ul li a:hover,.course-material ul li .create-header-material:hover{
+  background-color: var(--primary-color); 
+}
+.new-form{
+  display: none;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.new-form .form-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+.exit-btn{
+  position: absolute;
+  border: solid 0.1rem var(--red-color);
+  border-radius: 1rem;
+  padding: 0 1rem;
+  color: var(--red-color);
+  top: 2rem;
+  right: 3rem;
+  font-size: 3rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.exit-btn:hover{
+  background-color: var(--red-color);
+  color: var(--white-color);
+  transition: all 0.3s ease;
+}
+.new-form .form-container form{
+  position: relative;
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  border: solid 0.1rem var(--primary-color);
+  border-radius: 2rem;
+  padding: 2rem;
+  background-color: var(--secondary-color);
+}
+.new-form .form-container form h2{
+  text-align: center;
+  font-size: 2rem;
+  border-bottom: solid 0.1rem var(--primary-color);
+  padding-bottom: 2rem;
+}
+.new-form .form-container form input[type="text"]{
+  display: flex;
+  width: 90%;
+  margin: 0 auto;
+  padding: 1rem;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 12px;
+  outline-color: var(--primary-color);
+}
+.new-form .form-container form input[type="datetime-local"]{
+  display: flex;
+  width: 90%;
+  margin: 0 auto;
+  padding: 1rem;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 12px;
+  outline-color: var(--primary-color);
+}
+.new-form .form-container form input[type="file"]{
+  display: none;
+}
+.new-form .form-container form #add-btn{
+  display: flex;
+  width: calc(90% - 1rem);
+  padding: 1rem;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  border: solid 0.1rem var(--primary-color);
+  border-radius: 12px;
+  outline-color: var(--primary-color);
+  cursor: pointer;
+}
+.new-form .form-container form #add-btn:hover{
+  background-color: var(--primary-color);
+  color: var(--white-color);
+}
+.display-file ul{
+  list-style: none;
+  padding: 1rem;
+  margin: 1rem;
+}
+.display-file ul li{
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+}
+.display-file ul li a i{
+  font-size: 2rem;
+  color: var(--red-color);
+  cursor: pointer;
+  padding-right: 1rem;
+}
+
+.new-form .form-container form textarea{
+  display: flex;
+  width: 90%;
+  height: 10rem;
+  padding: 1rem;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 12px;
+  outline-color: var(--primary-color);
+  resize: none;
+}
+.new-form .form-container form label{
+  margin: 1rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.button-form{
+  display: flex;
+  justify-content: space-around;
+}
+.button-form button{
+  padding: 1rem 2rem;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 12px;
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  margin: 1rem 2rem;
+  cursor: pointer;
+}
+.button-form button:hover{
+  background-color: var(--white-color);
+  transform: scale(1.1);
+}
+.button-form button[type="submit"]:hover{
+  border: solid 0.1rem var(--green-color);
+  color: var(--green-color);
+}
+.button-form button[type="reset"]:hover{
+  border: solid 0.1rem var(--red-color);
+  color: var(--red-color);
+}
+
+.course-contact ul li a{
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  text-decoration: none;
+  color: var(--black-color);
+}
+.course-contact ul li a i{
+  font-size: 5rem;
+  padding-bottom: 1rem;
+}
+.course-contact ul li a:hover{
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  border-radius: 1rem;
+}
+.course-homework ul li a{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: var(--black-color);
+}
+.course-homework ul li a span{
+  padding-top: 1rem;
+  border-top: solid 0.1rem var(--primary-color);
+}
+
+.homework-status {
+  position: absolute;
+  bottom: 0.1rem;
+  right: 0.1rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  font-size: 2rem;
+  border: solid 0.1rem var(--black-color);
+}
+
+.homework-status.x {
+  color: var(--red-color);
+}
+
+.homework-status.tick {
+  color: var(--green-color);
+}
+
+.course-discussion, .course-discussions{
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 12rem);
+}
+.left-side{
+  position: relative;
+  flex: 30%;
+  border-right: solid 0.1rem var(--primary-color);
+}
+.left-side.hide{
+  display: none;
+}
+.left-side .header-menu-name{
+  text-align: center;
+  cursor: pointer;
+  padding: 0.1rem;
+  background-color: var(--primary-color);
+  border-radius: 0.5rem 0 0 0;
+}
+.right-side.hide{
+  display: none;
+}
+.right-side{
+  position: relative;
+  flex: 70%;
+  background-color: var(--secondary-color);
+}
+.course-discussion .right-side::before, .course-discussions .right-side::before{
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+}
+.course-discussion .discussion-listed, .course-discussions .discussion-listed{
+  position: relative;
+  height: calc(100% - 7rem);
+  overflow-y: auto;
+  scrollbar-color: var(--primary-color) var(--secondary-color);
+  scrollbar-width: thin;
+}
+.course-discussion .discussion-listed ul, .course-discussions .discussion-listed ul{
+  list-style: none;
+  padding: 1rem 0;
+}
+
+.course-discussion .discussion-listed ul li, .course-discussions .discussion-listed ul li{
+  width: 100%;
+  height: 6rem;
+  color: var(--primary-color);
+  display: block;
+  font-weight: bold;
+}
+.course-discussion .discussion-listed ul li:hover, .course-discussions .discussion-listed ul li:hover{
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  border-radius: 1rem;
+  cursor: pointer;
+}
+.course-discussion .discussion-listed ul li .discussion-name, .course-discussions .discussion-listed ul li .discussion-name{
+  align-items: center;
+  padding: 1rem;
+}
+.discussion-name .position{
+  font-weight: lighter;
+}
+.course-discussion .topic-header, .course-discussions .topic-header{
+  width: 100%;
+  height: 6rem;
+  border-bottom: solid 0.1rem var(--primary-color);
+}
+.course-discussion .topic-header .topic-info, .course-discussions .topic-header .topic-info{
+  margin: 0.5rem 1rem;
+  display: flex;
+  border: solid 0.1rem var(--primary-color);
+  border-radius: 2rem;
+  align-items: center;
+}
+.topic-header .topic-info i, .topic-header .topic-info span{
+  font-size: 2rem;
+  margin: 0.5rem;
+}
+.right-side .chat-form{
+  position: absolute;
+  justify-content: center;
+  bottom: 0;
+  width: 100%;
+  height: 7rem;
+  display: flex;
+  align-items: center;
+  border-top: solid 0.1rem var(--primary-color);
+}
+.chat-form textarea{
+  width: 80%;
+  resize: none;
+  height: 4.5rem;
+  padding-left: 1rem;
+  font-size: 1.5rem;
+  border: solid 0.1rem var(--primary-color);
+  border-radius: 1rem;
+  word-wrap: break-word;
+  outline: none;
+}
+.chat-form button{
+  width: 30%;
+  bottom: 1.5rem;
+  width: 4rem;
+  padding: 1rem;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 1rem;
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  margin-left: 1rem;
+  cursor: pointer;
+}
+.discussion-board{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-size: 1.5rem;
+  height: calc(100% - 6.5rem - 7rem - 1rem);
+  overflow-y: auto;
+  scrollbar-color: var(--primary-color) var(--secondary-color);
+  scrollbar-width: thin;
+}
+.discussion-board .other-msg{
+  display: flex;
+  flex-direction: column;
+  max-width: 70%;
+  padding: 1rem;
+  margin: 1rem;
+  border: solid 0.1rem var(--primary-color);
+  border-radius: 1rem;
+  background-color: var(--secondary-color);
+  word-wrap: break-word;
+}
+.discussion-board .owner-msg{
+  display: flex;
+  flex-direction: column;
+  max-width: 70%;
+  padding: 1rem;
+  margin: 1rem;
+  align-self: flex-end;
+  border: solid 0.1rem var(--primary-color);
+  border-radius: 1rem;
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  word-wrap: break-word;
+}
+.fullscreen{
+  position: absolute;
+  right: 3rem; bottom: calc(7rem + 1rem);
+  z-index: 1000;
+  padding: 0.5rem;
+  border: solid 0.1rem var(--primary-color);
+  border-radius: 50%;
+  background-color: var(--white-color);
+}
+.fullscreen:hover{
+  transform: scale(1.2);
+}
+.course-graded .graded-listed {
+  position: relative;
+  width: 100%;
+  display: flex;
+  background-color: var(--secondary-color);
+  align-items: center;
+  font-size: 1.8rem;
+}
+.course-graded .graded-listed ul li a{
+  padding: 1rem auto;
+  justify-content: center;
+  align-content: center;
+  transition: background-color 0.3s ease; 
+}
+
+.course-graded .graded-listed ul li a .homework-name{
+  display: block;
+  width: 115px;
+  height: 115px;
+  padding: 1rem;
+  border: solid 0.1rem var(--primary-color);
+  border-radius: 1rem 1rem 0 0;
+  background-color: var(--secondary-color);
+}
+.course-graded .graded-listed ul li a .grade{
+  text-align: center;
+  width: 115px;
+  padding: 1rem;
+  border: solid 0.1rem var(--primary-color);
+  border-radius: 0 0 1rem 1rem;
+  
+}
+.course-graded .graded-listed ul li a:hover .homework-name{
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  transition: background-color 0.3s ease;
+}
+
+.discussion-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1.5rem;
+  margin: 2rem;
+}
+.course-discussions{
+  display: flex;
+}
+.homework-genneral{
+  display: flex;
+  position: relative;
   width: 100%;
 }
 
-#courseMenuPalette_contents li a:hover {
-  opacity: 0.7;
+.new-announcement{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 2rem;
+}
+.new-announcement .form-header-announcement h2:hover{
+  cursor: pointer;
+}
+.new-announcement h2{
+  text-align: center;
+  font-size: 2rem;
+  margin: 0 2rem;
+  background-color: var(--primary-color);
+  border-radius: 1rem 1rem 0 0;
+  padding: 2rem;
+}
+.new-announcement .form-create-announcement{
+  display: flex;
+  max-height: 0;
+  overflow: hidden;
+  flex-direction: column;
+  width: 100%;
+}
+.new-announcement .form-create-announcement.show{
+  max-height: 100%;
+}
+.new-announcement .form-create-announcement form{
+  margin: 2rem;
+  margin-top: 0;
+  display: flex;
+  flex-direction: column;
+  border: solid 0.1rem var(--primary-color);
+  border-radius: 0 0 1rem 1rem;
+}
+.new-announcement form input{
+  width: 90%;
+  padding: 1rem;
+  margin: 1rem 2rem;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 12px;
+  outline: none;
+}
+.new-announcement form textarea{
+  width: 90%;
+  height: 10rem;
+  padding: 1rem;
+  margin: 0 2rem 1rem 2rem;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 12px;
+  outline: none;
+  resize: none;
+}
+.new-announcement form label{
+  margin: 1rem;
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
-#courseDisplay {
-  width: calc(100% - 210px);
-  margin: 66.67px 0 0 210px;
-  padding: 0 12px;
-  display: inline-block;
+.new-announcement button{
+  width: 10%;
+  padding: 1rem 2rem;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 12px;
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  margin: 1rem 2rem;
+  cursor: pointer;
+}
+.header-menu-name.teacher-dcs{
+  display: flex;
+  padding-right: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+.header-menu-name.teacher-dcs h2{
+  width: calc(100% - 1rem);
+}
+.header-menu-name.teacher-dcs i{
+  width: 1rem;
+  padding: 1rem;
+  font-size: 2rem;
+  margin: 0 auto;
+  color: var(--white-color);
+  cursor: pointer;
+}
+.header-menu-name.teacher-dcs i:hover{
+  color: var(--green-color);
+  transition: color 0.3s ease;
+}
+.homework-submission-form{
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+}
+.homework-submission-form label{
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.homework-submission-form textarea{
+  width: 100%;
+  height: 10rem;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 1.5rem;
+  border: solid 0.1rem var(--primary-color);
+  border-radius: 12px;
+  outline-color: var(--primary-color);
+  resize: none;
+}
+.homework-submission-form input[type="file"]{
+  display: none;
+}
+.homework-submission-form label.upload-file{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 1.5rem;
+  border: solid 0.1rem var(--primary-color);
+  border-radius: 12px;
+  cursor: pointer;
+}
+.homework-submission-form label.upload-file i{
+  font-size: 2rem;
+  padding-right: 1rem;
+}
+.homework-submission-form label.upload-file:hover{
+  background-color: var(--primary-color);
+  color: var(--white-color);
+}
+.homework-title{
+  width: calc(100% - 4rem);
+  padding: 2rem;
+  padding-top: 0;
+  border-bottom: solid 0.1rem var(--primary-color);
+}
+.homework-information{
+  padding: 2rem;
+  padding-top: 0;
+  width: calc(100% - 4rem);
+  padding-bottom: 1rem;
+  border-bottom: solid 0.1rem var(--primary-color);
+}
+.homework-submission{
+  padding: 2rem;
+  padding-top: 0;
+  width: calc(100% - 1rem);
+  padding-bottom: 1rem;
+  border-bottom: solid 0.1rem var(--primary-color);
 }
 @import 'responsive.scss';
 /* End student/course */
