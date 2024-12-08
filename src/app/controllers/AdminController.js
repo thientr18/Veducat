@@ -342,6 +342,7 @@ class AdminController {
     // POST /admin/announcement/send_to_teacher
     async admin_send_to_teacher_post(req, res) {
         const { courseID, title, content, teacherIDs, sender } = req.body;
+        console.log(req.body)
         try {
             await Announcement.create({
                 courseID: courseID,

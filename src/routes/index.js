@@ -15,7 +15,6 @@ function route(app) {
     app.use('/teacher', teacher)
     app.use('/admin', admin)
     app.use('/', siteRouter)
-    
 }
 
 module.exports = route;
