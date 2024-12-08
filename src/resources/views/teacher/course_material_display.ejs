@@ -1,0 +1,104 @@
+<%- include('./partials/header.ejs'); -%>
+<section class="material-detail">
+    <div class="material-title">
+        <h2>Lecture 1: HTML</h2>
+        <div class="bar-menu" id="bar-menu">
+            <i class="fas fa-ellipsis"></i>
+            <div class="dropdown-content hide" id="dropdown-option">
+                <div class="edit-button">
+                    Edit
+                </div>
+                <script>
+                    document.querySelector(".edit-button").addEventListener("click", function() {
+                        document.querySelector(".new-material-form").style.display = "block";
+                    });
+                </script>
+                <div class="delete-button">
+                    Delete
+                </div>
+            </div>
+        </div>
+        <script>
+            document.getElementById("bar-menu").addEventListener("click", function() {
+                document.querySelector("#dropdown-option").classList.toggle("show");
+            });
+        </script>
+    </div>
+    <div class="material-contents">
+        <h3>Description</h3>
+        <div class="material-description">
+            <p>HTML stands for Hyper Text Markup Language. It is used to design web pages using a markup language. HTML is the combination of Hypertext and Markup language. Hypertext defines the link between the web pages. A markup language is used to define the text document within tag which defines the structure of web pages.</p>
+        </div>
+        <h3>File Attached</h3>
+        <div class="material-file">
+            <i class="fas fa-file"></i>
+            <a href="_linkfile.pdf" download="Lecture 1: HTML">Lecture 1: HTML.pdf</a>
+        </div>
+    </div>
+</section>
+<!-- FORM CREATE A NEW MATERIAL -->
+<section class="new-form new-material-form">
+    <div class="form-container">
+        <form action="">
+            <div class="exit-btn" id="exit-material">
+                <i class="fas fa-times"></i>
+            </div>
+            <script>
+                document.querySelector("#exit-material").addEventListener("click", function() {
+                    document.querySelector(".new-material-form").style.display = "none";
+                });
+            </script>
+            <h2>Edit Material Form</h2>
+            <label for="title">Title</label>
+            <input type="text" name="title" id="" placeholder="Title of Material" required>
+            <label for="description">Description</label>
+            <textarea placeholder="Type your material here..."></textarea>
+            <label for="file">File</label>
+            <label for="file-upload-material" id="add-btn">Browse Local File</label>
+            <input type="file" name="file" id="file-upload-material" multiple>
+            <div class="display-file" id="display-file-material">
+                <ul>
+                <li>
+                    <a href="">
+                        <i></i>
+                        <span></span>
+                    </a>
+                </li>
+                </ul>
+            </div>
+            <script>
+                document.getElementById("file-upload-material").addEventListener("change", function() {
+                    var file = document.getElementById("file-upload-material").files;
+                    var displayFile = document.querySelector("#display-file-material ul");
+                    displayFile.innerHTML = "";
+                    for (var i = 0; i < file.length; i++) {
+                        var li = document.createElement("li");
+                        var a = document.createElement("a");
+                        var icon = document.createElement("i");
+                        var span = document.createElement("span");
+                        icon.classList.add("fas", "fa-file-pdf");
+                        span.textContent = file[i].name;
+                        a.appendChild(icon);
+                        a.appendChild(span);
+                        li.appendChild(a);
+                        displayFile.appendChild(li);
+                    }
+                });
+            </script>
+            <div class="button-form">
+                <button type="submit">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+                <button type="reset" class="reset-btn" id="reset-material">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <script>
+                document.querySelector("#reset-material").addEventListener("click", function() {
+                    document.querySelector("#display-file-material ul").innerHTML = "";
+                });
+            </script>
+        </form>
+    </div>
+</section>
+<%- include('./partials/footer.ejs'); -%>

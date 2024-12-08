@@ -1053,5 +1053,81 @@ ul li p{
     text-decoration: none;
     color: var(--black-color);
 }
+.bar-menu{
+    position: absolute;
+    top: 1rem; right: 1rem;
+    font-size: 2rem;
+}
+.bar-menu i{
+    padding: 1rem;
+    cursor: pointer;
+}
+.bar-menu i:hover{
+    background-color: var(--primary-color);
+    padding: 1rem;
+    color: var(--white-color);
+    border-radius: 1rem;
+}
+
+.bar-menu .dropdown-content.show{
+    display: block;
+}
+.bar-menu .dropdown-content{
+    display: none;
+    position: absolute;
+    top: 4rem; right: calc(0.5rem);
+    width: 8rem;
+    border: solid 0.1rem var(--primary-color);
+    border-radius: 1rem;
+    background-color: var(--white-color);
+    z-index: 1000;
+}
+.bar-menu .edit-button, .bar-menu .delete-button{
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+}
+.bar-menu .edit-button{
+    border-bottom: solid 0.1rem var(--primary-color);
+}
+.bar-menu .edit-button:hover{
+    background-color: var(--primary-color);
+    border-radius: 0.8rem 0.8rem 0 0;
+    color: var(--white-color);
+    cursor: pointer;
+}
+.bar-menu .delete-button:hover{
+    background-color: var(--red-color);
+    border-radius: 0 0 0.8rem 0.8rem;
+    color: var(--white-color);
+    cursor: pointer;
+}
+.student-submission-list{
+    padding: 1rem;
+}
+.student-submission-list table, .student-submission-list th, .student-submission-list td {
+    border: 0.2rem solid var(--primary-color);
+    border-collapse: collapse;
+    padding: 1rem;
+}
+.student-submission-list th{
+    background-color: var(--primary-color);
+    color: var(--white-color);
+}
+.student-submission-list .grading input[type="number"]{
+    outline-color: var(--primary-color);
+    border: solid 0.1rem var(--primary-color);
+    border-radius: 1rem;
+    color: var(--red-color);
+    font-weight: bold;
+    text-align: right;
+    width: 5rem;
+    height: 5rem;
+}
+td.id, td.fullname{
+    text-align: center;
+    max-width: 10rem;
+    overflow: hidden;
+    word-wrap: break-word;
+}
 
 @import 'responsive.scss';
