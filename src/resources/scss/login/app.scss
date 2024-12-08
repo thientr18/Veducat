@@ -319,7 +319,7 @@ a{
   margin: 2rem;
   font-size: 1.5rem;
 }
-.display-area .course-announcement, .course-material, .course-contact, .course-homework, .course-discussion, .course-graded, .course-discussions, .homework-detail{
+.display-area .course-announcement, .course-material, .course-contact, .course-homework, .course-discussion, .course-graded, .course-discussions, .homework-detail, .material-detail{
   display: none;
   position: relative;
   width: 100%;
@@ -327,7 +327,7 @@ a{
   border-radius: 1rem;
   background-color: var(--secondary-color);
 }
-.display-area .course-announcement, .course-material, .course-contact, .course-homework, .course-graded, .homework-detail{
+.display-area .course-announcement, .course-material, .course-contact, .course-homework, .course-graded, .homework-detail, .material-detail{
   display: block;
 }
 .display-area .course-discussion{
@@ -974,7 +974,7 @@ a{
   background-color: var(--primary-color);
   color: var(--white-color);
 }
-.homework-title{
+.homework-title, .material-title{
   width: calc(100% - 4rem);
   padding: 2rem;
   padding-top: 0;
@@ -993,6 +993,18 @@ a{
   width: calc(100% - 1rem);
   padding-bottom: 1rem;
   border-bottom: solid 0.1rem var(--primary-color);
+}
+.material-contents{
+  padding: 2rem;
+  padding-top: 0;
+  width: calc(100% - 4rem);
+  padding-bottom: 1rem;
+  border-bottom: solid 0.1rem var(--primary-color);
+}
+.material-contents i{
+  font-size: 1.5rem;
+  padding-right: 1rem;
+  color: var(--red-color);
 }
 @import 'responsive.scss';
 /* End student/course */
