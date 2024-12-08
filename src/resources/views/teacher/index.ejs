@@ -55,11 +55,12 @@
         const announcementSection = document.querySelector('.announcement-list');
         const announcementUl = announcementSection.querySelector('ul');
 
-        announcements.forEach(announcement => {
+        announcements.slice(0, 5).forEach(announcement => {
             const li = document.createElement('li');
             const a = document.createElement('a');
-            a.href = `/teacher/course/${announcement.courseID}/announcement`;
-            a.textContent = `${announcement.courseName}: ${announcement.title}`;
+            a.href = `/teacher/announcement/#${announcement._id}`;
+            a.target = '_blank';
+            a.textContent = `${announcement.title}`;
             li.appendChild(a);
             announcementUl.appendChild(li);
         });
