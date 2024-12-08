@@ -91,13 +91,23 @@
                 }
             });
         </script>
-        <div class="chat-form">
+        <div class="chat-form-container">
             <form action="" class="chat-form">
-                <textarea placeholder="Type diiscussion here..."></textarea>
+                <textarea placeholder="Type your message here..."></textarea>
                 <button type="submit">
                     <i class="fas fa-paper-plane"></i>
                 </button>
             </form>
+            <div class="grading-btn">
+                <button>
+                    <i class="fas fa-marker"></i>
+                </button>
+                <script>
+                    document.querySelector(".grading-btn button").addEventListener("click", function() {
+                        document.querySelector(".grading-discussion").style.display = "block";
+                    });
+                </script>
+            </div>
         </div>
     </div>
 </section>
@@ -162,6 +172,60 @@
             <script>
                 document.querySelector("#reset-discussion").addEventListener("click", function() {
                     document.querySelector("#display-file-discussion ul").innerHTML = "";
+                });
+            </script>
+        </form>
+    </div>
+</section>
+<section class="new-form grading-discussion">
+    <div class="form-container">
+        <form action="">
+            <div class="exit-btn" id="exit-grading">
+                <i class="fas fa-times"></i>
+            </div>
+            <script>
+                document.querySelector("#exit-grading").addEventListener("click", function() {
+                    document.querySelector(".grading-discussion").style.display = "none";
+                });
+            </script>
+            <h2>Grading Form</h2>
+            <label for="studentID">Student ID</label>
+            <select name="studentID" id="id-selected">
+                <option value="null">--Select Student ID--</option>
+                <option value="ITITIU21284">ITITIU21284</option>
+                <option value="ITITIU21285">ITITIU21285</option>
+            </select>
+            <script>
+                document.querySelector("#id-selected").addEventListener("change", function() {
+                    var id = document.querySelector("#id-selected").value;
+                    document.querySelector("#" + id).style.display = "block";
+                    document.querySelector(".students-info").style.display = "none";
+                });
+            </script>
+            <table>
+                <tr>
+                    <th>Student ID</th>
+                    <th>Student Name</th>
+                    <th>Discussion Contents</th>
+                    <th>Grade</th>
+                </tr>
+            </table>
+            <script>
+                document.querySelector("#id-selected").addEventListener("change", function() {
+                    
+                });
+            </script>
+            <div class="button-form">
+                <button type="submit">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+                <button type="reset" class="reset-btn" id="">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <script>
+                document.querySelector("#reset-grading").addEventListener("click", function() {
+                    document.querySelector("#display-file-grading ul").innerHTML = "";
                 });
             </script>
         </form>

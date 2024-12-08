@@ -710,39 +710,55 @@ ul li p {
   font-size: 2rem;
   margin: 0.5rem; }
 
-.right-side .chat-form {
-  position: absolute;
-  justify-content: center;
-  bottom: 0;
+.right-side .chat-form-container {
+  position: relative;
+  display: flex;
   width: 100%;
   height: 7rem;
-  display: flex;
-  align-items: center;
   border-top: solid 0.1rem var(--primary-color); }
 
-.chat-form textarea {
-  width: 80%;
-  resize: none;
-  height: 4.5rem;
-  padding-left: 1rem;
-  font-size: 1.5rem;
-  border: solid 0.1rem var(--primary-color);
-  border-radius: 1rem;
-  word-wrap: break-word;
-  outline: none; }
+.right-side .chat-form-container form {
+  display: flex;
+  width: calc(100% - 10rem);
+  height: 100%; }
 
-.chat-form button {
-  width: 30%;
-  bottom: 1.5rem;
-  width: 4rem;
+.chat-form textarea {
+  width: 100%;
+  height: 3.5rem;
+  margin: 1rem;
   padding: 1rem;
   font-size: 1.5rem;
   border: none;
-  border-radius: 1rem;
+  border-radius: 12px;
+  outline: none;
+  resize: none; }
+
+.chat-form button, .chat-form-container .grading-btn button {
+  width: 6rem;
+  height: 5rem;
+  padding: 1rem 2rem;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 12px;
   background-color: var(--primary-color);
   color: var(--white-color);
-  margin-left: 1rem;
+  margin: 1rem;
   cursor: pointer; }
+
+.chat-form button:hover {
+  background-color: var(--white-color);
+  color: var(--primary-color); }
+
+.grading-btn button:hover {
+  background-color: var(--white-color);
+  color: var(--green-color); }
+
+.chat-form-container .grading-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 10rem;
+  height: 100%; }
 
 .discussion-board {
   position: relative;
@@ -798,6 +814,20 @@ ul li p {
   align-items: center;
   font-size: 1.5rem;
   margin: 2rem; }
+
+.grading-discussion select {
+  width: 90%;
+  padding: 1rem;
+  margin: 1rem auto;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 12px;
+  outline: none; }
+
+.grading-discussion table, .grading-discussion th, .grading-discussion td {
+  border: 0.2rem solid var(--primary-color);
+  border-collapse: collapse;
+  padding: 1rem; }
 
 .course-discussions {
   display: flex; }
@@ -1095,7 +1125,7 @@ ul li p {
   background-color: var(--primary-color);
   color: var(--white-color); }
 
-.student-submission-list .grading input[type="number"] {
+.student-submission-list .grading input[type="number"], .grading-discussion input[type="number"] {
   outline-color: var(--primary-color);
   border: solid 0.1rem var(--primary-color);
   border-radius: 1rem;
@@ -1104,6 +1134,12 @@ ul li p {
   text-align: right;
   width: 5rem;
   height: 5rem; }
+
+td.id, td.fullname {
+  text-align: center;
+  max-width: 10rem;
+  overflow: hidden;
+  word-wrap: break-word; }
 
 @media (max-width: 1080px) {
   html {
