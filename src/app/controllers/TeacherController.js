@@ -5,66 +5,181 @@ const ProgressingCourse = require('../models/ProgressingCourse');
 const Announcement = require('../models/Announcement');
 
 class TeacherController {
-    // View announcements
-    async announcement_send_get (req, res, next) {
-        const { course_id } = req.params;
+
+    // GET /teacher
+    async index_get (req, res, next) {
+        const user = res.locals.user;
+
         try {
-            const course = await ProgressingCourse.findOne({ _id: course_id });
-            if (!course) {
-                return res.status(404).json({ message: "Course not found" });
+            const teacher = await Teacher.findOne({ teacherID: user.userID });
+            if (!teacher) {
+                return res.status(404).json({ message: "Teacher not found" });
             }
 
-            const announcements = await Announcement.find({ course_id });
-            res.render('announcement/toCourse/sendToCourse', { course, announcements });
-        } catch (error) {
-            res.status(500).json({ message: error.message });
-        }
-    }
-
-    // Create announcement
-    async announcement_post (req, res, next) {
-        const { course_id } = req.params;
-        console.log(req.params);
-        console.log(course_id)
-        const { title, content, recipents, sender } = req.body;
-        const type = 'course_announcement';
-        console.log(course_id, title, content, recipents, sender, type);
-        try {
-            await Announcement.create({ courseID: course_id, title, content, recipents, sender, type });
-            res.status(201).json({ message: "Announcement created" });
-        } catch (error) {
-            res.status(500).json({ message: error.message });
-        }
-    }
-
-    // List announcements in a course
-    async announcement_list_post (req, res, next) {
-        const { courseID } = req.params;
-        try {
-            const course = await Course.findOne({ courseID });
-            if (!course) {
-                return res.status(404).json({ message: "Course not found" });
+            // List progressingCourses
+            const progressingCourses = await ProgressingCourse.find({ teacherID: teacher.teacherID });
+            if (!progressingCourses.length) {
+                return res.render('teacher/index', { user, teacher, teacherCourses: [], announcements: [] });
             }
+            const courses = await Course.find({ courseID: { $in: progressingCourses.map(pc => pc.courseID) } });
+            const teacherCourses = progressingCourses.map(pCourse => {
+                const course = courses.find(c => c.courseID === pCourse.courseID);
+                return {
+                    ...pCourse._doc,
+                    name: course?.name || null,
+                    description: course?.description || null
+                };
+            });
+
             // List announcements
-            const announcements = await Announcement.find({ courseID });
-            res.render('announcement/toCourse/listAnnouncement', { course, announcements });
+            const announcements = await Announcement.find({ recipents: teacher.teacherID });
+            if (!announcements.length) {
+                return res.render('teacher/index', { user, teacher, teacherCourses, announcements: [] });
+            }
+            const enrichedAnnouncements = announcements.map(announcement => {
+                const pCourse = progressingCourses.find(pc => pc._id.toString() === announcement.courseID);
+                const course = courses.find(c => c.courseID === pCourse?.courseID);
+                return {
+                    ...announcement._doc,
+                    courseName: course?.name || null,
+                    courseDescription: course?.description || null
+                };
+            });
+
+            res.render('teacher/index', { user, teacher, teacherCourses, announcements: enrichedAnnouncements });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send({ message: "An error occurred", error });
         }
-        catch (error) {
+    }
+
+    // GET /teacher/course/:_id/
+    async course_get (req, res, next) {
+        const user = res.locals.user;
+        const { _id } = req.params;
+        try {
+            const teacher = await Teacher.findOne({ teacherID: user.userID });
+            if (!teacher) {
+                return res.status(404).json({ message: "Teacher not found" });
+            }
+            let progressingCourse = await ProgressingCourse.findById(_id)
+            const course = await Course.findOne({ courseID: progressingCourse.courseID });
+            if (!course) {
+                return res.status(404).json({ message: "Course not found" });
+            }
+            progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
+
+            res.render('teacher/course', { user, teacher, progressingCourse });
+        } catch (error) {
             res.status(500).json({ message: error.message });
         }
     }
 
-    // Delete announcement
-    async announcement_delete_post (req, res, next) {
-        const { courseID, announcementID } = req.params;
+    // GET /teacher/course/:_id/announcement
+    async announcement_get (req, res, next) {
+        const user = res.locals.user;
+        const { _id } = req.params;
         try {
-            const course = await Course.findOne({ courseID });
+            const teacher = await Teacher.findOne({ teacherID: user.userID });
+            if (!teacher) {
+                return res.status(404).json({ message: "Teacher not found" });
+            }
+            let progressingCourse = await ProgressingCourse.findById(_id)
+            const course = await Course.findOne({ courseID: progressingCourse.courseID });
             if (!course) {
                 return res.status(404).json({ message: "Course not found" });
             }
-            // Delete announcement
-            await Announcement.delete({ announcementID });
-            res.redirect(`/teacher/course/${courseID}/announcement`);
+            progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
+
+            res.render('teacher/course_announcement', { user, teacher, progressingCourse });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
+    // GET /teacher/course/:_id/material
+    async material_get (req, res, next) {
+        const user = res.locals.user;
+        const { _id } = req.params;
+        try {
+            const teacher = await Teacher.findOne({ teacherID: user.userID });
+            if (!teacher) {
+                return res.status(404).json({ message: "Teacher not found" });
+            }
+            let progressingCourse = await ProgressingCourse.findById(_id)
+            const course = await Course.findOne({ courseID: progressingCourse.courseID });
+            if (!course) {
+                return res.status(404).json({ message: "Course not found" });
+            }
+            progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
+
+            res.render('teacher/course_material', { user, teacher, progressingCourse });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
+    // GET /teacher/course/:_id/contact
+    async contact_get (req, res, next) {
+        const user = res.locals.user;
+        const { _id } = req.params;
+        try {
+            const teacher = await Teacher.findOne({ teacherID: user.userID });
+            if (!teacher) {
+                return res.status(404).json({ message: "Teacher not found" });
+            }
+            let progressingCourse = await ProgressingCourse.findById(_id)
+            const course = await Course.findOne({ courseID: progressingCourse.courseID });
+            if (!course) {
+                return res.status(404).json({ message: "Course not found" });
+            }
+            progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
+
+            res.render('teacher/course_contact', { user, teacher, progressingCourse });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
+    // GET /teacher/course/:_id/homework
+    async homework_get (req, res, next) {
+        const user = res.locals.user;
+        const { _id } = req.params;
+        try {
+            const teacher = await Teacher.findOne({ teacherID: user.userID });
+            if (!teacher) {
+                return res.status(404).json({ message: "Teacher not found" });
+            }
+            let progressingCourse = await ProgressingCourse.findById(_id)
+            const course = await Course.findOne({ courseID: progressingCourse.courseID });
+            if (!course) {
+                return res.status(404).json({ message: "Course not found" });
+            }
+            progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
+
+            res.render('teacher/course_homework', { user, teacher, progressingCourse });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
+    // GET /teacher/course/:_id/discussion
+    async discussion_get (req, res, next) {
+        const user = res.locals.user;
+        const { _id } = req.params;
+        try {
+            const teacher = await Teacher.findOne({ teacherID: user.userID });
+            if (!teacher) {
+                return res.status(404).json({ message: "Teacher not found" });
+            }
+            let progressingCourse = await ProgressingCourse.findById(_id)
+            const course = await Course.findOne({ courseID: progressingCourse.courseID });
+            if (!course) {
+                return res.status(404).json({ message: "Course not found" });
+            }
+            progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
+
+            res.render('teacher/course_discussion', { user, teacher, progressingCourse });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }

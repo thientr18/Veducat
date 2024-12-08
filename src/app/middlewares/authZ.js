@@ -1,31 +1,35 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
-const requireAuthZ = (permission) => (req, res, next) => {
+const requireAuthZ = (permission) => async (req, res, next) => {
     const token = req.cookies.jwt;
-    
-    // check json web token exists & is verified
+
     if (token) {
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, decodedToken) => {
-            let user = res.locals.user;
             if (err) {
-                // console.log(err.message);
-                res.redirect('/login')
+                console.log('ERROR: 1', err.message);
+                return res.redirect('/login');
             } else {
+                let user = res.locals.user;
                 if (!user || !user.role) {
+                    console.log('ERROR: 2');
                     res.cookie('jwt', '', { maxAge: 1 });
-                    res.redirect('/login')
+                    return res.redirect('/login');
                 }
-                if (!user || !permission.includes(user.role)) {
+                if (!permission.includes(user.role)) {
+                    console.log('ERROR: 3');
+                    console.log(user.role);
+                    console.log(permission);
                     res.cookie('jwt', '', { maxAge: 1 });
-                    res.redirect('/login')
+                    return res.redirect('/login');
                 }
                 next();
             }
-        })
+        });
     } else {
-        res.redirect('/login')
+        console.log('ERROR: 4');
+        return res.redirect('/login');
     }
-}
+};
 
 module.exports = { requireAuthZ };
