@@ -1,4 +1,5 @@
 <%- include('partials/header.ejs'); -%>
+
 <section class="course-graded">
     <div class="header-menu-name">
         <h2>
@@ -6,47 +7,33 @@
         </h2>
     </div>
     <div class="graded-listed">
-        <ul>
-            <li>
-                <a href="#">
-                    <div class="homework-name">
-                        Homework 1: HTML
-                    </div>
-                    <div class="grade">
-                        10/10
-                    </div>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <div class="homework-name">
-                        Homework 2: CSS
-                    </div>
-                    <div class="grade">
-                        8/10
-                    </div>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <div class="homework-name">
-                        Homework 3: JavaScript
-                    </div>
-                    <div class="grade">
-                        9/10
-                    </div>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <div class="homework-name">
-                        Homework 4: PHP
-                    </div>
-                    <div class="grade">
-                        not graded
-                    </div>
-                </a>
-            </li>
-        </ul>
+        <div class="header-grade">
+            <h3>Graded List</h3>
+        </div>
+        <div class="table-grade">
+            <table>
+                <tr>
+                    <th>Homework</th>
+                    <th>Writing</th>
+                    <th>File</th>
+                    <th>Grade</th>
+                    <th>Feedback</th>
+                </tr>
+                <tr>
+                    <td>Homework 1</td>
+                    <td>Write a program that reads a string from the user containing a date in the form mm/dd/yyyy. It should print the date in the form March 12, 2014.</td>
+                    <td>
+                        <a href="#">Homework1.pdf</a>
+                    </td>
+                    <td>100</td>
+                    <td>
+                        <a href="mailto:k@mail.com?subject=FEEDBACK ABOUT THE HOMEWORK 1 - COURSENAME
+                        &body=Full Name: Ung Huynh Phuc - ID: ITITIU21284">Send Feedback</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
 </section>
+
 <%- include('partials/footer.ejs'); -%>

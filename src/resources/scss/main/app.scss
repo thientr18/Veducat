@@ -321,7 +321,7 @@ ul li p{
     margin: 2rem;
     font-size: 1.5rem;
 }
-.display-area .course-announcement, .course-material, .course-contact, .course-homework, .course-discussion, .course-graded, .course-discussions, .homework-detail, .material-detail{
+.display-area .course-announcement, .course-material, .course-contact, .course-homework, .course-discussion, .course-discussions, .homework-detail, .material-detail, .course-graded{
     display: none;
     position: relative;
     width: 100%;
@@ -362,14 +362,14 @@ ul li p{
     text-decoration: underline;
 }
 
-.course-material ul, .course-contact ul, .course-homework ul, .course-graded ul{
+.course-material ul, .course-contact ul, .course-homework ul {
     list-style: none;
     padding: 0 2rem;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
 }
-.course-material ul li, .course-contact ul li, .course-homework ul li, .course-graded ul li{    
+.course-material ul li, .course-contact ul li, .course-homework ul li{    
     margin: 1rem 0;
     padding:0 3rem;
     text-align: center;
@@ -786,43 +786,6 @@ ul li p{
 .fullscreen:hover{
     transform: scale(1.2);
 }
-.course-graded .graded-listed {
-    position: relative;
-    width: 100%;
-    display: flex;
-    background-color: var(--secondary-color);
-    align-items: center;
-    font-size: 1.8rem;
-}
-.course-graded .graded-listed ul li a{
-    padding: 1rem auto;
-    justify-content: center;
-    align-content: center;
-    transition: background-color 0.3s ease; 
-}
-
-.course-graded .graded-listed ul li a .homework-name{
-    display: block;
-    width: 115px;
-    height: 115px;
-    padding: 1rem;
-    border: solid 0.1rem var(--primary-color);
-    border-radius: 1rem 1rem 0 0;
-    background-color: var(--secondary-color);
-}
-.course-graded .graded-listed ul li a .grade{
-    text-align: center;
-    width: 115px;
-    padding: 1rem;
-    border: solid 0.1rem var(--primary-color);
-    border-radius: 0 0 1rem 1rem;
-    
-}
-.course-graded .graded-listed ul li a:hover .homework-name{
-    background-color: var(--primary-color);
-    color: var(--white-color);
-    transition: background-color 0.3s ease;
-}
 
 .discussion-container{
     display: flex;
@@ -834,6 +797,22 @@ ul li p{
 .course-discussions{
     display: flex;
 }
+.course-graded .header-grade{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    margin: 0 2rem;
+}
+.course-graded .table-grade{
+    padding: 1.5rem;
+}
+.table-grade table, .table-grade th, .table-grade td {
+    border: 0.2rem solid var(--primary-color);
+    border-collapse: collapse;
+    padding: 1rem;
+}
+
 .homework-genneral{
     display: flex;
     position: relative;
@@ -1122,12 +1101,6 @@ ul li p{
     text-align: right;
     width: 5rem;
     height: 5rem;
-}
-td.id, td.fullname{
-    text-align: center;
-    max-width: 10rem;
-    overflow: hidden;
-    word-wrap: break-word;
 }
 
 @import 'responsive.scss';
