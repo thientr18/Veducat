@@ -1,0 +1,44 @@
+<%- include('./partials/header.ejs'); -%>
+<section class="course-homework">
+    <div class="header-menu-name">
+        <h2>
+            Grade
+        </h2>
+    </div>
+    <div class="student-submission-list">
+        <div class="homework-name">
+            <h3>Homework 1</h3>
+        </div>
+        <form action="" method="">
+            <table>
+                <tr>
+                    <th class="id">ID</th>
+                    <th class="fullname">Full Name</th>
+                    <th class="writing">Writing</th>
+                    <th class="attach">Attach</th>
+                    <th class="time-submission">Submission Time</th>
+                    <th class="grade">Grade</th>
+                </tr>
+                <tr>
+                    <td class="id">ITITIU21284</td>
+                    <input type="hidden" name="studentID" value="_id">
+                    <td class="fullname">Nguyen Van A</td>
+                    <input type="hidden" name="HomeworkID" value="_id">
+                    <td class="writing">Write a program that reads a string from the user containing a date in the form mm/dd/yyyy. It should print the date in the form March 12, 2014.</td>
+                    <td class="attach">
+                        <a href="homework1.pdf" target="_blank">homework1.pdf</a>
+                    </td>
+                    <td class="time-submisson">2025-09-30</td>
+                    <td class="grading">
+                        <input type="number" name="grade" id="grade" min="0" max="100">
+                    </td>
+                </tr>
+            </table>
+            <div class="button-form">
+                <button type="reset">Reset</button>
+                <button type="submit">Save</button>
+            </div>
+        </form>
+    </div>
+</section>
+<%- include('./partials/footer.ejs'); -%>
