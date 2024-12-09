@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+        h1 {
+            margin: 0;
+        }
+        nav {
+            background-color: #444;
+            overflow: hidden;
+        }
+        nav a {
+            float: left;
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        nav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        nav a.active {
+            background-color: #f89b28;
+            color: white;
+        }
+        main {
+            padding: 20px;
+        }
+        section {
+            display: none;
+        }
+        section.active {
+            display: block;
+        }
+        h2 {
+            color: #333;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 5px 0;
+        }
+        a {
+            text-decoration: none;
+            color: #f89b28;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('nav a');
+
+            function showSection(id) {
+                sections.forEach(section => {
+                    section.classList.remove('active');
+                    if (section.id === id) {
+                        section.classList.add('active');
+                    }
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === '#' + id) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(event) {
+                    if (this.getAttribute('href') === '/logout') {
+                        return; // Allow default behavior for logout
+                    }
+                    event.preventDefault();
+                    const id = this.getAttribute('href').substring(1);
+                    showSection(id);
+                });
+            });
+
+            // Show the default section
+            showSection('manage');
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Admin Dashboard</h1>
+    </header>
+    <nav>
+        <a href="#manage" class="active">Manage</a>
+        <a href="#announcement">Announcement</a>
+        <a href="/logout">Logout</a>
+    </nav>
+    <main>
+        <section id="manage" class="active">
+            <h2>Manage Students</h2>
+            <ul>
+                <li><a href="/admin/manage_student/insert">Insert Student</a></li>
+                <li><a href="/admin/manage_student/list">List Students</a></li>
+            </ul>
+            <h2>Manage Teachers</h2>
+            <ul>
+                <li><a href="/admin/manage_teacher/insert">Insert Teacher</a></li>
+                <li><a href="/admin/manage_teacher/list">List Teachers</a></li>
+            </ul>
+            <h2>Manage Courses</h2>
+            <ul>
+                <li><a href="/admin/manage_course/insert">Insert Course</a></li>
+                <li><a href="/admin/manage_course/list">List Courses</a></li>
+            </ul>
+            <h2>Manage Progressing Courses</h2>
+            <ul>
+                <li><a href="/admin/manage_progressing_course/insert">Insert Progressing Course</a></li>
+                <li><a href="/admin/manage_progressing_course/list">List Progressing Courses</a></li>
+            </ul>
+        </section>
+        <section id="announcement">
+            <h2>Announcements</h2>
+            <ul>
+                <li><a href="/admin/announcement/send_to_all">Send Announcement to All</a></li>
+                <li><a href="/admin/announcement/send_to_teacher">Send Announcement to Teachers</a></li>
+                <li><a href="/admin/announcement/send_to_student">Send Announcement to Students</a></li>
+            </ul>
+        </section>
+    </main>
+</body>
+</html>
+

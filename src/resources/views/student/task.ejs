@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veducat Home Page</title>
+
+    <%- include('../partials/main/header.ejs'); -%>
+    <div class="homework-container">
+        <div class="header-menu-option">
+            <h2 id="unsubmitted" class="active">Unsubmitted</h2>
+            <h2 id="submitted">Submitted</h2>
+        </div>
+        
+        <div class="homework-list-container">
+            <section class="homework-unsubmitted selected" id="unsubmitted-list">
+                <table>
+                    <tr>
+                        <th>Course Name</th>
+                        <th>Homework Title</th>
+                        <th>Due Date</th>
+                        <th>Action</th>
+                    </tr>
+                    <tr>
+                        <td>Course 1</td>
+                        <td>Homework 1</td>
+                        <td>2025-09-27</td>
+                        <td><a href="#">Do Homework</a></td>
+                    </tr>
+                </table>
+            </section>
+            <section class="homework-submitted" id="submitted-list">
+                <table>
+                    <tr>
+                        <th>Course Name</th>
+                        <th>Homework Title</th>
+                        <th>Due Date</th>
+                        <th>Submission</th>
+                    </tr>
+                    <tr>
+                        <td>Course 2</td>
+                        <td>Homework 2</td>
+                        <td>2025-09-01</td>
+                        <td><a href="#">View Submission</a></td>
+                    </tr>
+                </table>
+            </section>
+            <script>
+                let unsubmitted = document.getElementById('unsubmitted');
+                let submitted = document.getElementById('submitted');
+                let unsubmittedList = document.getElementById('unsubmitted-list');
+                let submittedList = document.getElementById('submitted-list');
+
+                unsubmitted.onclick = () => {
+                    unsubmitted.classList.add('active')
+                    submitted.classList.remove('active')
+
+                    unsubmittedList.classList.add('selected')
+                    submittedList.classList.remove('selected')
+                }
+
+                submitted.onclick = () => {
+                    unsubmitted.classList.remove('active')
+                    submitted.classList.add('active')
+
+                    unsubmittedList.classList.remove('selected')
+                    submittedList.classList.add('selected')
+                }
+                
+            </script>
+        </div>
+    </div>
+    <%- include('../partials/main/footer.ejs'); -%>

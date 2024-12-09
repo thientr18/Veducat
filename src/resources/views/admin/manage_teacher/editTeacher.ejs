@@ -6,6 +6,24 @@
     <title>Teacher list</title>
 
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f89b28;
+            color: white;
+        }
         /* Styles for the alert box */
         .alert-box {
             display: none;
@@ -40,6 +58,17 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.5);
             z-index: 999;
+        }
+        input[type="submit"], input[type="button"] {
+            background-color: #f89b28;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        input[type="submit"]:hover, input[type="button"]:hover {
+            background-color: #e07b1f;
         }
     </style>
 </head>

@@ -7,7 +7,7 @@ body {
     background-color: var(--white-color);
     transition: background-color 0.3s, color 0.5s;
     padding-top: 60px; /* Adjust this value based on the height of your header */
-    background-image: url(background.svg);
+    background-image: url(/img/background.svg);
     background-position: center;
     background-size: cover;
     background-attachment: fixed;
@@ -1140,5 +1140,66 @@ td.id, td.fullname{
     overflow: hidden;
     word-wrap: break-word;
 }
-
+.homework-container{
+    display: flex;
+    flex-direction: column;
+    margin: 2rem;
+}
+.homework-container .header-menu-option{
+    display: flex;
+    width: 100%;
+}
+.header-menu-option h2{
+    width: calc(100% / 2);
+    text-align: center;
+    padding: 2rem;
+    font-size: 2rem;
+    border-right: solid 0.1rem var(--secondary-color);
+    background-color: var(--primary-color);
+}
+.header-menu-option:last-child h2{
+    border-right: none;
+}
+.header-menu-option h2:hover{
+    cursor: pointer;
+}
+.header-menu-option h2.active{
+    background-color: var(--white-color);
+    border: solid 0.1rem var(--primary-color);
+    transform: scale(1.05);
+    color: var(--primary-color);
+}
+.header-menu-option :first-child{
+    border-radius: 1rem 0 0 0;
+}
+.header-menu-option :last-child{
+    border-radius: 0 1rem 0 0;
+}
+.homework-list-container{
+    display: flex;
+    flex-direction: column;
+    background-color: var(--secondary-color);
+}
+.homework-unsubmitted, .homework-submitted{
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1.5rem;
+}
+.homework-unsubmitted table, .homework-submitted table{
+    width: 100%;
+    border-collapse: collapse;
+}
+.homework-unsubmitted th, .homework-unsubmitted td, .homework-submitted th, .homework-submitted td{
+    border: solid 0.1rem var(--primary-color);
+    padding: 1rem;
+    width: calc(100% / 4);
+    border-collapse: collapse;
+}
+.homework-unsubmitted table tr, .homework-submitted table tr{
+    width: 100%;
+}
+.homework-unsubmitted.selected, .homework-submitted.selected{
+    display: block;
+}
 @import 'responsive.scss';
