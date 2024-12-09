@@ -4,39 +4,104 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Insert Announcement to Student API</title>
-
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #333;
+      color: #fff;
+      padding: 10px 0;
+      text-align: center;
+    }
+    h1 {
+      margin: 0;
+    }
+    main {
+      padding: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    td {
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0;
+      box-sizing: border-box;
+    }
+    input[type="submit"], input[type="reset"] {
+      background-color: #f89b28;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+    input[type="submit"]:hover, input[type="reset"]:hover {
+      background-color: #333;
+    }
+    a {
+      color: #f89b28;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
-  <form class="form-insert-announcement" style="margin: 200px;" method="POST" action="/manage_announcement/insert">
-    <table>
-      <tr>
-        <td>Announcement Title</td>
-        <td><input type="text" name="announcement_title" id="announcement_title" required></td>
-      </tr>
-      <tr>
-        <td>Announcement Content</td>
-        <td><textarea name="announcement_content" id="announcement_content"></textarea></td>
-      </tr>
+  <header>
+    <h1>Insert Announcement to Student API</h1>
+  </header>
+  <main>
+    <form class="form-insert-announcement" style="margin: 200px;" method="POST" action="/manage_announcement/insert">
+      <table>
         <tr>
-            <td>Announcement Receivers: </td>
-            <td>
-                <p>Nút select all -> Front end tự code</p>
-                <% students.forEach(student => { %>
-                    <input type="checkbox" id="<%= student.studentID %>" name="student_ids" value="<%= student.studentID %>">
-                    <label for="<%= student.studentID %>"><%= student.studentID.toUpperCase() %> | <%= student.name %></label><br>
-                <% }); %>
-            </td>
+          <td>Announcement Title</td>
+          <td><input type="text" name="announcement_title" id="announcement_title" required></td>
         </tr>
-      <tr>
-        <td><input type="submit" value="Insert"></td>
-        <td><input type="reset" value="Reset"></td>
-      </tr> 
-      <tr>
-        <td><a href="/admin/announcement/send_to_student/list">Go to List</a></td>
-      </tr>
-    </table>
-  </form>
-
+        <tr>
+          <td>Announcement Content</td>
+          <td><textarea name="announcement_content" id="announcement_content"></textarea></td>
+        </tr>
+        <tr>
+          <td>Announcement Receivers: </td>
+          <td>
+            <input type="checkbox" id="select_all_students">
+            <script>
+              const selectAllStudents = document.querySelector('#select_all_students');
+              selectAllStudents.addEventListener('change', () => {
+                const checkboxes = document.querySelectorAll('input[name="student_ids"]');
+                checkboxes.forEach(checkbox => {
+                  checkbox.checked = selectAllStudents.checked;
+                });
+              });
+            </script>
+            <label for="select_all_students">Select All</label><br>
+            <% students.forEach(student => { %>
+              <input type="checkbox" id="<%= student.studentID %>" name="student_ids" value="<%= student.studentID %>">
+              <label for="<%= student.studentID %>"><%= student.studentID.toUpperCase() %> | <%= student.name %></label><br>
+            <% }); %>
+          </td>
+        </tr>
+        <tr>
+          <td><input type="submit" value="Insert"></td>
+          <td><input type="reset" value="Reset"></td>
+        </tr> 
+        <tr>
+          <td><a href="/admin/announcement/send_to_student/list">Go to List</a></td>
+        </tr>
+      </table>
+    </form>
+  </main>
   <script>
     const form = document.querySelector('.form-insert-announcement');
     form.addEventListener('submit', async (e) => {
@@ -45,7 +110,7 @@
       const title = document.querySelector('#announcement_title').value;
       const content = document.querySelector('#announcement_content').value;
       const studentIDs = [];
-      const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+      const checkboxes = document.querySelectorAll('input[name="student_ids"]');
       checkboxes.forEach(checkbox => {
         if (checkbox.checked) {
           studentIDs.push(checkbox.value);
@@ -69,7 +134,6 @@
         console.log(error);
       }
     });
-
   </script>
 </body>
 </html>

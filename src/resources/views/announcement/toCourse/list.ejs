@@ -4,39 +4,87 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Insert Announcement to Course API</title>
-
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #333;
+      color: #fff;
+      padding: 10px 0;
+      text-align: center;
+    }
+    h1 {
+      margin: 0;
+    }
+    main {
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      text-align: center;
+      max-width: 100%;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+    th {
+      background-color: #f89b28;
+      color: white;
+    }
+    a {
+      color: #f89b28;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
-  <form class="form-insert-announcement" style="margin: 200px;" method="POST" action="/manage_announcement/insert">
-    <table>
-        <tr>
-            <th>Announcement ID</th>
-            <th>Announcement Title</th>
-            <th>Announcement Content</th>
-            <th>Receivers</th>
-            <th>Sender</th>
-            <th>Created At</th>
-            <th>Action</th>
-        </tr>
-        <% announcements.forEach(announcement => { %>
-            <tr id="<%= announcement._id %>">
-                <td><%= announcement._id %></td>
-                <td><%= announcement.title %></td>
-                <td><%= announcement.content %></td>
-                <td><%= announcement.recipents %></td>
-                <td><%= announcement.sender %></td>
-                <td><%= announcement.createdAt %></td>
-                <td>
-                    <a href="/teacher/course/:<%= announcement.courseID %>/announcement/<%= announcement._id %>/delete/">Delete</a>
-                </td>
-            </tr>
-        <% }); %>
-        <tr>
-          <a href="/course/">Go to Insert</a>
-        </tr>
-    </table>
-  </form>
-
+  <header>
+    <h1>Announcement List</h1>
+  </header>
+  <main>
+    <form class="form-insert-announcement" style="margin: 200px;" method="POST" action="/manage_announcement/insert">
+      <table>
+          <tr>
+              <th>Announcement ID</th>
+              <th>Announcement Title</th>
+              <th>Announcement Content</th>
+              <th>Receivers</th>
+              <th>Sender</th>
+              <th>Created At</th>
+              <th>Action</th>
+          </tr>
+          <% announcements.forEach(announcement => { %>
+              <tr id="<%= announcement._id %>">
+                  <td><%= announcement._id %></td>
+                  <td><%= announcement.title %></td>
+                  <td><%= announcement.content %></td>
+                  <td><%= announcement.recipents %></td>
+                  <td><%= announcement.sender %></td>
+                  <td><%= announcement.createdAt %></td>
+                  <td>
+                      <a href="/teacher/course/:<%= announcement.courseID %>/announcement/<%= announcement._id %>/delete/">Delete</a>
+                  </td>
+              </tr>
+          <% }); %>
+          <tr>
+            <a href="/course/">Go to Insert</a>
+          </tr>
+      </table>
+    </form>
+  </main>
   <script>
 
   </script>

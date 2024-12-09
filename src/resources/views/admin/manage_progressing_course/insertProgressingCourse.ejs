@@ -4,9 +4,44 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Insert Progressing Course API</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    form {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    table {
+      width: 100%;
+    }
+    td {
+      padding: 10px;
+    }
+    input[type="submit"], input[type="reset"] {
+      background-color: #f89b28;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    input[type="submit"]:hover, input[type="reset"]:hover {
+      background-color: #e07b1f;
+    }
+  </style>
 </head>
 <body>
-  <form class="form-insert-progessing-course" style="margin: auto;" method="POST" action="/admin/manage_progressing_course/insert">
+  <form class="form-insert-progessing-course" method="POST" action="/admin/manage_progressing_course/insert">
     <table>
       <tr>
         <td>Course: </td>

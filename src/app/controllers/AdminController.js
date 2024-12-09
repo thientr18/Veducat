@@ -9,13 +9,12 @@ const Announcement = require('../models/Announcement');
 class AdminController {
 
     admin_get(req, res) {
-        res.json('admin');
+        res.render('admin/index');
     }
 
     admin_post(req, res) {
         res.json('admin');
     }
-
     /*--- START manage STUDENT---*/ 
     // GET /admin/manage_student/insert
     admin_insert_student_get(req, res, next) {
