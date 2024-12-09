@@ -125,12 +125,15 @@ class TeacherController {
         const user = res.locals.user;
         const { _id } = req.params;
         
-        console.log(req.body);
-        
         upload(req, res, async (err) => {
             if (err) {
-                return res.status(400).json({ message: err.message });
+                console.log('Hello 0');
+                return res.status(400).json({ hello: 'hello', message: err.message });
             }
+            console.log('Hello 1');
+            console.log(req.files);
+            console.log('Hello 2');
+            console.log(req.body);
 
             try {
                 const teacher = await Teacher.findOne({ teacherID: user.userID });

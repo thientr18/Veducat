@@ -135,17 +135,11 @@
         const title = form.querySelector('input[name="title"]').value;
         const description = form.querySelector('textarea').value;
         const files = form.querySelector('input[type="file"]').files;
-        const formData = new FormData();
+        const formData = new FormData(e.target);
 
-        formData.append('title', title);
-        formData.append('description', description);
-
-        for (let i = 0; i < files.length; i++) {
-            console.log(files[i].name, files[i].type);
-            formData.append('files', files[i]);
+        for( data of formData) {
+            console.log(data);
         }
-
-        console.log(formData.files);
 
         try {
             const res = await fetch(`/teacher/course/${progressingCourse._id}/material`, {
