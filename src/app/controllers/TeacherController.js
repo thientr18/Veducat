@@ -245,7 +245,7 @@ class TeacherController {
     }
 
     // GET /teacher/announcement
-    async announcement_get (req, res, next) {
+    async admin_announcement_get (req, res, next) {
         const user = res.locals.user;
         try {
             const teacher = await Teacher.findOne({ teacherID: user.userID });
