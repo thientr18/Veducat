@@ -6,7 +6,8 @@
     <title>Veducat | 
         <%=  %> 
     </title> 
-<%- include('../../partials/main/header.ejs'); -%>
+
+    <%- include('../partials/main/header.ejs'); -%>
 
 <div class="course-name">
     <a href="">
@@ -36,4 +37,11 @@
             </li>
         </ul>
 </section>
+
+<script>
+    const announcementList = document.querySelector('.announcement-listed');
+    const announcementUl = announcementList.querySelector('ul');
+    
+
+</script>
 <%- include('./partials/footer.ejs') -%>

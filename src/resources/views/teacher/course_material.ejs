@@ -30,26 +30,16 @@
                     Lecture 4: JavaScript
                 </a>
             </li>
-            <script>
-                document.querySelector("#material-form").addEventListener("click", function() {
-                    document.querySelector(".new-material-form").style.display = "block";
-                });
-            </script>
         </ul>
     </div>
 </section>
 <!-- FORM CREATE A NEW MATERIAL -->
 <section class="new-form new-material-form">
     <div class="form-container">
-        <form action="" enctype="multipart/form-data">
+        <form action="/teacher/course/<%= progressingCourse._id %>/material" method="POST" enctype="multipart/form-data">
             <div class="exit-btn" id="exit-material">
                 <i class="fas fa-times"></i>
             </div>
-            <script>
-                document.querySelector("#exit-material").addEventListener("click", function() {
-                    document.querySelector(".new-material-form").style.display = "none";
-                });
-            </script>
             <h2>Upload Material Form</h2>
             <label for="title">Title</label>
             <input type="text" name="title" id="" placeholder="Title of Material" required>
@@ -60,12 +50,6 @@
             <input type="file" name="file" id="file-upload-material" multiple>
             <div class="display-file" id="display-file-material">
                <ul>
-                <li>
-                    <a href="">
-                        <i></i>
-                        <span></span>
-                    </a>
-                </li>
                </ul>
             </div>
             <script>
@@ -104,32 +88,69 @@
     </div>
 </section>
 
+<script>
+    const newMaterialSection = document.querySelector(".new-material-form");
+    const newMaterialForm = newMaterialSection.querySelector("form");
+    const createButton = document.querySelector("#material-form");
+    const exitMaterial = document.querySelector("#exit-material");
+
+    // Open the form when clicking the create button
+    createButton.addEventListener("click", function() {
+        newMaterialSection.style.display = "block";
+    });
+
+    // Close the form when clicking the exit button
+    exitMaterial.addEventListener("click", function(e) {
+        e.stopPropagation(); // Prevent the click from bubbling up
+        newMaterialSection.style.display = "none";
+    });
+
+    // Close the form when clicking outside of it
+    newMaterialSection.addEventListener("click", function(e) {
+        // Check if the clicked target is not inside newMaterialForm
+        if (!newMaterialForm.contains(e.target)) {
+            newMaterialSection.style.display = "none";
+        }
+    });
+
+    // Close the form when pressing the Escape key
+    document.addEventListener("keyup", function(e) {
+        if (e.key === "Escape") {  // Check if the Escape key is pressed
+            e.stopPropagation(); // Prevent the keyup event from bubbling up
+            newMaterialSection.style.display = "none";
+        }
+    });
+</script>
+
+
 <script> 
-        let progressingCourse = '<%- JSON.stringify(progressingCourse) %>';
-        progressingCourse = JSON.parse(progressingCourse);
-// Get the form container and form
+    let progressingCourse = '<%- JSON.stringify(progressingCourse) %>';
+    progressingCourse = JSON.parse(progressingCourse);
+
+    // Get the form container and form
     const formContainer = document.querySelector('.form-container');
     const form = formContainer.querySelector('form');
-    console.log(form);
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const title = form.querySelector('input[name="title"]').value;
         const description = form.querySelector('textarea').value;
-        const file = form.querySelector('input[type="file"]').files;
+        const files = form.querySelector('input[type="file"]').files;
         const formData = new FormData();
+
         formData.append('title', title);
         formData.append('description', description);
 
-
-        for (let i = 0; i < file.length; i++) {
-            formData.append('file', file[i]);
+        for (let i = 0; i < files.length; i++) {
+            console.log(files[i].name, files[i].type);
+            formData.append('files', files[i]);
         }
+
+        console.log(formData.files);
+
         try {
-            
             const res = await fetch(`/teacher/course/${progressingCourse._id}/material`, {
                 method: 'POST',
-                body: {formData},
-                
+                body: formData,
             });
             const data = await res.json();
             if(res.status >= 200 && res.status < 300) {
@@ -139,7 +160,5 @@
             console.log(error);
         }
     });
-
-
 </script>
 <%- include('./partials/footer.ejs'); -%>
