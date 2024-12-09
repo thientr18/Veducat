@@ -15,7 +15,7 @@ router.get('/course/:_id/homework', requireAuthZ('teacher'), teacherController.h
 router.get('/course/:_id/discussion', requireAuthZ('teacher'), teacherController.discussion_get);
 router.get('/course/:_id/', requireAuthZ('teacher'), teacherController.course_get);
 router.get('/announcement/:_id/', requireAuthZ('teacher'), teacherController.announcement_detail_get);
-router.get('/announcement/', requireAuthZ('teacher'), teacherController.announcement_get);
+router.get('/announcement/', requireAuthZ('teacher'), teacherController.admin_announcement_get);
 router.get('/', requireAuthZ('teacher'), teacherController.index_get);
 
 module.exports = router;
