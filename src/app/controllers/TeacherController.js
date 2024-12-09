@@ -5,7 +5,6 @@ const ProgressingCourse = require('../models/ProgressingCourse');
 const Announcement = require('../models/Announcement');
 const Material = require('../models/Material');
 const multer = require('multer');
-// const path = require('../../storage');
 
 class TeacherController {
 
@@ -104,7 +103,6 @@ class TeacherController {
     async material_get (req, res, next) {
         const user = res.locals.user;
         const { _id } = req.params;
-        const { title, description } = req.body;
         try {
             const teacher = await Teacher.findOne({ teacherID: user.userID });
             if (!teacher) {
@@ -127,6 +125,8 @@ class TeacherController {
         const user = res.locals.user;
         const { _id } = req.params;
         
+        console.log(req.body);
+        
         upload(req, res, async (err) => {
             if (err) {
                 return res.status(400).json({ message: err.message });
@@ -141,7 +141,7 @@ class TeacherController {
                 let progressingCourse = await ProgressingCourse.findById(_id);
                 const course = await Course.findOne({ courseID: progressingCourse.courseID });
 
-                const material = req.file.map(file => ({
+                const materials = req.files.map(file => ({
                     courseID: progressingCourse.courseID,
                     title: req.body.title,
                     description: req.body.description,
@@ -151,9 +151,9 @@ class TeacherController {
                     uploadedBy: teacher.teacherID,
                 }));
                 
-                await Material.create(material);
+                await Material.create(materials);
                 res.status(201).json({ message: "Material uploaded successfully" });
-                
+            
             } catch (error) {
                 res.status(500).json({ message: error.message });
             }
@@ -225,7 +225,42 @@ class TeacherController {
             res.status(500).json({ message: error.message });
         }
     }
+
+    // GET /teacher/announcement/#id
+    async announcement_detail_get (req, res, next) {
+        const user = res.locals.user;
+        const { _id } = req.params;
+        console.log(_id);
+        try {
+            const teacher = await Teacher.findOne({ teacherID: user.userID });
+            if (!teacher) {
+                return res.status(404).json({ message: "Teacher not found" });
+            }
+            const announcement = await Announcement.find({ recipents: teacher.teacherID })
+
+            res.render('teacher/admin_announcement', { user, teacher, announcement});
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
+    // GET /teacher/announcement
+    async announcement_get (req, res, next) {
+        const user = res.locals.user;
+        try {
+            const teacher = await Teacher.findOne({ teacherID: user.userID });
+            if (!teacher) {
+                return res.status(404).json({ message: "Teacher not found" });
+            }
+            const announcement = await Announcement.find({ recipents: teacher.teacherID })
+
+            res.render('teacher/admin_announcement', { user, teacher, announcement});
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
 }
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, './storage');
@@ -235,17 +270,16 @@ const storage = multer.diskStorage({
         cb(null, `${uniqueSuffix}-${file.originalname}`);
     }
 });
+
 const upload = multer({ 
     storage: storage,
-    limits: {
-        fileSize: 1024 * 1024 * 10 // 10MB
-    },
+    limits: { fileSize: 1024 * 1024 * 10 },
     fileFilter: (req, file, cb) => {
         const allowedTypes = ['application/pdf', 'image/png', 'image/jpeg', 'application/zip', 'application/x-rar-compressed'];
         if (allowedTypes.includes(file.mimetype)) {
             cb(null, true);
         } else {
-            cb(null, false);
+            cb(new Error('Invalid file type'), false);
         }
     }
 }).array('files', 10);
