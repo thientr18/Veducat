@@ -34,35 +34,71 @@
                 </form>
             </div>
         </div>
-        <ul>
-        </ul>
+        <ul></ul>
     </div>
 </section>
+<!-- Script to send announcement creationg request -->
+<script>
+    let progressingCourse = '<%- JSON.stringify(progressingCourse) %>';
+    progressingCourse = JSON.parse(progressingCourse);
+
+    const formCreateAnnouncement = document.querySelector(".form-create-announcement form");
+
+    formCreateAnnouncement.addEventListener("submit", async function(e) {
+        e.preventDefault();
+
+        const courseID = progressingCourse._id;
+        const title = formCreateAnnouncement.querySelector("input[name='title']").value;
+        const content = formCreateAnnouncement.querySelector("textarea").value;
+        const sender = progressingCourse.teacherID;
+        const recipents = progressingCourse.students;
+        const type = 'course_announcement';
+        const router = `/teacher/course/${courseID}/announcement`
+
+        try {
+            const res = await fetch(router, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ courseID, title, content, sender, recipents, type })
+            });
+
+            if (res.status >= 200 && res.status < 300) {
+                console.log("Announcement created successfully");
+                location.reload();
+            }
+        } catch (error) {
+            console.log(error);
+        }
+
+        
+    });
+</script>
+
+<!-- Script to render announcements -->
 <script>
     let announcements = '<%- JSON.stringify(announcements) %>';
     announcements = JSON.parse(announcements);
-    // SORT ANNOUNCEMENTS BY DATE: newest to oldest
-    announcements.sort((a, b) => new Date(b.sentAt).getTime() - new Date(a.sentAt).getTime());
 
-    const announcementList = document.querySelector('.announcement-listed');
-    const announcementUl = announcementList.querySelector('ul');
+    const announcementListed = document.querySelector(".announcement-listed ul");
 
     announcements.forEach(announcement => {
-        const li = document.createElement('li');
-        const div = document.createElement('div');
-        div.classList.add('announcement-container');
-        const a = document.createElement('a');
-        a.href = '#';
-        a.textContent = `${announcement.title}`;
-        const description = document.createElement('div');
-        description.classList.add('description');
-        const span = document.createElement('span');
-        span.textContent = `${announcement.content}`;
-        description.appendChild(span);
-        div.appendChild(a);
-        div.appendChild(description);
-        li.appendChild(div);
-        announcementUl.appendChild(li);
+        const announcementContainer = document.createElement("li");
+        announcementContainer.innerHTML = `
+            <div class="announcement-container">
+                <a id="${announcement._id}">
+                    ${announcement.title}
+                </a>
+                <div class="description">
+                    <span>
+                        ${announcement.content}
+                    </span>
+                </div>
+            </div>
+        `;
+        announcementContainer.id = announcement._id;
+        announcementListed.appendChild(announcementContainer);
     });
 </script>
 <%- include('./partials/footer.ejs'); -%>

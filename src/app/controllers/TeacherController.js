@@ -93,8 +93,20 @@ class TeacherController {
             }
             progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
 
-            const announcements = await Announcement.find({ courseID: progressingCourse.courseID });
+            const announcements = await Announcement.find({ courseID: progressingCourse._id });
+
             res.render('teacher/course_announcement', { user, teacher, progressingCourse, announcements });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+    // POST /teacher/course/:_id/announcement
+    async announcement_post (req, res, next) {
+        const user = res.locals.user;
+        const { courseID, title, content, sender, recipents, type } = req.body;
+        try {
+            await Announcement.create({ courseID, title, content, sender, recipents, type });
+            res.status(201).json({ message: "Announcement created successfully" });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
@@ -111,13 +123,11 @@ class TeacherController {
             }
             let progressingCourse = await ProgressingCourse.findById(_id);
             const course = await Course.findOne({ courseID: progressingCourse.courseID });
-            if (!course) {
-                return res.status(404).json({ message: "Course not found" });
-            }
             progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
 
-            const materials = await Material.find({ courseID: progressingCourse.courseID });
-            res.render('teacher/course_material', { user, teacher, progressingCourse, materials: JSON.stringify(materials) });
+            const materials = await Material.find({ courseID: progressingCourse._id });
+
+            res.render('teacher/course_material', { user, teacher, progressingCourse, materials });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
@@ -129,15 +139,7 @@ class TeacherController {
         const {courseID, title, description} = req.body;
         const files = req.files;
 
-
-        
         upload(req, res, async (err) => {
-
-            // if (err) {
-            //     console.log('Hello 0');
-            //     return res.status(400).json({ hello: 'hello', message: err.message });
-            // } 
-
             try {
                 const teacher = await Teacher.findOne({ teacherID: user.userID });
                 if (!teacher) {
@@ -145,8 +147,6 @@ class TeacherController {
                 }
 
                 let progressingCourse = await ProgressingCourse.findById(_id);
-                const course = await Course.findOne({ courseID: progressingCourse.courseID });
-                
                 const materials = files.file.map(file => ({
                     courseID,
                     title,
@@ -166,7 +166,25 @@ class TeacherController {
             }
         });
     }
+    // GET /teacher/course/:_id/material/:mID
+    async material_detail_get (req, res, next) {
+        const user = res.locals.user;
+        const { _id, mID } = req.params;
+        console.log(_id, mID);
+        try {
+            const teacher = await Teacher.findOne({ teacherID: user.userID });
+            
+            let progressingCourse = await ProgressingCourse.findById(_id);
+            const course = await Course.findOne({ courseID: progressingCourse.courseID });
+            progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
 
+            const material = await Material.findById({ _id: mID });
+
+            res.render('teacher/course_material_display', { user, teacher, progressingCourse, material });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
     // GET /teacher/course/:_id/contact
     async contact_get (req, res, next) {
         const user = res.locals.user;
@@ -233,24 +251,6 @@ class TeacherController {
         }
     }
 
-    // GET /teacher/announcement/#id
-    async announcement_detail_get (req, res, next) {
-        const user = res.locals.user;
-        const { _id } = req.params;
-        console.log(_id);
-        try {
-            const teacher = await Teacher.findOne({ teacherID: user.userID });
-            if (!teacher) {
-                return res.status(404).json({ message: "Teacher not found" });
-            }
-            const announcement = await Announcement.find({ recipents: teacher.teacherID })
-
-            res.render('teacher/admin_announcement', { user, teacher, announcement});
-        } catch (error) {
-            res.status(500).json({ message: error.message });
-        }
-    }
-
     // GET /teacher/announcement
     async admin_announcement_get (req, res, next) {
         const user = res.locals.user;
@@ -259,9 +259,9 @@ class TeacherController {
             if (!teacher) {
                 return res.status(404).json({ message: "Teacher not found" });
             }
-            const announcement = await Announcement.find({ recipents: teacher.teacherID })
+            const announcements = await Announcement.find({ recipents: teacher.teacherID });
 
-            res.render('teacher/admin_announcement', { user, teacher, announcement});
+            res.render('teacher/admin_announcement', { user, teacher, announcements});
         } catch (error) {
             res.status(500).json({ message: error.message });
         }

@@ -5,19 +5,30 @@
             Material
         </h2>
     </div>
-
-    <% const materialList = JSON.parse(materials); %>
     <div class="material-listed">
         <ul>
-            <% materialList.forEach(material => { %>
-                <li>
-                    <a href="/student/course/<%=material.courseID%>/material/<%=material.title%>" class="title-book">
-                        <%= material.title %> 
-                    </a>
-                </li>
-            <% }); %>
         </ul>
     </div>
 
 </section>
+
+
+<script>    
+    let materials = '<%- JSON.stringify(materials).replace(/\\/g, "\\\\") %>';
+    materials = JSON.parse(materials);
+
+    const materialListed = document.querySelector('.material-listed ul');
+
+    materials.forEach(material => {
+        const mID = material._id;
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <a href="/student/course/${material.courseID}/material/${mID}" class="title-book">
+                ${material.title}
+            </a>
+        `;
+        materialListed.appendChild(li);
+    });
+
+</script>
 <%- include('./partials/footer.ejs'); -%>
