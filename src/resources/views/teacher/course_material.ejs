@@ -124,35 +124,40 @@
 
 
 <script> 
+
     let progressingCourse = '<%- JSON.stringify(progressingCourse) %>';
-    progressingCourse = JSON.parse(progressingCourse);
+        progressingCourse = JSON.parse(progressingCourse);
+        // Get the form container and form
+        const formContainer = document.querySelector('.form-container');
+        const form = formContainer.querySelector('form');
 
-    // Get the form container and form
-    const formContainer = document.querySelector('.form-container');
-    const form = formContainer.querySelector('form');
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const title = form.querySelector('input[name="title"]').value;
-        const description = form.querySelector('textarea').value;
-        const files = form.querySelector('input[type="file"]').files;
-        const formData = new FormData(e.target);
-
-        for( data of formData) {
-            console.log(data);
-        }
-
-        try {
-            const res = await fetch(`/teacher/course/${progressingCourse._id}/material`, {
-                method: 'POST',
-                body: formData,
-            });
-            const data = await res.json();
-            if(res.status >= 200 && res.status < 300) {
-                location.reload();
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const title = form.querySelector('input[name="title"]').value;
+            const description = form.querySelector('textarea').value;
+            const files = form.querySelector('input[type="file"]').files;
+            const courseID = progressingCourse._id;
+            console.log(title, description, files);
+            const formData = new FormData(e.target);
+            formData.append('courseID', courseID);
+            formData.append('description', description);
+    
+            for(item of formData) {
+                    console.log(item);
+                }
+            try {
+                const res = await fetch(`/teacher/course/${progressingCourse._id}/material`, {
+                    method: 'POST',
+                    body: formData,
+                });
+                const data = await res.json();
+                if(res.status >= 200 && res.status < 300) {
+                    location.reload();
+                }
+            } catch (error) {
+                console.log(error);
             }
-        } catch (error) {
-            console.log(error);
-        }
-    });
+        });
 </script>
 <%- include('./partials/footer.ejs'); -%>

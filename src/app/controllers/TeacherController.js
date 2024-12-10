@@ -124,16 +124,20 @@ class TeacherController {
     async material_post (req, res, next) {
         const user = res.locals.user;
         const { _id } = req.params;
+        const {courseID, title, description} = req.body;
+        const files = req.files;
+
+        console.log("hello");
+        
+        console.log(req.body);
+        console.log(req.files);
         
         upload(req, res, async (err) => {
-            if (err) {
-                console.log('Hello 0');
-                return res.status(400).json({ hello: 'hello', message: err.message });
-            }
-            console.log('Hello 1');
-            console.log(req.files);
-            console.log('Hello 2');
-            console.log(req.body);
+
+            // if (err) {
+            //     console.log('Hello 0');
+            //     return res.status(400).json({ hello: 'hello', message: err.message });
+            // } 
 
             try {
                 const teacher = await Teacher.findOne({ teacherID: user.userID });
@@ -143,20 +147,21 @@ class TeacherController {
 
                 let progressingCourse = await ProgressingCourse.findById(_id);
                 const course = await Course.findOne({ courseID: progressingCourse.courseID });
-
-                const materials = req.files.map(file => ({
-                    courseID: progressingCourse.courseID,
-                    title: req.body.title,
-                    description: req.body.description,
+                
+                const materials = files.file.map(file => ({
+                    courseID,
+                    title,
+                    description,
                     filePath: file.path,
                     fileType: file.mimetype,
                     fileSize: file.size,
                     uploadedBy: teacher.teacherID,
-                }));
-                
+                })
+            );
+
                 await Material.create(materials);
+                // await Material.insertMany(materials);
                 res.status(201).json({ message: "Material uploaded successfully" });
-            
             } catch (error) {
                 res.status(500).json({ message: error.message });
             }

@@ -12,6 +12,7 @@ const app = express();
 
 // middleware
 app.use(express.static(path.join(__dirname, 'public')))
+// app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use('/storage', express.static(path.join(__dirname, 'storage')));
