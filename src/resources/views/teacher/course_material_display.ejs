@@ -1,7 +1,7 @@
 <%- include('./partials/header.ejs'); -%>
 <section class="material-detail">
     <div class="material-title">
-        <h2></h2>
+        <h2><%= material.title %></h2>
         <div class="bar-menu" id="bar-menu">
             <i class="fas fa-ellipsis"></i>
             <div class="dropdown-content hide" id="dropdown-option">
@@ -27,12 +27,12 @@
     <div class="material-contents">
         <h3>Description</h3>
         <div class="material-description">
-            <p>HTML stands for Hyper Text Markup Language. It is used to design web pages using a markup language. HTML is the combination of Hypertext and Markup language. Hypertext defines the link between the web pages. A markup language is used to define the text document within tag which defines the structure of web pages.</p>
+            <p><%= material.description %></p>
         </div>
         <h3>File Attached</h3>
         <div class="material-file">
             <i class="fas fa-file"></i>
-            <a href="_linkfile.pdf" download="Lecture 1: HTML">Lecture 1: HTML.pdf</a>
+            <a href="<%= material.filePath %>" download=""><%= material. chèn cái qq gì giờ %></a>
         </div>
     </div>
 </section>

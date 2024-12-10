@@ -118,7 +118,8 @@ class StudentController {
             progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
 
             const materials = await Material.find({ courseID: progressingCourse._id });
-            res.render('student/course_material', { user, student, progressingCourse, materials: JSON.stringify(materials)});
+
+            res.render('student/course_material', { user, student, progressingCourse, materials });
         } catch {
             console.error(error);
             res.status(500).send({ message: "An error occurred", error });
@@ -127,7 +128,7 @@ class StudentController {
 
     async material_detail_get(req, res, next) {
         const user = res.locals.user;
-        const { _id, title } = req.params;
+        const { _id, mID } = req.params;
         try {
             const student = await Student.findOne({ studentID: user.userID });
             if (!student) {
@@ -139,10 +140,9 @@ class StudentController {
             const course = await Course.findOne({ courseID: progressingCourse.courseID });
             progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
 
-            const material = await Material.findOne({ title: title });
+            const material = await Material.findOne({ _id: mID });
             res.render('student/course_material_display', { user, student, progressingCourse, material});
-        }
-        catch {
+        } catch {
             console.error(error);
             res.status(500).send({ message: "An error occurred", error });
         }
