@@ -1,33 +1,23 @@
-<%- include('partials/header.ejs'); -%>
+<%- include('./partials/header.ejs'); -%>
 <section class="course-material">
     <div class="header-menu-name">
         <h2>
             Material
         </h2>
     </div>
+
+    <% const materialList = JSON.parse(materials); %>
     <div class="material-listed">
         <ul>
-            <li>
-                <a href="#" class="title-book">
-                    Lecture 1: Introduction to Web Development
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    Lecture 2: HTML
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    Lecture 3: CSS
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    Lecture 4: JavaScript
-                </a>
-            </li>
+            <% materialList.forEach(material => { %>
+                <li>
+                    <a href="/student/course/<%=material.courseID%>/material/<%=material.title%>" class="title-book">
+                        <%= material.title %> 
+                    </a>
+                </li>
+            <% }); %>
         </ul>
     </div>
+
 </section>
-<%- include('partials/footer.ejs'); -%>
+<%- include('./partials/footer.ejs'); -%>

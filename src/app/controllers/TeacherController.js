@@ -93,7 +93,8 @@ class TeacherController {
             }
             progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
 
-            res.render('teacher/course_announcement', { user, teacher, progressingCourse });
+            const announcements = await Announcement.find({ courseID: progressingCourse.courseID });
+            res.render('teacher/course_announcement', { user, teacher, progressingCourse, announcements });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
@@ -108,14 +109,15 @@ class TeacherController {
             if (!teacher) {
                 return res.status(404).json({ message: "Teacher not found" });
             }
-            let progressingCourse = await ProgressingCourse.findById(_id)
+            let progressingCourse = await ProgressingCourse.findById(_id);
             const course = await Course.findOne({ courseID: progressingCourse.courseID });
             if (!course) {
                 return res.status(404).json({ message: "Course not found" });
             }
             progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
 
-            res.render('teacher/course_material', { user, teacher, progressingCourse });
+            const materials = await Material.find({ courseID: progressingCourse.courseID });
+            res.render('teacher/course_material', { user, teacher, progressingCourse, materials: JSON.stringify(materials) });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
@@ -127,10 +129,7 @@ class TeacherController {
         const {courseID, title, description} = req.body;
         const files = req.files;
 
-        console.log("hello");
-        
-        console.log(req.body);
-        console.log(req.files);
+
         
         upload(req, res, async (err) => {
 
@@ -281,7 +280,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ 
     storage: storage,
-    limits: { fileSize: 1024 * 1024 * 10 },
+    limits: { fileSize: 1024*1024 * 1024 * 10 },
     fileFilter: (req, file, cb) => {
         const allowedTypes = ['application/pdf', 'image/png', 'image/jpeg', 'application/zip', 'application/x-rar-compressed'];
         if (allowedTypes.includes(file.mimetype)) {

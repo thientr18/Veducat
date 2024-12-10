@@ -3,6 +3,8 @@ const Student = require('../models/Student');
 const ProgressingCourse = require('../models/ProgressingCourse');
 const Course = require('../models/Course');
 const Announcement = require('../models/Announcement');
+const Task = require('../models/Task');
+const Material = require('../models/Material');
 
 class StudentController {
     // GET /student
@@ -80,7 +82,7 @@ class StudentController {
 
     async announcement_get(req, res, next) {
         const user = res.locals.user;
-        const { id } = req.params;
+        const { _id } = req.params;
         try {
             const student = await Student.findOne({ studentID: user.userID });
             if (!student) {
@@ -88,7 +90,7 @@ class StudentController {
             }
 
             // Current course
-            let progressingCourse = await ProgressingCourse.findById(id);
+            let progressingCourse = await ProgressingCourse.findById(_id);
             const course = await Course.findOne({ courseID: progressingCourse.courseID });
             progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
 
@@ -115,8 +117,32 @@ class StudentController {
             const course = await Course.findOne({ courseID: progressingCourse.courseID });
             progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
 
-            res.render('student/course_material', { user, student, progressingCourse});
+            const materials = await Material.find({ courseID: progressingCourse._id });
+            res.render('student/course_material', { user, student, progressingCourse, materials: JSON.stringify(materials)});
         } catch {
+            console.error(error);
+            res.status(500).send({ message: "An error occurred", error });
+        }
+    }
+
+    async material_detail_get(req, res, next) {
+        const user = res.locals.user;
+        const { _id, title } = req.params;
+        try {
+            const student = await Student.findOne({ studentID: user.userID });
+            if (!student) {
+                return res.status(404).json({ message: "Student not found" });
+            }
+
+            // Current course
+            let progressingCourse = await ProgressingCourse.findById(_id);
+            const course = await Course.findOne({ courseID: progressingCourse.courseID });
+            progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
+
+            const material = await Material.findOne({ title: title });
+            res.render('student/course_material_display', { user, student, progressingCourse, material});
+        }
+        catch {
             console.error(error);
             res.status(500).send({ message: "An error occurred", error });
         }
@@ -202,6 +228,20 @@ class StudentController {
 
             res.render('student/course_grade', { user, student, progressingCourse});
         } catch {
+            console.error(error);
+            res.status(500).send({ message: "An error occurred", error });
+        }
+    }
+
+    async task_get(req, res, next) {
+        const user = res.locals.user;
+        try {
+            const student = await Student.findOne({ studentID: user.userID });
+            if (!student) {
+                return res.status(404).json({ message: "Student not found" });
+            }
+            res.render('student/task', { user, student});
+        } catch (error) {
             console.error(error);
             res.status(500).send({ message: "An error occurred", error });
         }
