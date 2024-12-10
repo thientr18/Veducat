@@ -2,16 +2,40 @@
 <section class="course-contact">
     <div class="header-menu-name">
         <h2>
-            Contact
+            Students List
         </h2>
     </div>
-    <div class="contact-listed">
-        <ul>
-        </ul>
+    <div class="student-listed">
+        <table>
+            <tr>
+                <th class="studentID">Student ID</th>
+                <th class="studentName">Student Name</th>
+                <th class="studentMail">Email</th>
+            </tr>
+            <tr>
+                
+            </tr>
+        </table>
     </div>
 </section>
-
 <script>
+    let students = '<%- JSON.stringify(students) %>';
+    console.log(students);
+    students = JSON.parse(students);
+    const studentListed = document.querySelector('.student-listed table');
+    students.forEach(student => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td class="studentID">${student.studentID}</td>
+            <td class="studentName">${student.name}</td>
+            <td class="studentMail">
+                <a href="mailto:${student.email}">${student.email}</a>
+            </td>
+        `;
+        studentListed.appendChild(tr);
+    });
+</script>
+<!-- <script>
     let teacher = '<%- JSON.stringify(teacher) %>';
     teacher = JSON.parse(teacher);
     console.log(teacher);
@@ -24,5 +48,5 @@
     li.appendChild(a);
     contactList.appendChild(li);
 
-</script>
+</script> -->
 <%- include('./partials/footer.ejs'); -%>
