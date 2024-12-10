@@ -9,15 +9,18 @@
 
     <%- include('../partials/main/header.ejs'); -%>
 
-    <div class="course-name">
-        <a href="">
-            Admin's Announcement
-        </a>
-    </div>
-    <div class="announcement-listed">
-        <ul>
-        </ul>
-</section>
+    <main class="admin-announcement">
+        <section class="announcements-container">
+            <div class="header-menu-name">
+                <h2>
+                    Admin's Announcement
+                </h2>
+            </div>
+            <div class="announcement-listed">
+                <ul>
+                </ul>
+        </section>
+    </main>
 
 <script>
     let announcements = '<%- JSON.stringify(announcements) %>';
