@@ -32,7 +32,7 @@
         <h3>File Attached</h3>
         <div class="material-file">
             <i class="fas fa-file"></i>
-            <a href="<%= material.filePath %>" download=""><%= material. chèn cái qq gì giờ %></a>
+            <a href="<%= material.filePath %>" download=""><%= material.filePath %></a>
         </div>
     </div>
 </section>
@@ -101,4 +101,11 @@
         </form>
     </div>
 </section>
+<script>
+    let title = document.querySelector("input[name='title']");
+    let description = document.querySelector("textarea");
+    let file = document.querySelector("input[type='file']");
+    title.value = "<%= material.title %>";
+    description.value = "<%= material.description %>";
+</script>
 <%- include('./partials/footer.ejs'); -%>

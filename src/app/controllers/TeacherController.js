@@ -5,6 +5,7 @@ const ProgressingCourse = require('../models/ProgressingCourse');
 const Announcement = require('../models/Announcement');
 const Material = require('../models/Material');
 const multer = require('multer');
+const Student = require('../models/Student');
 
 class TeacherController {
 
@@ -200,8 +201,11 @@ class TeacherController {
                 return res.status(404).json({ message: "Course not found" });
             }
             progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
+            
+            
+            const students = await Student.find({ studentID: { $in: progressingCourse.students } });
 
-            res.render('teacher/course_contact', { user, teacher, progressingCourse });
+            res.render('teacher/course_contact', { user, teacher, progressingCourse, students });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }

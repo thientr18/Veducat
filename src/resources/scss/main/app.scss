@@ -586,6 +586,54 @@ ul li p{
     color: var(--white-color);
     border-radius: 1rem;
 }
+.student-listed{
+    display: flex;
+    position: relative;
+    width: 100%;
+    margin: 2rem auto;
+    align-items: center;
+    justify-content: center;
+}
+.student-listed table, .student-listed tr{
+    border: solid 0.1rem var(--primary-color);
+    border-collapse: separate;
+}
+.student-listed table{
+    width: 80%;
+    border-radius: 2rem;
+}
+.student-listed th, .student-listed td{
+    padding: 1rem;
+    border-left: solid 0.1rem var(--primary-color);
+    border-top: solid 0.1rem var(--primary-color);
+}
+.student-listed th.studentID, .student-listed td.studentID{
+    text-align: center;
+    width: 20%;
+}
+.student-listed th.studentName, .student-listed td.studentName{
+    text-align: center;
+    width: 30%;
+}
+
+.student-listed th.studentMail, .student-listed td.studentMail{
+    text-align: center;
+    width: 50%;
+}
+.student-listed th{
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    border: none;
+}
+.student-listed th:first-child, .student-listed td:first-child{
+    border-left: none;
+}
+.student-listed th:first-child{
+    border-radius: 1.8rem 0 0 0;
+}
+.student-listed th:last-child{
+    border-radius: 0 1.8rem 0 0;
+}
 .course-homework ul li a{
     position: relative;
     display: flex;
