@@ -31,7 +31,6 @@ const upload = multer({
     }
 })
 const cpUpload = upload.fields([{ name: 'file', maxCount: 10 }])
-
 // GET /teacher
 router.get('/course/:_id/announcement', requireAuthZ('teacher'), teacherController.announcement_get);
 router.get('/course/:_id/material', requireAuthZ('teacher'), teacherController.material_get);

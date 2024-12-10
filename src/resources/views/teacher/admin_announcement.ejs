@@ -9,35 +9,36 @@
 
     <%- include('../partials/main/header.ejs'); -%>
 
-<div class="course-name">
-    <a href="">
-        Admin's Announcement
-    </a>
-</div>
-<section class="course-announcement">
-    <div class="header-menu-name">
-        <h2>
+    <div class="course-name">
+        <a href="">
             Admin's Announcement
-        </h2>
+        </a>
     </div>
-    <div class="announcement-listed">
-        <ul>
-            <li>
-                <div class="announcement-container">
-                    <a href="#">
-                        System maintaining: New course has been added.
-                    </a>
-                    <div class="description">
-                        <span>
-                            Dear Students, we have added a new course to the system. Please check it out.
-                            Best regards, Admin.
-                        </span>
-                    </div>
-                </div>
-            </li>
-        </ul>
-</section>
-
+    <main class="admin-announcement">
+        <section class="announcements-container">
+            <div class="header-menu-name">
+                <h2>
+                    Admin's Announcement
+                </h2>
+            </div>
+            <div class="announcement-listed">
+                <ul>
+                    <li>
+                        <div class="announcement-container">
+                            <p href="#">
+                                System maintaining: New course has been added.
+                            </p>
+                            <div class="description">
+                                <span>
+                                    Dear Students, we have added a new course to the system. Please check it out.
+                                    Best regards, Admin.
+                                </span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+        </section>
+    </main>
 <script>
     const announcementList = document.querySelector('.announcement-listed');
     const announcementUl = announcementList.querySelector('ul');
