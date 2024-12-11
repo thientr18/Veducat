@@ -4,6 +4,7 @@ const Course = require('../models/Course');
 const ProgressingCourse = require('../models/ProgressingCourse');
 const Announcement = require('../models/Announcement');
 const Material = require('../models/Material');
+const MaterialFile = require('../models/MaterialFile');
 const multer = require('multer');
 const Student = require('../models/Student');
 
@@ -162,11 +163,6 @@ class TeacherController {
 
         upload(req, res, async (err) => {
 
-            // if (err) {
-            //     console.log('Hello 0');
-            //     return res.status(400).json({ hello: 'hello', message: err.message });
-            // } 
-
             try {
                 const teacher = await Teacher.findOne({ teacherID: user.userID });
                 if (!teacher) {
@@ -177,24 +173,30 @@ class TeacherController {
                 const course = await Course.findOne({ courseID: progressingCourse.courseID });
 
                 if(files.file == null){
-                    await Material.create({courseID : courseID,
+                    await Material.create({
+                        courseID : courseID,
                         title : title,
                         description : description,
                         uploadedBy: teacher.teacherID,
                     });
+
                 } else{
-                    const materials = files.file.map(file => ({
-                        courseID,
-                        title,
-                        description,
+                    const material = await Material.create({
+                        courseID : courseID,
+                        title : title,
+                        description : description,
+                        uploadedBy: teacher.teacherID,
+                    });
+                    const uploadFiles = files.file.map(file => ({
+                        materialID: material._id,
+                        fileName: file.originalname,
                         filePath: file.path,
                         fileType: file.mimetype,
                         fileSize: file.size,
-                        uploadedBy: teacher.teacherID,
                     }));
-                    await Material.create(materials);
+                    console.log(uploadFiles);
+                    await MaterialFile.create(uploadFiles);
                 }                
-                // await Material.insertMany(materials);
                 res.status(201).json({ message: "Material uploaded successfully" });
             } catch (error) {
                 res.status(500).json({ message: error.message });
@@ -394,7 +396,73 @@ class TeacherController {
             res.status(500).json({ message: error.message });
         }
     }
+    // get /course/:_id/delete/:_id
+    async teacher_delete_material(req, res, next) {
+        const { _id } = req.params;
+        try {
+            const material = await Material.findById( _id);
+            if(!material){
+                return res.status(404).json({ message: "Material not found" });
+            }
+
+            let progressingCourse = await ProgressingCourse.findById(material.courseID);
+            await MaterialFile.deleteMany({ materialID: material._id });
+            await Material.findByIdAndDelete(_id);
+            res.redirect(`/teacher/course/${progressingCourse._id}/material`);
+        }
+        catch (err) {
+            res.status(400).json( {err} )
+        }
+    }
+
+    // put /course/:_id/edit/:_id
+    async teacher_edit_material(req, res) {
+        const { _id } = req.params;
+        const {title, description} = req.body;
+        const files = req.files;
+        console.log(req.body);
+        console.log(req.files);
+        console.log("hello 00");
+        upload(req, res, async (err) => {
+            try {
+                const material = await Material.findById( _id);
+                console.log("hello 01");
+             
+                console.log(files);
+
+                if(files == null){
+                    await Material.updateOne(
+                        {_id : _id},
+                        {title : title,
+                        description : description}
+                    );
+                    await MaterialFile.deleteMany({ materialID: material._id });
+                } else{
+                    await Material.updateOne(
+                        {_id : _id},
+                        {title : title,
+                        description : description}
+                    );
+                    console.log("hello 02");
+                    const uploadFiles = files.file.map(file => ({
+                        materialID: material._id,
+                        fileName: file.originalname,
+                        filePath: file.path,
+                        fileType: file.mimetype,
+                        fileSize: file.size,
+                    }));
+                    await MaterialFile.deleteMany({ materialID: material._id });
+                    await MaterialFile.create(uploadFiles);
+                    console.log("hello 03");
+                }               
+                res.status(201).json({ message: "Material uploaded successfully" });
+            } catch (error) {
+                res.status(500).json({ message: error.message });
+            }
+        });
+    }
 }
+
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {

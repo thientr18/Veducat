@@ -36,7 +36,9 @@ const cpUpload = upload.fields([{ name: 'file', maxCount: 10 }])
 router.get('/course/:_id/announcement', requireAuthZ('teacher'), teacherController.announcement_get);
 router.post('/course/:_id/announcement', requireAuthZ('teacher'), teacherController.announcement_post);
 router.get('/course/:_id/material', requireAuthZ('teacher'), teacherController.material_get);
+
 router.post('/course/:_id/material', cpUpload, requireAuthZ('teacher'), teacherController.material_post);
+
 router.get('/course/:_id/material/:mID', requireAuthZ('teacher'), teacherController.material_detail_get);
 router.get('/course/:_id/contact', requireAuthZ('teacher'), teacherController.contact_get);
 router.get('/course/:_id/homework', requireAuthZ('teacher'), teacherController.homework_get);
@@ -49,4 +51,8 @@ router.get('/profile', requireAuthZ('teacher'), teacherController.profile_get);
 router.get('/homework/task', requireAuthZ('teacher'), teacherController.tasks_get);
 router.get('/discussion', requireAuthZ('teacher'), teacherController.discussion_all_get);
 router.get('/grade', requireAuthZ('teacher'), teacherController.grade_all_get);
+
+router.get('/course/:_id/delete/:_id', requireAuthZ('teacher'), teacherController.teacher_delete_material);
+router.put('/course/:_id/edit/:_id', cpUpload, requireAuthZ('teacher'), teacherController.teacher_edit_material);
+
 module.exports = router;
