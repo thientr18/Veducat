@@ -41,9 +41,12 @@ router.get('/course/:_id/material/:mID', requireAuthZ('teacher'), teacherControl
 router.get('/course/:_id/contact', requireAuthZ('teacher'), teacherController.contact_get);
 router.get('/course/:_id/homework', requireAuthZ('teacher'), teacherController.homework_get);
 router.get('/course/:_id/discussion', requireAuthZ('teacher'), teacherController.discussion_get);
+router.get('/course/:_id/grade', requireAuthZ('teacher'), teacherController.grade_get);
 router.get('/course/:_id/', requireAuthZ('teacher'), teacherController.course_get);
 router.get('/announcement/', requireAuthZ('teacher'), teacherController.admin_announcement_get);
 router.get('/', requireAuthZ('teacher'), teacherController.index_get);
 router.get('/profile', requireAuthZ('teacher'), teacherController.profile_get);
-
+router.get('/homework/task', requireAuthZ('teacher'), teacherController.tasks_get);
+router.get('/discussion', requireAuthZ('teacher'), teacherController.discussion_all_get);
+router.get('/grade', requireAuthZ('teacher'), teacherController.grade_all_get);
 module.exports = router;

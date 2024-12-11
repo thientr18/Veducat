@@ -271,6 +271,29 @@ class TeacherController {
         }
     }
 
+    // GET /teacher/course/:_id/grade
+    async grade_get (req, res, next) {
+        const user = res.locals.user;
+        const { _id } = req.params;
+        try {
+            const teacher = await Teacher.findOne({ teacherID: user.userID });
+            if (!teacher) {
+                return res.status(404).json({ message: "Teacher not found" });
+            }
+            let progressingCourse = await ProgressingCourse.findById(_id)
+            const course = await Course.findOne({ courseID: progressingCourse.courseID });
+            if (!course) {
+                return res.status(404).json({ message: "Course not found" });
+            }
+            progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
+
+            res.render('teacher/course_grade', { user, teacher, progressingCourse });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
+
     // GET /teacher/announcement
     async admin_announcement_get (req, res, next) {
         const user = res.locals.user;
@@ -296,6 +319,78 @@ class TeacherController {
 
             res.render('teacher/profile', { user, teacher });
         } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+    async tasks_get (req, res, next) {
+        const user = res.locals.user;
+        try {
+            const teacher = await Teacher.findOne({ teacherID: user.userID });
+            if (!teacher) {
+                return res.status(404).json({ message: "Teacher not found" });
+            }
+
+            const progressingCourses = await ProgressingCourse.find({ teacherID: teacher.teacherID });
+            if (!progressingCourses.length) {
+                return res.render('teacher/index', { user, teacher, teacherCourses: [], announcements: [] });
+            }
+            const courses = await Course.find({ courseID: { $in: progressingCourses.map(pc => pc.courseID) } });
+            const teacherCourses = progressingCourses.map(pCourse => {
+                const course = courses.find(c => c.courseID === pCourse.courseID);
+                return {
+                    ...pCourse._doc,
+                    name: course?.name || null,
+                    description: course?.description || null
+                };
+            });
+
+            res.render('teacher/task', { user, teacher, teacherCourses });
+        }
+        catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
+    async discussion_all_get (req, res, next) {
+        const user = res.locals.user;
+        try {
+            const teacher = await Teacher.findOne({ teacherID: user.userID });
+            if (!teacher) {
+                return res.status(404).json({ message: "Teacher not found" });
+            }
+
+            const progressingCourses = await ProgressingCourse.find({ teacherID: teacher.teacherID });
+            if (!progressingCourses.length) {
+                return res.render('teacher/index', { user, teacher, teacherCourses: [], announcements: [] });
+            }
+            const courses = await Course.find({ courseID: { $in: progressingCourses.map(pc => pc.courseID) } });
+            const teacherCourses = progressingCourses.map(pCourse => {
+                const course = courses.find(c => c.courseID === pCourse.courseID);
+                return {
+                    ...pCourse._doc,
+                    name: course?.name || null,
+                    description: course?.description || null
+                };
+            });
+
+            res.render('teacher/discussion', { user, teacher, teacherCourses });
+        }
+        catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
+    async grade_all_get (req, res, next) {
+        const user = res.locals.user;
+        try {
+            const teacher = await Teacher.findOne({ teacherID: user.userID });
+            if (!teacher) {
+                return res.status(404).json({ message: "Teacher not found" });
+            }
+
+            res.render('teacher/grade', { user, teacher });
+        }
+        catch (error) {
             res.status(500).json({ message: error.message });
         }
     }

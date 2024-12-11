@@ -25,12 +25,12 @@
                 <a href="/teacher/homework/task">Tasks</a>
                 <% } %>
                 <% if (user.role === 'student') { %>
-                <a href="student/discussion">Discussion</a>
+                <a href="/student/discussion">Discussion</a>
                 <% } else if (user.role === 'teacher') { %>
-                <a href="teacher/discussion">Discussion</a>
+                <a href="/teacher/discussion">Discussion</a>
                 <% } %>
                 <a href="/logout">Logout</a>
-                <div id="darkmode-btn" class="fas fa-moon"></div>
+                <div id="darkmode-btn" class="fas fa-sun"></div>
             </nav>
             <div id="span-btn" class="fas fa-bars"></div>
         </div>

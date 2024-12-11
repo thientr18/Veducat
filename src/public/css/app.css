@@ -89,7 +89,7 @@ ul li p {
   cursor: pointer;
   margin-left: 2rem;
   color: var(--primary-color);
-  font-size: 2rem;
+  font-size: 3.5rem;
   transition: 0.2s linear; }
 
 #darkmode-btn.fa-sun {
@@ -231,7 +231,7 @@ ul li p {
   text-decoration: underline;
   transform: translateX(1rem); }
 
-#main-in-course, #main-in-announcement {
+#main-in-course, #main-in-announcement, #main-in-discussion, #main-in-grade {
   display: flex; }
 
 #main-in-course .display-area {
@@ -1100,11 +1100,11 @@ ul li p {
   padding-right: 1rem;
   color: var(--red-color); }
 
-#main-in-announcement {
+#main-in-announcement, #main-in-discussion, #main-in-grade {
   display: flex;
   width: 100%; }
 
-#main-in-announcement .container {
+#main-in-announcement .container, #main-in-discussion .container, #main-in-grade .container {
   padding: 2rem;
   padding-top: 0;
   margin: 2rem auto;
@@ -1117,7 +1117,7 @@ ul li p {
   border-radius: 1.2rem;
   background-color: var(--secondary-color); }
 
-#main-in-announcement .container .header-announcement {
+#main-in-announcement .container .header-announcement, #main-in-discussion .container .header-discussion, #main-in-grade .container .header-grade {
   width: 100%;
   text-align: center;
   font-size: 2rem;
@@ -1126,16 +1126,16 @@ ul li p {
   border-radius: 1rem 1rem 0 0;
   padding: 0 2rem; }
 
-#main-in-announcement .container .announcement-list {
+#main-in-announcement .container .announcement-list, #main-in-discussion .container .discussion-list, #main-in-grade .container .grade-list {
   width: 100%;
   display: block;
   font-size: 1.5rem; }
 
-#main-in-announcement .container .announcement-list ul {
+#main-in-announcement .container .announcement-list ul, #main-in-discussion .container .discussion-list ul, #main-in-grade .container .grade-list ul {
   list-style: none;
   padding: 1rem; }
 
-#main-in-announcement .container .announcement-list ul li {
+#main-in-announcement .container .announcement-list ul li, #main-in-discussion .container .discussion-list ul li, #main-in-grade .container .grade-list ul li {
   margin: 1rem 0;
   padding: 1rem;
   border: solid 0.1rem var(--primary-color);
@@ -1378,6 +1378,131 @@ td.id, td.fullname {
   height: 100%;
   font-size: 2rem;
   color: var(--black-color); }
+
+.homework-container {
+  display: flex;
+  flex-direction: column;
+  margin: 2rem; }
+
+.content-list .new-homework-form {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%; }
+
+.content-list .new-homework-form .form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center; }
+
+.content-list .new-homework-form .form-container form {
+  position: relative;
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  border: solid 0.1rem var(--primary-color);
+  border-radius: 2rem;
+  padding: 2rem;
+  background-color: var(--secondary-color); }
+
+.content-list .new-homework-form .form-container form h2 {
+  text-align: center;
+  font-size: 2rem;
+  border-bottom: solid 0.1rem var(--primary-color);
+  padding-bottom: 2rem; }
+
+.content-list .new-homework-form .form-container form input[type="text"] {
+  display: flex;
+  width: 90%;
+  margin: 0 auto;
+  padding: 1rem;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 12px;
+  outline-color: var(--primary-color); }
+
+.content-list .new-homework-form .form-container form select {
+  display: flex;
+  width: 90%;
+  margin: 0 auto;
+  padding: 1rem;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 12px;
+  outline-color: var(--primary-color); }
+
+.content-list .new-homework-form .form-container form input[type="datetime-local"] {
+  display: flex;
+  width: 90%;
+  margin: 0 auto;
+  padding: 1rem;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 12px;
+  outline-color: var(--primary-color); }
+
+.content-list .new-homework-form .form-container form input[type="file"] {
+  display: none; }
+
+.content-list .new-homework-form .form-container form #add-btn {
+  display: flex;
+  width: calc(90% - 1rem);
+  padding: 1rem;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  border: solid 0.1rem var(--primary-color);
+  border-radius: 12px;
+  outline-color: var(--primary-color);
+  cursor: pointer; }
+
+.content-list .new-homework-form .form-container form #add-btn:hover {
+  background-color: var(--primary-color);
+  color: var(--white-color); }
+
+.content-list .new-homework-form .form-container form textarea {
+  display: flex;
+  width: 90%;
+  height: 10rem;
+  padding: 1rem;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 12px;
+  outline-color: var(--primary-color);
+  resize: none; }
+
+.content-list .new-homework-form .form-container form label {
+  margin: 1rem;
+  font-size: 1.5rem;
+  font-weight: bold; }
+
+.grade.course-name, .average-grade, .grade.homework-title, .status {
+  padding: 1rem;
+  margin: 0;
+  font-size: 2rem;
+  font-weight: bold; }
+
+.grade.course-name {
+  color: var(--primary-color); }
+
+.see-detail {
+  padding: 0.5rem 1rem; }
+
+.see-detail:hover {
+  color: var(--white-color);
+  background-color: var(--primary-color);
+  border-radius: 1rem;
+  cursor: pointer; }
 
 @media (max-width: 1080px) {
   html {
