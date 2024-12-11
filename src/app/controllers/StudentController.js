@@ -5,6 +5,7 @@ const Course = require('../models/Course');
 const Announcement = require('../models/Announcement');
 const Task = require('../models/Task');
 const Material = require('../models/Material');
+const Teacher = require('../models/Teacher');
 
 class StudentController {
     // GET /student
@@ -160,10 +161,11 @@ class StudentController {
             // Current course
             let progressingCourse = await ProgressingCourse.findById(_id);
             const course = await Course.findOne({ courseID: progressingCourse.courseID });
-            progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
+            progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description};
 
+            const teacher = await Teacher.findOne({ teacherID: progressingCourse.teacherID });
 
-            res.render('student/course_contact', { user, student, progressingCourse});
+            res.render('student/course_contact', { user, student, progressingCourse, teacher});
         } catch {
             console.error(error);
             res.status(500).send({ message: "An error occurred", error });
@@ -242,6 +244,36 @@ class StudentController {
             }
             res.render('student/task', { user, student});
         } catch (error) {
+            console.error(error);
+            res.status(500).send({ message: "An error occurred", error });
+        }
+    }
+    async profile_get(req, res, next) {
+        const user = res.locals.user;
+        try {
+            const student = await Student.findOne({ studentID: user.userID });
+            if (!student) {
+                return res.status(404).json({ message: "Student not found" });
+            }
+            res.render('student/profile', { user, student });
+        }
+        catch (error) {
+            console.error(error);
+            res.status(500).send({ message: "An error occurred", error });
+        }
+    }
+    async announcement_all_get(req, res, next) {
+        const user = res.locals.user;
+        try {
+            const student = await Student.findOne({ studentID: user.userID });
+            if (!student) {
+                return res.status(404).json({ message: "Student not found" });
+            }
+            const announcements = await Announcement.find({ recipents: student.studentID });
+
+            res.render('student/announcement', { user, student, announcements});
+        } 
+        catch (error) {
             console.error(error);
             res.status(500).send({ message: "An error occurred", error });
         }

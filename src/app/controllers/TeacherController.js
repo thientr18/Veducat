@@ -133,6 +133,26 @@ class TeacherController {
             res.status(500).json({ message: error.message });
         }
     }
+
+    async material_detail_get (req, res, next) {
+        const user = res.locals.user;
+        const { _id, mID } = req.params;
+        console.log(_id, mID);
+        try {
+            const teacher = await Teacher.findOne({ teacherID: user.userID });
+            
+            let progressingCourse = await ProgressingCourse.findById(_id);
+            const course = await Course.findOne({ courseID: progressingCourse.courseID });
+            progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
+
+            const material = await Material.findById({ _id: mID });
+
+            res.render('teacher/course_material_display', { user, teacher, progressingCourse, material });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
     // POST /teacher/course/:_id/material
     async material_post (req, res, next) {
         const user = res.locals.user;
@@ -262,6 +282,19 @@ class TeacherController {
             const announcements = await Announcement.find({ recipents: teacher.teacherID });
 
             res.render('teacher/admin_announcement', { user, teacher, announcements});
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+    async profile_get (req, res, next) {
+        const user = res.locals.user;
+        try {
+            const teacher = await Teacher.findOne({ teacherID: user.userID });
+            if (!teacher) {
+                return res.status(404).json({ message: "Teacher not found" });
+            }
+
+            res.render('teacher/profile', { user, teacher });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }

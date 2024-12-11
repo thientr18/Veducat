@@ -38,6 +38,12 @@
         li.appendChild(div);
         announcementUl.appendChild(li);
     });
+    if (announcements.length === 0) {
+        const li = document.createElement('li');
+        li.classList.add('empty-content');
+        li.textContent = 'No announcements yet';
+        announcementUl.appendChild(li);
+    }
 </script>
 
 <%- include('./partials/footer.ejs'); -%>

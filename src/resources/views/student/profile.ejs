@@ -1,0 +1,47 @@
+<%- include('../partials/main/header.ejs'); -%>
+
+<main>
+    <section class="profile-container">
+        <div class="profile">
+            <div class="profile-header">
+                <h2>Profile</h2>
+            </div>
+            <div class="profile-content">
+                <div class="profile-detail">
+                    <div class="items profile-name">
+                        <span class="label">Name:</span>
+                        <span class="info">
+                            <%- student.name %>
+                        </span>
+                    </div>
+                    <div class="items profile-role">
+                        <span class="label">Role: </span>
+                        <span class="info">
+                            <%- user.role %>
+                        </span>
+                    </div>
+                    <div class="items profile-id">
+                        <span class="label">ID:</span>
+                        <span class="info">
+                            <%- student.studentID %>
+                        </span>
+                    </div>
+                    <div class="items profile-email">
+                        <span class="label">Email:</span>
+                        <span class="info">
+                            <%- student.email %>
+                        </span>
+                    </div>
+                    <div class="items profile-dob">
+                        <span class="label">Date of Birth:</span>
+                        <span class="info">
+                            <%- student.dob %>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<%- include('../partials/main/footer.ejs'); -%>

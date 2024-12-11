@@ -30,5 +30,12 @@
         materialListed.appendChild(li);
     });
 
+    if (materials.length === 0) {
+        const li = document.createElement('li');
+        li.classList.add('empty-content');
+        li.textContent = 'No materials yet';
+        materialListed.appendChild(li);
+    }
+
 </script>
 <%- include('./partials/footer.ejs'); -%>
