@@ -32,15 +32,16 @@ const upload = multer({
 })
 const cpUpload = upload.fields([{ name: 'file', maxCount: 10 }])
 
-// GET /teacher
+// :/teacher
 router.get('/course/:_id/announcement', requireAuthZ('teacher'), teacherController.announcement_get);
+router.post('/course/:_id/announcement', requireAuthZ('teacher'), teacherController.announcement_post);
 router.get('/course/:_id/material', requireAuthZ('teacher'), teacherController.material_get);
 router.post('/course/:_id/material', cpUpload, requireAuthZ('teacher'), teacherController.material_post);
+router.get('/course/:_id/material/:mID', requireAuthZ('teacher'), teacherController.material_detail_get);
 router.get('/course/:_id/contact', requireAuthZ('teacher'), teacherController.contact_get);
 router.get('/course/:_id/homework', requireAuthZ('teacher'), teacherController.homework_get);
 router.get('/course/:_id/discussion', requireAuthZ('teacher'), teacherController.discussion_get);
 router.get('/course/:_id/', requireAuthZ('teacher'), teacherController.course_get);
-router.get('/announcement/:_id/', requireAuthZ('teacher'), teacherController.announcement_detail_get);
 router.get('/announcement/', requireAuthZ('teacher'), teacherController.admin_announcement_get);
 router.get('/', requireAuthZ('teacher'), teacherController.index_get);
 
