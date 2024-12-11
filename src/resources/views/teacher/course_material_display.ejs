@@ -5,16 +5,11 @@
         <div class="bar-menu" id="bar-menu">
             <i class="fas fa-ellipsis"></i>
             <div class="dropdown-content hide" id="dropdown-option">
-                <div class="edit-button">
+                <div class="edit-button" id="material-form">
                     Edit
                 </div>
-                <script>
-                    document.querySelector(".edit-button").addEventListener("click", function() {
-                        document.querySelector(".new-material-form").style.display = "block";
-                    });
-                </script>
                 <div class="delete-button">
-                    Delete
+                    <a href="/teacher/course/<%= progressingCourse._id %>/delete/<%= material._id %>">Delete</a>
                 </div>
             </div>
         </div>
@@ -36,18 +31,13 @@
         </div>
     </div>
 </section>
-<!-- FORM CREATE A NEW MATERIAL -->
+<!-- FORM EDIT A NEW MATERIAL -->
 <section class="new-form new-material-form">
     <div class="form-container">
-        <form action="">
+        <form action = "/teacher/course/<%= material.courseID %>/material/<%= material._id %>" method = "PUT" enctype="multipart/form-data">
             <div class="exit-btn" id="exit-material">
                 <i class="fas fa-times"></i>
             </div>
-            <script>
-                document.querySelector("#exit-material").addEventListener("click", function() {
-                    document.querySelector(".new-material-form").style.display = "none";
-                });
-            </script>
             <h2>Edit Material Form</h2>
             <label for="title">Title</label>
             <input type="text" name="title" id="" placeholder="Title of Material" required>
@@ -102,10 +92,69 @@
     </div>
 </section>
 <script>
-    let title = document.querySelector("input[name='title']");
-    let description = document.querySelector("textarea");
-    let file = document.querySelector("input[type='file']");
-    title.value = "<%= material.title %>";
-    description.value = "<%= material.description %>";
+    const newMaterialSection = document.querySelector(".new-material-form");
+    const newMaterialForm = newMaterialSection.querySelector("form");
+    const createButton = document.querySelector("#material-form");
+    const exitMaterial = document.querySelector("#exit-material");
+
+    // Open the form when clicking the create button
+    createButton.addEventListener("click", function() {
+        newMaterialSection.style.display = "block";
+    });
+
+    // Close the form when clicking the exit button
+    exitMaterial.addEventListener("click", function(e) {
+        e.stopPropagation(); // Prevent the click from bubbling up
+        newMaterialSection.style.display = "none";
+    });
+
+    // Close the form when clicking outside of it
+    newMaterialSection.addEventListener("click", function(e) {
+        // Check if the clicked target is not inside newMaterialForm
+        if (!newMaterialForm.contains(e.target)) {
+            newMaterialSection.style.display = "none";
+        }
+    });
+
+    // Close the form when pressing the Escape key
+    document.addEventListener("keyup", function(e) {
+        if (e.key === "Escape") {  // Check if the Escape key is pressed
+            e.stopPropagation(); // Prevent the keyup event from bubbling up
+            newMaterialSection.style.display = "none";
+        }
+    });
+</script>
+<script> 
+
+    let material = '<%- JSON.stringify(material).replace(/\\/g, "\\\\") %>';
+        material = JSON.parse(material);
+
+        // Get the form container and form
+    const formContainer = document.querySelector('.form-container');
+    const form = formContainer.querySelector('form');
+ 
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const title = form.querySelector('input[name="title"]').value;
+        const description = form.querySelector('textarea').value;
+        const files = form.querySelector('input[type="file"]').files;
+        const formData = new FormData(e.target);
+        formData.append('description', description);
+
+        const action = `/teacher/course/<%= material.courseID %>/edit/<%= material._id %>`;
+        try {
+            const res = await fetch(action, {
+                method: 'PUT',
+                body: formData,
+            });
+            const data = await res.json();
+            if(res.status >= 200 && res.status < 300) {
+                location.reload();
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    });
 </script>
 <%- include('./partials/footer.ejs'); -%>
