@@ -1,19 +1,34 @@
-    <script>
-        let spanBtn = document.querySelector('#span-btn');
-        let darkmodeBtn = document.querySelector('#darkmode-btn');
-        let navbar = document.querySelector('.header .flex-header .navbar');
-        let headerBar = document.querySelector('.header');
+<script>
+    // Select the elements
+    let spanBtn = document.querySelector('#span-btn');
+    let darkmodeBtn = document.querySelector('#darkmode-btn');
+    let navbar = document.querySelector('.header .flex-header .navbar');
+    let headerBar = document.querySelector('.header');
 
-        spanBtn.onclick = () => {
+    // Load saved dark mode state
+    const isDarkMode = localStorage.getItem('dark-mode') === 'true';
+    if (isDarkMode) {
+        document.body.classList.add('dark');
+        headerBar.classList.add('dark');
+        darkmodeBtn.classList.add('fa-sun'); // Optional: ensure the button icon reflects the state
+    }
+
+    // Toggle navbar menu
+    spanBtn.onclick = () => {
         spanBtn.classList.toggle('fa-times');
         navbar.classList.toggle('active');
-        };
+    };
 
-        darkmodeBtn.onclick = () => {
-        darkmodeBtn.classList.toggle('fa-sun');
-        document.body.classList.toggle('dark');
+    // Toggle dark mode
+    darkmodeBtn.onclick = () => {
+        const isCurrentlyDark = document.body.classList.toggle('dark');
         headerBar.classList.toggle('dark');
-        };
-    </script>
+        darkmodeBtn.classList.toggle('fa-sun');
+
+        // Save the state
+        localStorage.setItem('dark-mode', isCurrentlyDark);
+    };
+</script>
+
 </body>
 </html>

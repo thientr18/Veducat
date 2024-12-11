@@ -34,47 +34,71 @@
                 </form>
             </div>
         </div>
-        <ul>
-            <li>
-                <div class="announcement-container">
-                    <a href="#">
-                        System maintaining: New course has been added.
-                    </a>
-                    <div class="description">
-                        <span>
-                            Dear Students, we have added a new course to the system. Please check it out.
-                            Best regards, Admin.
-                        </span>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="announcement-container">
-                    <a href="#">
-                        No OS class on Fri & Sat, 15 & 16/11/2024
-                    </a>
-                    <div class="description">
-                        <span>
-                            Dear Students, there will be no Operating System class on Friday and Saturday, 15th and 16th of November, 2024.
-                            Best regards, Instructor.
-                        </span>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="announcement-container">
-                    <a href="#">
-                        New assignment for Computer Networks
-                    </a>
-                    <div class="description">
-                        <span>
-                            Dear Students, a new assignment has been uploaded for Computer Networks. Please check it out.
-                            Best regards, Instructor.
-                        </span>
-                    </div>
-                </div>
-            </li>
-        </ul>
+        <ul></ul>
     </div>
 </section>
+<!-- Script to send announcement creationg request -->
+<script>
+    let progressingCourse = '<%- JSON.stringify(progressingCourse) %>';
+    progressingCourse = JSON.parse(progressingCourse);
+
+    const formCreateAnnouncement = document.querySelector(".form-create-announcement form");
+
+    formCreateAnnouncement.addEventListener("submit", async function(e) {
+        e.preventDefault();
+
+        const courseID = progressingCourse._id;
+        const title = formCreateAnnouncement.querySelector("input[name='title']").value;
+        const content = formCreateAnnouncement.querySelector("textarea").value;
+        const sender = progressingCourse.teacherID;
+        const recipents = progressingCourse.students;
+        const type = 'course_announcement';
+        const router = `/teacher/course/${courseID}/announcement`
+
+        try {
+            const res = await fetch(router, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ courseID, title, content, sender, recipents, type })
+            });
+
+            if (res.status >= 200 && res.status < 300) {
+                console.log("Announcement created successfully");
+                location.reload();
+            }
+        } catch (error) {
+            console.log(error);
+        }
+
+        
+    });
+</script>
+
+<!-- Script to render announcements -->
+<script>
+    let announcements = '<%- JSON.stringify(announcements) %>';
+    announcements = JSON.parse(announcements);
+
+    const announcementListed = document.querySelector(".announcement-listed ul");
+
+    announcements.forEach(announcement => {
+        const announcementContainer = document.createElement("li");
+        announcementContainer.innerHTML = `
+            <div class="announcement-container">
+                <a id="${announcement._id}">
+                    ${announcement.title}
+                </a>
+                <div class="description">
+                    <span>
+                        ${announcement.content}
+                    </span>
+                </div>
+            </div>
+        `;
+        announcementContainer.id = announcement._id;
+        announcementListed.appendChild(announcementContainer);
+    });
+</script>
 <%- include('./partials/footer.ejs'); -%>

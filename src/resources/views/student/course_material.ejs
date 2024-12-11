@@ -1,4 +1,4 @@
-<%- include('partials/header.ejs'); -%>
+<%- include('./partials/header.ejs'); -%>
 <section class="course-material">
     <div class="header-menu-name">
         <h2>
@@ -7,27 +7,28 @@
     </div>
     <div class="material-listed">
         <ul>
-            <li>
-                <a href="#" class="title-book">
-                    Lecture 1: Introduction to Web Development
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    Lecture 2: HTML
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    Lecture 3: CSS
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    Lecture 4: JavaScript
-                </a>
-            </li>
         </ul>
     </div>
+
 </section>
-<%- include('partials/footer.ejs'); -%>
+
+
+<script>    
+    let materials = '<%- JSON.stringify(materials).replace(/\\/g, "\\\\") %>';
+    materials = JSON.parse(materials);
+
+    const materialListed = document.querySelector('.material-listed ul');
+
+    materials.forEach(material => {
+        const mID = material._id;
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <a href="/student/course/${material.courseID}/material/${mID}" class="title-book">
+                ${material.title}
+            </a>
+        `;
+        materialListed.appendChild(li);
+    });
+
+</script>
+<%- include('./partials/footer.ejs'); -%>

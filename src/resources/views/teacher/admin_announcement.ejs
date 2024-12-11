@@ -9,39 +9,44 @@
 
     <%- include('../partials/main/header.ejs'); -%>
 
-<div class="course-name">
-    <a href="">
-        Admin's Announcement
-    </a>
-</div>
-<section class="course-announcement">
-    <div class="header-menu-name">
-        <h2>
-            Admin's Announcement
-        </h2>
-    </div>
-    <div class="announcement-listed">
-        <ul>
-            <li>
-                <div class="announcement-container">
-                    <a href="#">
-                        System maintaining: New course has been added.
-                    </a>
-                    <div class="description">
-                        <span>
-                            Dear Students, we have added a new course to the system. Please check it out.
-                            Best regards, Admin.
-                        </span>
-                    </div>
-                </div>
-            </li>
-        </ul>
-</section>
+    <main class="admin-announcement">
+        <section class="announcements-container">
+            <div class="header-menu-name">
+                <h2>
+                    Admin's Announcement
+                </h2>
+            </div>
+            <div class="announcement-listed">
+                <ul>
+                </ul>
+        </section>
+    </main>
 
 <script>
+    let announcements = '<%- JSON.stringify(announcements) %>';
+    announcements = JSON.parse(announcements);
+
     const announcementList = document.querySelector('.announcement-listed');
     const announcementUl = announcementList.querySelector('ul');
-    
 
+    announcements.forEach(announcement => {
+        const announcementLi = document.createElement('li');
+        const announcementContainer = document.createElement('div');
+        const announcementLink = document.createElement('a');
+        const announcementDescription = document.createElement('div');
+        const announcementDescriptionSpan = document.createElement('span');
+
+        announcementContainer.classList.add('announcement-container');
+        announcementLink.id = announcement._id;
+        announcementLink.textContent = announcement.title;
+        announcementDescription.classList.add('description');
+        announcementDescriptionSpan.textContent = announcement.content;
+
+        announcementDescription.appendChild(announcementDescriptionSpan);
+        announcementContainer.appendChild(announcementLink);
+        announcementContainer.appendChild(announcementDescription);
+        announcementLi.appendChild(announcementContainer);
+        announcementUl.appendChild(announcementLi);
+    });
 </script>
 <%- include('./partials/footer.ejs') -%>
