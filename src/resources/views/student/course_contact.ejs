@@ -7,19 +7,21 @@
     </div>
     <div class="contact-listed">
         <ul>
-            <li>
-                <a href="#">
-                    <i class="fas fa-user-circle"></i>
-                    Teacher 1:
-                    </a>
-            </li>
-            <li>
-                <a href="#">
-                    <i class="fas fa-user-circle"></i>
-                    Teacher 2:
-                </a>
-            </li>
+            
         </ul>
     </div>
 </section>
+<script>
+    let teacher = '<%- JSON.stringify(teacher) %>';
+    teacher = JSON.parse(teacher);
+    console.log(teacher);
+    const contact = document.querySelector('.contact-listed');
+    const contactList = contact.querySelector('ul');
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.href = `mailto:${teacher.email}`;
+    a.innerHTML = `<i class="fa-regular fa-envelope"></i><span>Name: ${teacher.name}</span><span>Email: ${teacher.email}</span>`;
+    li.appendChild(a);
+    contactList.appendChild(li);
+</script>
 <%- include('partials/footer.ejs'); -%>

@@ -17,5 +17,7 @@ router.get('/course/:_id/grade', requireAuthZ('student'), studentController.grad
 router.get('/course/:_id/', requireAuthZ('student'), studentController.course_get);
 router.get('/homework/task', requireAuthZ('student'), studentController.task_get);
 router.get('/', requireAuthZ('student'), studentController.index_get);
+router.get('/profile', requireAuthZ('student'), studentController.profile_get);
+router.get('/announcement', requireAuthZ('student'), studentController.announcement_all_get);
 
 module.exports = router;
