@@ -134,11 +134,6 @@ class TeacherController {
         
         upload(req, res, async (err) => {
 
-            // if (err) {
-            //     console.log('Hello 0');
-            //     return res.status(400).json({ hello: 'hello', message: err.message });
-            // } 
-
             try {
                 const teacher = await Teacher.findOne({ teacherID: user.userID });
                 if (!teacher) {
@@ -147,19 +142,25 @@ class TeacherController {
 
                 let progressingCourse = await ProgressingCourse.findById(_id);
                 const course = await Course.findOne({ courseID: progressingCourse.courseID });
-                
-                const materials = files.file.map(file => ({
-                    courseID,
-                    title,
-                    description,
-                    filePath: file.path,
-                    fileType: file.mimetype,
-                    fileSize: file.size,
-                    uploadedBy: teacher.teacherID,
-                })
-            );
+                if(files.file == null){
+                    await Material.create({courseID : courseID,
+                        title : title,
+                        description : description,
+                        uploadedBy: teacher.teacherID});
+                } else{
+                    const materials = files.file.map(file => ({
+                        courseID,
+                        title,
+                        description,
+                        fileName: file.filename,
+                        filePath: file.path,
+                        fileType: file.mimetype,
+                        fileSize: file.size,
+                        uploadedBy: teacher.teacherID,
+                    }));
+                    await Material.create(materials);
+                }
 
-                await Material.create(materials);
                 // await Material.insertMany(materials);
                 res.status(201).json({ message: "Material uploaded successfully" });
             } catch (error) {
@@ -167,6 +168,7 @@ class TeacherController {
             }
         });
     }
+    
 
     // GET /teacher/course/:_id/contact
     async contact_get (req, res, next) {

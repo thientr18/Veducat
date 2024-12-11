@@ -13,17 +13,18 @@ const materialSchema = new mongoose.Schema({
     description: {
         type: 'string'
     },
+    fileName: {
+        type: 'string',
+    },
     filePath: {
         type: 'string',
-        required: [true, 'Please enter a file path']
     },
     fileType: {
         type: 'string',
-        required: [true, 'Please enter a file type']
+ 
     },
     fileSize: {
         type: 'number',
-        required: [true, 'Please enter a file size']
     },
     uploadedBy: {
         type: 'string',
