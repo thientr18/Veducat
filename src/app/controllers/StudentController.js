@@ -278,6 +278,34 @@ class StudentController {
             res.status(500).send({ message: "An error occurred", error });
         }
     }
+    async discussion_all_get(req, res, next) {
+        const user = res.locals.user;
+        try {
+            const student = await Student.findOne({ studentID: user.userID });
+            if (!student) {
+                return res.status(404).json({ message: "Student not found" });
+            }
+            res.render('student/discussion', { user, student});
+        }
+        catch (error) {
+            console.error(error);
+            res.status(500).send({ message: "An error occurred", error });
+        }
+    }
+    async grade_all_get(req, res, next) {
+        const user = res.locals.user;
+        try {
+            const student = await Student.findOne({ studentID: user.userID });
+            if (!student) {
+                return res.status(404).json({ message: "Student not found" });
+            }
+            res.render('student/grade', { user, student});
+        } 
+        catch (error) {
+            console.error(error);
+            res.status(500).send({ message: "An error occurred", error });
+        }
+    }
 }
 
 module.exports = new StudentController();

@@ -10,7 +10,8 @@
     if (isDarkMode) {
         document.body.classList.add('dark');
         headerBar.classList.add('dark');
-        darkmodeBtn.classList.add('fa-sun'); // Optional: ensure the button icon reflects the state
+        darkmodeBtn.classList.add('fa-moon'); // Optional: ensure the button icon reflects the state
+        darkmodeBtn.classList.remove('fa-sun');
     }
 
     // Toggle navbar menu
@@ -23,7 +24,13 @@
     darkmodeBtn.onclick = () => {
         const isCurrentlyDark = document.body.classList.toggle('dark');
         headerBar.classList.toggle('dark');
-        darkmodeBtn.classList.toggle('fa-sun');
+        if (isCurrentlyDark) {
+            darkmodeBtn.classList.add('fa-moon');
+            darkmodeBtn.classList.remove('fa-sun');
+        } else {
+            darkmodeBtn.classList.add('fa-sun');
+            darkmodeBtn.classList.remove('fa-moon');
+        }
 
         // Save the state
         localStorage.setItem('dark-mode', isCurrentlyDark);
