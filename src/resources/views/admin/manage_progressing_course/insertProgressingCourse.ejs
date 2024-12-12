@@ -98,7 +98,6 @@
         alert('Please select a course, teacher, and at least one student.');
         return;
       }
-
       try {
         const res = await fetch('/admin/manage_progressing_course/insert', {
           method: 'POST',

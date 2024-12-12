@@ -31,6 +31,10 @@ const gradeSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    updateAt: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 const Grade = mongoose.model('grade', gradeSchema); // 'grade' is the name of the collection in the database

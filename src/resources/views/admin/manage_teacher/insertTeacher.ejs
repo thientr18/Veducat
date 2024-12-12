@@ -52,12 +52,21 @@
         <td><input type="text" name="teacher_name" id="teacher_name" required></td>
       </tr>
       <tr>
+        <td>Teacher Mail</td>
+        <td><input type="text" name="teacher_mail" id="teacher_mail" required></td>
+      </tr>
+      <tr>
         <td>Teacher Birthday</td>
         <td><input type="date" name="teacher_dob" id="teacher_dob"></td>
       </tr>
       <tr>
         <td><input type="submit" value="Insert"></td>
         <td><input type="reset" value="Reset"></td>
+      </tr>
+      <tr>
+        <td><a href="/admin">Back to Home</a></td>
+        <td><a href="/admin/manage_teacher/list">Go to Teacher List</a></td>
+      </tr>
     </table>
   </form>
 
@@ -68,14 +77,22 @@
       const teacherID = document.querySelector('#teacher_id').value;
       const name = document.querySelector('#teacher_name').value;
       const DoB = document.querySelector('#teacher_dob').value;
-      const email = teacherID + '@teacher.com';
+      const email = document.querySelector('#teacher_mail').value;
       
       try {
-        const res = await fetch('/admin/manage_teacher/insert', {
+        const res = await fetch(`/admin/manage_teacher/insert`, {
           method: 'POST',
           body: JSON.stringify({teacherID, name, DoB, email}),
           headers: {'Content-Type': 'application/json'},
         });
+
+        if (res.status >= 200 && res.status < 300) {
+          alert(`Teacher '${teacherID.toUpperCase(  )}' inserted successfully`);
+          location.reload();
+        }
+        if (res.status >= 400 && res.status < 500) {
+          console.log("Request failed because the resource either does not exist or is forbidden", res.responseText);
+        }
       } catch (error) {
         console.log(error);
       }

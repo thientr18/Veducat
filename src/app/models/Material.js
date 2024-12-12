@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const materialSchema = new mongoose.Schema({
-    courseID: {
+    pCourseID: {
         type: 'string',
         required: [true, 'Please enter a course ID'],
         lowercase: true,
@@ -22,6 +22,10 @@ const materialSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    updateAt: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 const Material = mongoose.model('material', materialSchema); // 'material' is the name of the collection in the database

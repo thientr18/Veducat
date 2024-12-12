@@ -10,30 +10,6 @@
     </div>
     <div class="homework-listed">
         <ul>
-            <li>
-                <a href="#">
-                    <p>Homework 1: HTML</p>
-                    <span>
-                        Deadline: 10/11/2024
-                    </span>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <p>Homework 2: CSS</p>
-                    <span>
-                        Deadline: 15/11/2024
-                    </span>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <p>Homework 3: JavaScript</p>
-                    <span>
-                        Deadline: 20/11/2024
-                    </span>
-                </a>
-            </li>
             <script>
                 document.querySelector("#homework-form").addEventListener("click", function() {
                     document.querySelector(".new-homework-form").style.display = "block";
@@ -42,10 +18,41 @@
         </ul>
     </div>
 </section>
+<script>
+    let homeworks = '<%- JSON.stringify(homeworks).replace(/\\/g, "\\\\") %>';
+        homeworks = JSON.parse(homeworks);
+    let progressingCourse = '<%- JSON.stringify(progressingCourse) %>';
+        progressingCourse = JSON.parse(progressingCourse);
+
+
+    const homeworkListed = document.querySelector('.homework-listed ul');
+
+    homeworks.forEach(homework => {
+        const hID = homework._id;
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <a href="/teacher/course/${progressingCourse._id}/homework/${hID}" class="title-book">
+                ${homework.title}
+                <span>
+                    Deadline: ${new Date(homework.dueDate).toLocaleDateString()}
+                </span>
+            </a>
+        `;
+        homeworkListed.appendChild(li);
+    });
+
+    if (homeworks.length === 0) {
+        const li = document.createElement('li');
+        li.classList.add('empty-content');
+        li.textContent = 'No homeworks yet';
+        homeworkListed.appendChild(li);
+    }
+
+</script>
 <!-- FORM FOR CREATE A HOMEWORK -->
 <section class="new-form new-homework-form">
     <div class="form-container">
-        <form action="">
+        <form action="/teacher/course/<%= progressingCourse._id %>/homework" method="POST" enctype="multipart/form-data">
             <div class="exit-btn" id="exit-homework">
                 <i class="fas fa-times"></i>
             </div>
@@ -109,4 +116,50 @@
         </form>
     </div>
 </section>
+<script>
+    const newHomeworkSection = document.querySelector(".new-homework-form");
+    const newHomeworkForm = newHomeworkSection.querySelector("form");
+    const createButton = document.querySelector("#homework-form");
+    const exitHomework = document.querySelector("#exit-homework");
+
+    // Open the form when clicking the create button
+    createButton.addEventListener("click", function() {
+        newHomeworkSection.style.display = "block";
+    });
+    // Close the form when clicking the exit button
+    exitHomework.addEventListener("click", function() {
+        newHomeworkSection.style.display = "none";
+    });
+</script>
+<script>
+    // Get the form container and form
+    const formContainer = document.querySelector('.form-container');
+    const form = formContainer.querySelector('form');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const title = form.querySelector('input[name="title"]').value;
+        const description = form.querySelector('textarea').value;
+        const files = form.querySelector('input[type="file"]').files;
+        const courseID = progressingCourse._id;
+        const deadline = form.querySelector('input[type="datetime-local"]').value;
+        const formData = new FormData(e.target);
+
+        formData.append('courseID', courseID);
+        formData.append('description', description);
+        try {
+            const res = await fetch(`/teacher/course/${progressingCourse._id}/homework`, {
+                method: 'POST',
+                body: formData,
+            });
+            const data = await res.json();
+            if(res.status >= 200 && res.status < 300) {
+                location.reload();
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    });
+</script>
 <%- include('./partials/footer.ejs'); -%>

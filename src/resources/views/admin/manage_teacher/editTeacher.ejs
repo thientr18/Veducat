@@ -1,175 +1,283 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teacher list</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Teachers</title>
+  <style>
+    /* General Table Styling */
+    table {
+      width: 90%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 10px;
-            border: 1px solid #ddd;
-        }
-        th {
-            background-color: #f89b28;
-            color: white;
-        }
-        /* Styles for the alert box */
-        .alert-box {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            border: 1px solid #ccc;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            padding: 20px;
-            z-index: 1000;
-        }
-        .alert-box input {
-            display: block;
-            margin: 10px 0;
-            padding: 5px;
-            width: 100%;
-        }
-        .alert-box button {
-            margin: 10px 5px 0 0;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-        /* Overlay for background dimming */
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-        }
-        input[type="submit"], input[type="button"] {
-            background-color: #f89b28;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-        input[type="submit"]:hover, input[type="button"]:hover {
-            background-color: #e07b1f;
-        }
-    </style>
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+
+    /* Header Styling */
+    th {
+      background-color: #f89b28;
+      color: white;
+    }
+
+    /* Cell Styling */
+    td {
+      background-color: #fff;
+    }
+
+    /* Hover Effect for Table Rows */
+    tr:hover {
+      background-color: #f9f9f9;
+    }
+
+    /* Button Styling */
+    input[type="submit"], input[type="button"], button {
+      background-color: #f89b28;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    button:hover, input[type="submit"]:hover, input[type="button"]:hover {
+      background-color: #e07b1f;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      table {
+        width: 100%;
+        margin: 10px;
+      }
+
+      .alert-box {
+        width: 90%;
+      }
+    }
+
+    /* Initially hide the edit form */
+    .alert-box {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      border: 1px solid #ccc;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      padding: 20px;
+      z-index: 1000;
+    }
+
+    /* Overlay for background */
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+
+    /* Add specific styling for alert button */
+    .alert-btn {
+      background-color: #f89b28;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+      margin-top: 20px;
+    }
+
+    .alert-btn:hover {
+      background-color: #e07b1f;
+    }
+  </style>
 </head>
 <body>
-    <h1>Teacher list</h1>
-    <table>
+  <h1>Teacher List</h1>
+  <table>
+    <tr>
+      <th>Teacher ID</th>
+      <th>Teacher Name</th>
+      <th>Teacher Birthday</th>
+      <th>Teacher Email</th>
+      <th>Action</th>
+    </tr>
+    <!-- Loop through teachers to display the teacher data dynamically -->
+    <% teachers.forEach(teacher => { %>
+      <tr>
+        <td><%= teacher.teacherID.toUpperCase() %></td>
+        <td><%= teacher.name %></td>
+        <td><%= teacher.DoB ? new Date(teacher.DoB).toLocaleDateString('en-GB') : 'No data' %></td>
+        <td><%= teacher.email %></td>
+        <td>
+          <button onclick="openForm('<%= teacher.teacherID %>', '<%= teacher.name %>', '<%= teacher.DoB %>')">Edit</button>
+          <button onclick="deleteTeacher('<%= teacher.teacherID %>')">Delete</button>
+        </td>
+      </tr>
+    <% }); %>
+  </table>
+
+  <br>
+  <table>
+    <tr>
+      <td><a href="/admin">Back to Home</a></td>
+      <td><a href="/admin/manage_teacher/insert">Insert New Teacher</a></td>
+    </tr>
+  </table>
+
+  <!-- Edit Teacher Form (Initially hidden) -->
+  <div class="overlay" id="overlay"></div>
+  <div class="alert-box" id="editForm">
+    <h2>Edit Teacher Information</h2>
+    <form id="editTeacherForm">
+      <input type="hidden" name="id" id="teacherId">
+      <table>
         <tr>
-            <th>Teacher ID</th>
-            <th>Teacher Name</th>
-            <th>Teacher Birthday</th>
-            <th>Teacher Email</th>
+          <td>Teacher ID:</td>
+          <td>
+            <input type="text" name="teacherID" id="teacherID" disabled>
+          </td>
         </tr>
-        <% teachers.forEach(teacher => { %>
-            <tr>
-                <td><%= teacher.teacherID.toUpperCase() %></td>
-                <td><%= teacher.name %></td>
-                <td><%= teacher.DoB %></td>
-                <td><%= teacher.email %></td>
-                <td>
-                    <a href="#" onclick="openForm('<%= teacher.teacherID %>', '<%= teacher.name %>', '<%= teacher.DoB %>')">Edit</a>
-                    <a href="/admin/manage_teacher/delete/<%= teacher.teacherID %>">Delete</a>
-                </td>
-            </tr>
-        <% }); %>
-    </table>
+        <tr>
+          <td>Name:</td>
+          <td>
+            <input type="text" name="name" id="name">
+          </td>
+        </tr>
+        <tr>
+          <td>Birthday:</td>
+          <td>
+            <input type="date" name="DoB" id="DoB">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <input type="submit" value="Save">
+          </td>
+          <td>
+            <input type="button" value="Cancel" onclick="closeEditForm()">
+          </td>
+        </tr>
+      </table>
+    </form>
+  </div>
 
-    <!-- Alert Box -->
-    <div class="overlay" id="overlay"></div>
-    <div class="alert-box" id="editForm">
-        <h2>Edit Teacher Information</h2>
-        <form id="editteacherForm">
-            <input type="hidden" name="id" id="teacherId">
-            <table>
-                <tr>
-                    <td>Teacher ID:</td>
-                    <td>
-                        <input type="text" name="teacherID" id="teacherID" disabled>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Name:</td>
-                    <td>
-                        <input type="text" name="name" id="name">
-                    </td>
-                </tr>
-                <tr>
-                    <td>Birthday:</td>
-                    <td>
-                        <input type="date" name="DoB" id="DoB">
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <input type="submit" name="" id="" value="Save">
-                    </td>
-                    <td>
-                        <input type="button" name="" id="" onclick="closeEditForm()" value="Cancel">
-                    </td>
-                </tr>
-            </table>
-        </form>
-    </div>
+  <!-- Alert Box for Deletion -->
+  <div class="alert-box" id="alertBox">
+    <p id="alertMessage"></p>
+    <button id="goToCourseBtn" class="alert-btn" onclick="goToCoursePage()">Go to Course</button>
+    <button class="alert-btn" onclick="closeAlert()">Close</button>
+  </div>
 
-    <script>
-        const form = document.getElementById('editteacherForm');
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
+  <script>
+    const form = document.getElementById('editTeacherForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const teacherID = document.getElementById('teacherID').value.toLowerCase();
+      const name = document.getElementById('name').value;
+      const DoB = document.getElementById('DoB').value;
+      const email = teacherID + '@teacher.hcmiu.edu.com';
+      const action = '/admin/manage_teacher/edit/' + teacherID;
 
-            // Get updated values from the form
-            const teacherID = document.getElementById('teacherID').value;
-            const name = document.getElementById('name').value;
-            const DoB = document.getElementById('DoB').value;
-            const email = teacherID + '@teacher.com';
-            const action = '/admin/manage_teacher/edit/'+teacherID
-
-            try {
-                const res = await fetch(action, {
-                    method: 'PUT',
-                    body: JSON.stringify({teacherID, name, DoB, email}),
-                    headers: {'Content-Type': 'application/json'},
-                });
-            } catch (error) {
-                console.log(error);
-            }
+      try {
+        const res = await fetch(action, {
+          method: 'PUT',
+          body: JSON.stringify({ teacherID, name, DoB, email }),
+          headers: { 'Content-Type': 'application/json' },
         });
-        
-        // Function to open the edit form
-        openForm = (teacherID, name, DoB) => {
-            document.getElementById('overlay').style.display = 'block';
-            document.getElementById('editForm').style.display = 'block';
 
-            document.getElementById('teacherID').value = teacherID;
-            document.getElementById('name').value = name;
-            document.getElementById('DoB').value = DoB;
+        if (res.status >= 200 && res.status < 300) {
+          alert(`Teacher '${teacherID.toUpperCase()}' updated successfully`);
+          location.reload();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    });
+
+    function openForm(teacherID, name, DoB) {
+      document.getElementById('overlay').style.display = 'block';
+      document.getElementById('editForm').style.display = 'block';
+
+      document.getElementById('teacherID').value = teacherID.toUpperCase();
+      document.getElementById('name').value = name;
+
+      if (DoB) {
+        let formattedDoB = '';
+        const dateObj = new Date(DoB);
+        if (!isNaN(dateObj)) {
+          const year = dateObj.getFullYear();
+          const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+          const day = String(dateObj.getDate()).padStart(2, '0');
+          formattedDoB = `${year}-${month}-${day}`;
+        }
+        document.getElementById('DoB').value = formattedDoB;
+      } else {
+        document.getElementById('DoB').value = '';
+      }
+    }
+
+    function closeEditForm() {
+      document.getElementById('editForm').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+    }
+
+    async function deleteTeacher(teacherID) {
+        const action = '/admin/manage_teacher/delete/' + teacherID;
+        try {
+            const res = await fetch(action, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            });
+
+            const data = await res.json(); // Await the response and parse it
+
+            if (res.status >= 200 && res.status < 300) {
+                alert(`Teacher '${teacherID.toUpperCase()}' deleted successfully`);
+                location.reload();
+            } else if (res.status === 400) {
+                if (data.message) {
+                    showAlert(data.message, data.hasCourses);
+                }
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
+    function showAlert(message, hasCourses) {
+        document.getElementById('alertMessage').innerText = message;
+
+        const goToCourseBtn = document.getElementById('goToCourseBtn');
+        if (hasCourses) {
+            goToCourseBtn.style.display = 'inline-block';
+        } else {
+            goToCourseBtn.style.display = 'none';
         }
 
-        // Function to close the edit form
-        function closeEditForm() {
-            document.getElementById('editForm').style.display = 'none';
-            document.getElementById('overlay').style.display = 'none';
-        }
-    </script>
+        document.getElementById('alertBox').style.display = 'block';
+    }
+
+
+    function goToCoursePage() {
+        window.location.href = '/admin/manage_progressing_course/list';
+    }
+
+    function closeAlert() {
+        document.getElementById('alertBox').style.display = 'none';
+    }
+  </script>
 </body>
 </html>

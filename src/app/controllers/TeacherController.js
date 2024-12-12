@@ -5,6 +5,8 @@ const ProgressingCourse = require('../models/ProgressingCourse');
 const Announcement = require('../models/Announcement');
 const Material = require('../models/Material');
 const MaterialFile = require('../models/MaterialFile');
+const Task = require('../models/Task');
+const TaskFile = require('../models/TaskFile');
 const multer = require('multer');
 const Student = require('../models/Student');
 
@@ -193,12 +195,12 @@ class TeacherController {
                     });
                     const uploadFiles = files.file.map(file => ({
                         materialID: material._id,
+                        materialName: title,
                         fileName: file.originalname,
                         filePath: file.path,
                         fileType: file.mimetype,
                         fileSize: file.size,
                     }));
-                    console.log(uploadFiles);
                     await MaterialFile.create(uploadFiles);
                 }                
                 res.status(201).json({ message: "Material uploaded successfully" });
@@ -248,8 +250,30 @@ class TeacherController {
                 return res.status(404).json({ message: "Course not found" });
             }
             progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
+            const homeworks = await Task.find({ courseID: progressingCourse._id });
 
-            res.render('teacher/course_homework', { user, teacher, progressingCourse });
+            res.render('teacher/course_homework', { user, teacher, progressingCourse, homeworks });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+    
+    // GET /teacher/course/:_id/homework/:_id
+    async homework_detail_get (req, res, next) {
+        const user = res.locals.user;
+        const { _id, hID } = req.params;
+        
+        try {
+            const teacher = await Teacher.findOne({ teacherID: user.userID });
+            
+            let progressingCourse = await ProgressingCourse.findById(_id);
+            const course = await Course.findOne({ courseID: progressingCourse.courseID });
+            progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
+
+            const homework = await Task.findById({ _id: hID });
+            const files = await TaskFile.find({ taskID: homework._id });
+
+            res.render('teacher/course_homework_display', { user, teacher, progressingCourse, homework, files });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
@@ -419,20 +443,15 @@ class TeacherController {
         }
     }
 
-    // put /course/:_id/edit/:_id
+    // put /course/:_id/material/edit/:_id
     async teacher_edit_material(req, res) {
         const { _id } = req.params;
         const {title, description} = req.body;
         const files = req.files;
-        console.log(req.body);
-        console.log(req.files);
-        console.log("hello 00");
+
         upload(req, res, async (err) => {
             try {
                 const material = await Material.findById( _id);
-                console.log("hello 01");
-             
-                console.log(files);
 
                 if(files == null){
                     await Material.updateOne(
@@ -447,9 +466,9 @@ class TeacherController {
                         {title : title,
                         description : description}
                     );
-                    console.log("hello 02");
                     const uploadFiles = files.file.map(file => ({
                         materialID: material._id,
+                        materialName: title,
                         fileName: file.originalname,
                         filePath: file.path,
                         fileType: file.mimetype,
@@ -457,7 +476,6 @@ class TeacherController {
                     }));
                     await MaterialFile.deleteMany({ materialID: material._id });
                     await MaterialFile.create(uploadFiles);
-                    console.log("hello 03");
                 }               
                 res.status(201).json({ message: "Material uploaded successfully" });
             } catch (error) {
@@ -465,6 +483,58 @@ class TeacherController {
             }
         });
     }
+    // POST /teacher/course/:_id/homework
+    async homework_post (req, res, next) {
+        const user = res.locals.user;
+        const { _id } = req.params;
+        const {courseID, title, description,deadline} = req.body;
+        const files = req.files;
+
+        upload(req, res, async (err) => {
+
+            try {
+                const teacher = await Teacher.findOne({ teacherID: user.userID });
+                if (!teacher) {
+                    return res.status(404).json({ message: "Teacher not found" });
+                }
+                if(files.file == null){
+                    console.log(courseID, title, description, deadline,teacher.teacherID);
+                    await Task.create({
+                        courseID : courseID,
+                        title : title,
+                        description : description,
+                        taskType: "homework",
+                        dueDate: deadline,
+                        assignedBy: teacher.teacherID,
+                    });
+
+                } else{
+                    const homework = await Task.create({
+                        courseID : courseID,
+                        title : title,
+                        description : description,
+                        taskType: "homework",
+                        dueDate: deadline,
+                        assignedBy: teacher.teacherID,
+                    });
+                    const uploadFiles = files.file.map(file => ({
+                        taskID: homework._id,
+                        taskName: title,
+                        fileName: file.originalname,
+                        filePath: file.path,
+                        fileType: file.mimetype,
+                        fileSize: file.size,
+                    }));
+                    await TaskFile.create(uploadFiles);
+                }                
+                res.status(201).json({ message: "Homework uploaded successfully" });
+            } catch (error) {
+                res.status(500).json({ message: error.message });
+            }
+        });
+    }
+
+
 }
 
 
