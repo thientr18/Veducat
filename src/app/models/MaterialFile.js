@@ -23,6 +23,14 @@ const materialFileSchema = new mongoose.Schema({
     },
     fileSize: {
         type: 'number',
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    updateAt: {
+        type: Date,
+        default: Date.now
     }
 });
 

@@ -82,25 +82,25 @@
             <th>Student NOT register(only to check in BE, FE dont care)</th>
             <th>Actions</th>
         </tr>
-        <% progressingCourses.forEach(progressingCourse => { %>
+        <% pCourses.forEach(pCourse => { %>
             <%
-                const notInProgressingCourse = studentIDs.filter(studentID => 
-                !progressingCourse.students.includes(studentID)
+                const notInpCourse = studentIDs.filter(studentID => 
+                !pCourse.students.includes(studentID)
             );
             %>
-            <tr id="<%= progressingCourse._id %>">
-                <td><%= progressingCourse.courseID %></td>
-                <td><%= progressingCourse.teacherID %></td>
-                <td><%= progressingCourse.createdAt %></td>
-                <td><%= notInProgressingCourse %></td>
+            <tr id="<%= pCourse._id %>">
+                <td><%= pCourse.courseID %></td>
+                <td><%= pCourse.teacherID %></td>
+                <td><%= pCourse.createdAt %></td>
+                <td><%= notInpCourse %></td>
                 <td>
-                    <a href="#" onclick="openForm('<%= progressingCourse._id %>',
-                                                    '<%= progressingCourse.courseID %>',
-                                                    '<%= progressingCourse.teacherID %>',
-                                                    '<%= progressingCourse.students %>',
-                                                    '<%= progressingCourse.createdAt %>',
-                                                    '<%= notInProgressingCourse %>')">Edit</a>
-                    <a href="/admin/manage_progressing_course/delete/<%= progressingCourse._id %>">Delete</a>
+                    <a href="#" onclick="openForm('<%= pCourse._id %>',
+                                                    '<%= pCourse.courseID %>',
+                                                    '<%= pCourse.teacherID %>',
+                                                    '<%= pCourse.students %>',
+                                                    '<%= pCourse.createdAt %>',
+                                                    '<%= notInpCourse %>')">Edit</a>
+                    <a href="/admin/manage_progressing_course/delete/<%= pCourse._id %>">Delete</a>
                 </td>
             </tr>
         <% }); %>
@@ -111,7 +111,7 @@
     <div class="alert-box" id="editForm">
         <h2>Edit Progressing Course Information</h2>
         <form id="edit-progressing-course-form">
-            <input type="hidden" name="id" id="progressingCourseID">
+            <input type="hidden" name="id" id="pCourseID">
             <table>
                 <tr>
                     <td>Created At:</td>

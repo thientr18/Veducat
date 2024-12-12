@@ -19,6 +19,10 @@ const MessageSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    updateAt: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 const Message = mongoose.model('message', MessageSchema); // 'message' is the name of the collection in the database

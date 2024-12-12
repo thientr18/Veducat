@@ -23,6 +23,14 @@ const taskforStudentSchema = new mongoose.Schema({
         type: 'number',
         default: 0
     },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    updateAt: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 const TaskforStudent = mongoose.model('taskforstudent', taskforStudentSchema); // 'taskforstudent' is the name of the collection in the database
