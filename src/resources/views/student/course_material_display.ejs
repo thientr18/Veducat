@@ -9,10 +9,25 @@
             <p><%-material.description%></p>
         </div>
         <h3>File Attached</h3>
-        <div class="material-file">
-            <i class="fas fa-file"></i>
-            <a href="<%-material.filePath%>"><%-material.filePath%></a>
-        </div>
     </div>
 </section>
+<script>
+    let files = '<%- JSON.stringify(materialFiles).replace(/\\/g, "\\\\") %>';
+    files = JSON.parse(files);
+    console.log(files);
+    const materialContents = document.querySelector('.material-contents');
+    files.forEach(file => {
+        const a = document.createElement('a');
+        const div = document.createElement('div');
+        const icon = document.createElement('i');
+        icon.classList.add('fas', 'fa-file-pdf');
+        div.classList.add('material-file');
+        a.href = "\\..\\..\\" + file.filePath;
+        a.textContent = file.fileName;
+        a.target = "_blank";
+        div.appendChild(icon);
+        div.appendChild(a);
+        materialContents.appendChild(div);
+    });
+</script>
 <%- include('./partials/footer.ejs'); -%>

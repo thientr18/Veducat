@@ -14,7 +14,8 @@ const app = express();
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.json());
 app.use(cookieParser());
-app.use('/storage', express.static(path.join(__dirname, 'storage')));
+// app.use('/storage', express.static(path.join(__dirname, 'storage')));
+app.use('/storage', express.static('storage'));
 
 // view engine
 app.set('view engine', 'ejs');
