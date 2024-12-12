@@ -18,6 +18,10 @@ const courseSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    updateAt: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 const Course = mongoose.model('course', courseSchema); // 'course' is the name of the collection in the database

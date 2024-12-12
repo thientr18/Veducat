@@ -38,6 +38,10 @@ const submissionSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    updateAt: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 const Submission = mongoose.model('submission', submissionSchema); // 'submission' is the name of the collection in the database

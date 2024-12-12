@@ -1,49 +1,71 @@
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
-const Student = require('../models/Student');
-const Teacher = require('../models/Teacher');
-const Course = require('../models/Course');
-const ProgressingCourse = require('../models/ProgressingCourse');
+const Admin = require('../models/Admin');
 const Announcement = require('../models/Announcement');
+const Course = require('../models/Course');
+const Discussion = require('../models/Discussion');
+const Grade = require('../models/Grade');
+const Material = require('../models/Material');
+const MaterialFile = require('../models/MaterialFile');
+const Message = require('../models/Message');
+const ProgressingCourse = require('../models/ProgressingCourse');
+const Student = require('../models/Student');
+const Submission = require('../models/Submission');
+const Task = require('../models/Task');
+const TaskforStudent = require('../models/TaskforStudent');
+const Teacher = require('../models/Teacher');
+const User = require('../models/User');
 
 class AdminController {
 
-    admin_get(req, res) {
+    // GET /admin
+    admin_get(req, res, next) {
         res.render('admin/index');
     }
 
-    admin_post(req, res) {
-        res.json('admin');
-    }
     /*--- START manage STUDENT---*/ 
     // GET /admin/manage_student/insert
     admin_insert_student_get(req, res, next) {
         res.render('admin/manage_student/insertStudent');
-        next();
     }
 
     // POST /admin/manage_student/insert
-    async admin_insert_student_post(req, res) {
-        const {studentID, name, DoB, email} = req.body;
-        console.log(studentID, name, DoB, email)
+    async admin_insert_student_post(req, res, next) {
+        let {studentID, name, DoB, email} = req.body;
+        studentID = studentID.toLowerCase();
+        email = email.toLowerCase();
         try {
             await User.create({ userID: studentID})
-            await Student.create({ studentID: studentID,
-                                    name: name, 
-                                    DoB: DoB, 
-                                    email: email })
-            console.log('Insert student successfully')
-            res.status(200).json( { message: 'Insert student successfully' })
-        }
-        catch (err) {
-            res.status(400).json( {err} )
+            await Student.create({ studentID, name, DoB, email });
+            const course = await Course.findOne({ courseID: 'admin' });
+            if (!course) {
+                await Course.create({ courseID: 'admin', name: 'Admin', description: 'Admin course' });
+            }
+            const pCourse = await ProgressingCourse.findOne({ courseID: 'admin' });
+            if (!pCourse) {
+                await ProgressingCourse.create({ courseID: 'admin', teacherID: 'admin', students: [studentID] });
+            } else {
+                await ProgressingCourse.updateOne(
+                    { courseID: 'admin' }, 
+                    { $push: { students: studentID } 
+                });
+            }
+
+            res.status(200).send({ message: 'Insert student successfully' })
+        } catch (err) {
+            console.log(err)
+            res.status(400).send({err})
         }
     }
 
     // GET /admin/manage_student/list
-    async admin_edit_student_get(req, res) {
+    async admin_edit_student_get(req, res, next) {
         try {
-            const students = await Student.find();
+            let students = await Student.find();
+            const courseOfStudent = await ProgressingCourse.find({ students: { $in: students.map(student => student.studentID) } });
+            students = students.map(student => {
+                const course = courseOfStudent.find(course => course.students.includes(student.studentID));
+                return { ...student._doc, courseID: course.courseID };
+            });
+            console.log(students);
             res.render('admin/manage_student/editStudent', { students });
         }
         catch (err) {
@@ -52,202 +74,203 @@ class AdminController {
     }
 
     // PUT /admin/manage_student/list
-    async admin_edit_student_put(req, res) {
-        const { studentID, name, DoB, email } = req.body;
+    async admin_edit_student_put(req, res, next) {
+        let { studentID, name, DoB, email } = req.body;
+        studentID = studentID.toLowerCase();
+        email = email.toLowerCase();
         try {
-            await Student.updateOne({ studentID: studentID }, {studentID: studentID, name: name, DoB: DoB, email: email })
-        }
-        catch (err) {
+            await Student.updateOne({ studentID: studentID }, { name, DoB, email })
+            res.status(200).json( { message: 'Update student successfully' })
+        } catch (err) {
             res.status(400).json( {err} )
         }
     }
 
     // /manage_student/delete/:id
-    async admin_edit_student_delete(req, res) {
-        const studentID = req.params.id;
+    async admin_edit_student_delete(req, res, next) {
+        let studentID = req.params.id;
+        studentID = studentID.toLowerCase();
         try {
             await Student.deleteOne({ studentID: studentID })
             await User.deleteOne({ userID: studentID })
-        }
-        catch (err) {
-            res.status(400).json( {err} )
+            await ProgressingCourse.updateMany({}, { $pull: { students: studentID } });
+            await Announcement.updateMany({}, { $pull: { receivers: studentID } });
+            await Discussion.updateMany({}, { $pull: { studentID: studentID } });
+            await Submission.deleteMany({ studentID: studentID });
+            await Message.deleteMany({ senderID: studentID });
+            await Grade.deleteMany({ studentID: studentID });
+
+            res.status(200).json({ message: 'Delete student successfully' })
+        } catch (err) {
+            res.status(400).json({err})
         }
     }
-    /*--- End manage studen ---*/ 
+
+    // Delete many students
+
+
+    /*--- End manage student ---*/ 
 
     /*--- START manage teacher---*/ 
     // GET /admin/manage_teacher/insert
-    admin_insert_teacher_get(req, res) {
+    admin_insert_teacher_get(req, res, next) {
         res.render('admin/manage_teacher/insertTeacher');
     }
 
     // POST /admin/manage_teacher/insert
-    async admin_insert_teacher_post(req, res) {
-        const {teacherID, name, DoB, email} = req.body;
-        console.log(teacherID, name, DoB, email);
-        
+    async admin_insert_teacher_post(req, res, next) {
+        let {teacherID, name, DoB, email} = req.body;
+        teacherID = teacherID.toLowerCase();
+        email = email.toLowerCase();
         try {
 
             await User.create({ userID: teacherID, role: 'teacher' })
-            await Teacher.create({teacherID: teacherID,
-                                    name: name,
-                                    DoB: DoB,
-                                    email: email})
-            console.log('Insert teacher successfully')
+            await Teacher.create({ teacherID, name, DoB, email })
             res.status(201).json( { message: 'Insert teacher successfully' })
-        }
-        catch (err) {
+        } catch (err) {
             res.status(400).json( {err} )
         }
     }
 
     // GET /admin/manage_teacher/list
-    async admin_edit_teacher_get(req, res) {
+    async admin_edit_teacher_get(req, res, next) {
         try {
             const teachers = await Teacher.find();
             res.render('admin/manage_teacher/editTeacher', { teachers });
-        }
-        catch (err) {
+        } catch (err) {
             res.status(400).json( {err} )
         }
     }
 
     // PUT /admin/manage_teacher/list
-    async admin_edit_teacher_put(req, res) {
-        const { teacherID, name, email } = req.body;
+    async admin_edit_teacher_put(req, res, next) {
+        let { teacherID, name, DoB, email } = req.body;
+        teacherID = teacherID.toLowerCase();
+        email = email.toLowerCase();
         try {
-            await Teacher.updateOne({ teacherID: teacherID }, {teacherID: teacherID, name: name, email: email })
-        }
-        catch (err) {
+            await Teacher.updateOne({ teacherID }, { name, DoB, email })
+        } catch (err) {
             res.status(400).json( {err} )
         }
     }
 
     // /manage_teacher/delete/:id
-    async admin_edit_teacher_delete(req, res) {
-        const teacherID = req.params.id;
+    async admin_edit_teacher_delete(req, res, next) {
+        let teacherID = req.params.id;
+        teacherID = teacherID.toLowerCase();
         try {
-            await Teacher.deleteOne({ teacherID: teacherID })
-            await User.deleteOne({ userID: teacherID })
+            const progressingCourses = await ProgressingCourse.find({ teacherID });
+            if (progressingCourses.length > 0) {
+                return res.status(400).json({
+                        message: "Teacher is teaching a course, please delete the course first.",
+                        hasCourses: true
+                    })
+            } else {
+                await Teacher.deleteOne({ teacherID: teacherID });
+                await User.deleteOne({ userID: teacherID });
+                await Announcement.updateMany({}, { $pull: { receivers: teacherID } });
+                
+                res.status(200).json({ message: 'Delete teacher successfully' })
+            }
         }
         catch (err) {
             res.status(400).json( {err} )
         }
     }
+    // Delete many teachers
     /*--- END manage teacher---*/ 
 
     /*--- START manage COURSE---*/     
     // GET /admin/manage_course/insert
-    admin_insert_course_get(req, res) {
+    admin_insert_course_get(req, res, next) {
         res.render('admin/manage_course/insertCourse');
     }
 
     // POST /admin/manage_course/insert
-    async admin_insert_course_post(req, res) {
-        const { courseID, name, description, createdAt } = req.body;
+    async admin_insert_course_post(req, res, next) {
+        const { courseID, name, description } = req.body;
+        courseID = courseID.toLowerCase();
         try {
-            await Course.create({courseID: courseID,
-                                name: name,
-                                description: description,
-                                createdAt: createdAt})
-            console.log('Insert course successfully')
-        }
-        catch (err) {
-            res.status(400).json( {err: err,
-                message: 'Insert course failed'
-            } )
+            await Course.create({ courseID, name, description })
+        } catch (err) {
+            res.status(400).json({err})
         }
     }
 
     // GET /admin/manage_course/list
-    async admin_edit_course_get(req, res) {
+    async admin_edit_course_get(req, res, next) {
         try {
             const courses = await Course.find();
             res.render('admin/manage_course/editCourse', { courses });
-        }
-        catch (err) {
-            res.status(400).json( {err,
-                courseID: courseID,
-                message: 'Get course failed'
-} )
+        } catch (err) {
+            res.status(400).json({err})
         }
     }
 
     // PUT /admin/manage_course/list
-    async admin_edit_course_put(req, res) {
-        const { courseID, name, teacherID } = req.body;
+    async admin_edit_course_put(req, res, next) {
+        const { courseID, name } = req.body;
+        courseID = courseID.toLowerCase();
         try {
-            await Course.updateOne({ courseID: courseID }, {courseID: courseID, name: name, teacherID: teacherID })
-        }
-        catch (err) {
-            res.status(400).json( { err: err,
-                                    courseID: courseID,
-                                    name: name,
-                                    teacherID: teacherID,
-                                    message: 'Update course failed'
-            } )
+            await Course.updateOne({ courseID }, { name, updateAt: Date.now() })
+        } catch (err) {
+            res.status(400).json({err})
         }
     }
 
     // /manage_course/delete/:id
-    async admin_edit_course_delete(req, res) {
+    async admin_edit_course_delete(req, res, next) {
         const courseID = req.params.id;
+        courseID = courseID.toLowerCase();
         try {
+            // If course is in progressing course, must delete progressing course first
             await Course.deleteOne({ courseID: courseID })
-        }
-        catch (err) {
-            res.status(400).json( {err: err,
-                                    courseID: courseID,
-                                    message: 'Delete course failed'
-            } )
+        } catch (err) {
+            res.status(400).json({err})
         }
     }
     /*--- END manage COURSE---*/ 
 
     /* START PROGRESSING COURSE */
     // GET /admin/manage_course/progressing
-    async admin_insert_progressing_course_get(req, res) {
+    async admin_insert_progressing_course_get(req, res, next) {
         try {
             const courses = await Course.find();
             const teachers = await Teacher.find();
             const students = await Student.find();
             res.render('admin/manage_progressing_course/insertProgressingCourse', { courses, teachers, students });
-        }
-        catch (err) {
-            res.status(400).json( {err} )
+        } catch (err) {
+            res.status(400).json({err})
         }
     }
 
     // POST /admin/manage_course/progressing
-    async admin_insert_progressing_course_post(req, res) {
+    async admin_insert_progressing_course_post(req, res, next) {
         const { courseID, teacherID, studentIDs } = req.body;
+        courseID = courseID.toLowerCase();
+        teacherID = teacherID.toLowerCase();
+        const students = studentIDs.map(studentID => studentID.toLowerCase());
 
         // Validate required fields
-        if (!courseID || !teacherID || !Array.isArray(studentIDs) || studentIDs.length === 0) {
+        if (!courseID || !teacherID || !Array.isArray(students) || students.length === 0) {
             return res.status(400).json({ error: 'Invalid input: courseID, teacherID, and studentIDs are required.' });
         }
         
         try {
-            await ProgressingCourse.create({
-                courseID: courseID.toLowerCase(),
-                teacherID: teacherID.toLowerCase(),
-                students: studentIDs.map(studentID => studentID.toLowerCase()),
-            });
-        }
-        catch (err) {
-            console.log(courseID, teacherID, studentIDs, 'Insert progressing course failed', err);
+            await ProgressingCourse.create({ courseID, teacherID, students });
+        } catch (err) {
             res.status(400).json( { message: 'Insert progressing course failed' })
         }
     }
 
     // GET /admin//manage_progressing_course/list
-    async admin_edit_progressing_course_get(req, res) {
+    async admin_edit_progressing_course_get(req, res, next) {
         try {
-            const progressingCourses = await ProgressingCourse.find();
+            const pCourses = await ProgressingCourse.find();
             const students = await Student.find();
             const studentIDs = students.map(student => student.studentID); // Create an array of student IDs
 
-            res.render('admin/manage_progressing_course/editProgressingCourse', { progressingCourses, studentIDs });
+            res.render('admin/manage_progressing_course/editProgressingCourse', { pCourses, studentIDs });
         }
         catch (err) {
             res.status(400).json( {err} )
@@ -255,11 +278,17 @@ class AdminController {
     }
 
     // PUT /admin/manage_progressing_course/list
-    async admin_edit_progressing_course_put(req, res) {
+    async admin_edit_progressing_course_put(req, res, next) {
         const { courseID, teacherID, studentIDs } = req.body;
-        const progressingCourseID = req.params.id;
+        const pCourseID = req.params.id;
+
+        courseID = courseID.toLowerCase();
+        teacherID = teacherID.toLowerCase();
+        const students = studentIDs.map(studentID => studentID.toLowerCase());
+        pCourseID = pCourseID.toLowerCase();
+
         try {
-            await ProgressingCourse.updateOne({ _id: progressingCourseID }, { courseID: courseID, teacherID: teacherID, students: studentIDs })
+            await ProgressingCourse.updateOne({ _id: pCourseID }, { courseID: courseID, teacherID: teacherID, students })
         }
         catch (err) {
             res.status(400).json( {err} )
@@ -267,12 +296,15 @@ class AdminController {
     }
 
     // /manage_progressing_course/delete/:id
-    async admin_edit_progressing_course_delete(req, res) {
-        const progressingCourseID = req.params.id;
+    async admin_edit_progressing_course_delete(req, res, next) {
+        const pCourseID = req.params.id;
+        pCourseID = pCourseID.toLowerCase();
 
-        console.log('progressingCourseID: ', progressingCourseID)
         try {
-            await ProgressingCourse.deleteOne({ _id: progressingCourseID })
+            await Material.deleteMany({ pCourseID });
+            await Announcement.deleteMany({ pCourseID });
+            await ProgressingCourse.deleteOne({ _id: pCourseID });
+            
         }
         catch (err) {
             res.status(400).json( {err} )
@@ -282,7 +314,7 @@ class AdminController {
 
     /* START ANNOUNCEMENT */
     // GET /admin/announcement/send_to_all
-    async admin_send_to_all_get(req, res) {
+    async admin_send_to_all_get(req, res, next) {
         const students = await Student.find();
         const studentIDs = students.map(personID => personID.studentID); // Create an array of student IDs
         const teachers = await Teacher.find();
@@ -293,8 +325,11 @@ class AdminController {
     }
 
     // POST /admin/announcement/send_to_all
-    async admin_send_to_all_post(req, res) {
+    async admin_send_to_all_post(req, res, next) {
         const { courseID, title, content, peopleObject, sender } = req.body;
+        courseID = courseID.toLowerCase();
+        sender = sender.toLowerCase();
+
         try {
             await Announcement.create({ 
                 courseID: courseID,
@@ -312,7 +347,7 @@ class AdminController {
     }
 
     // /announcement/send_to_all/list
-    async admin_send_to_all_list(req, res) {
+    async admin_send_to_all_list(req, res, next) {
         res.locals.user = req.user;
         try {
             const announcements = await Announcement.find({ type: 'send_to_all' });
@@ -324,7 +359,7 @@ class AdminController {
     }
 
     // /announcement/send_to_all/delete/:id
-    async admin_send_to_all_delete(req, res) {
+    async admin_send_to_all_delete(req, res, next) {
         const announcementID = req.params.id;
         try {
             // Delete announcement
@@ -336,13 +371,13 @@ class AdminController {
     }
 
     // GET /admin/announcement/send_to_teacher
-    async admin_send_to_teacher_get(req, res) {
+    async admin_send_to_teacher_get(req, res, next) {
         const teachers = await Teacher.find();
         res.render('announcement/toTeacher/sendToTeacher', { teachers } );
     }
 
     // POST /admin/announcement/send_to_teacher
-    async admin_send_to_teacher_post(req, res) {
+    async admin_send_to_teacher_post(req, res, next) {
         const { courseID, title, content, teacherIDs, sender } = req.body;
         console.log(req.body)
         try {
@@ -362,7 +397,7 @@ class AdminController {
     }
 
     // /announcement/send_to_teacher/list
-    async admin_send_to_teacher_list(req, res) {
+    async admin_send_to_teacher_list(req, res, next) {
         res.locals.user = req.user;
         try {
             const announcements = await Announcement.find( { type: 'send_to_teacher' } );
@@ -374,7 +409,7 @@ class AdminController {
     }
 
     // /announcement/send_to_teacher/delete/:id
-    async admin_send_to_teacher_delete(req, res) {
+    async admin_send_to_teacher_delete(req, res, next) {
         const announcementID = req.params.id;
         try {
             await Announcement.deleteOne({ _id: announcementID })
@@ -386,13 +421,13 @@ class AdminController {
     }
 
     // GET /admin/announcement/send_to_student
-    async admin_send_to_student_get(req, res) {
+    async admin_send_to_student_get(req, res, next) {
         const students = await Student.find();
         res.render('announcement/toStudent/sendToStudent', { students });
     }
 
     // POST /admin/announcement/send_to_student
-    async admin_send_to_student_post(req, res) {
+    async admin_send_to_student_post(req, res, next) {
         const { courseID, title, content, studentIDs, sender } = req.body;
         try {
             await Announcement.create({
@@ -411,7 +446,7 @@ class AdminController {
     }
 
     // /announcement/send_to_student/list
-    async admin_send_to_student_list(req, res) {
+    async admin_send_to_student_list(req, res, next) {
         res.locals.user = req.user;
         try {
             const announcements = await Announcement.find( { type: 'send_to_student' } );
@@ -423,7 +458,7 @@ class AdminController {
     }
 
     // /announcement/send_to_student/delete/:id
-    async admin_send_to_student_delete(req, res) {
+    async admin_send_to_student_delete(req, res, next) {
         const announcementID = req.params.id;
         try {
             await Announcement.deleteOne({ _id: announcementID })

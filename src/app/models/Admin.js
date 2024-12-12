@@ -21,6 +21,14 @@ const adminSchema = new mongoose.Schema({
         required: [true, 'Please enter a email'],
         unique: true,
     },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    updateAt: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 const Admin = mongoose.model('admin', adminSchema); // 'admin' is the name of the collection in the database

@@ -12,13 +12,17 @@ const progressingCourseSchema = new mongoose.Schema({
         lowercase: true
     },
     students: {
-        type: Array,
+        type: [String],
         default: [],
     },
     createdAt: {
         type: Date,
         default: Date.now
     },
+    updateAt: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 const ProgressingCourse = mongoose.model('progressingCourse', progressingCourseSchema); // 'course' is the name of the collection in the database
