@@ -9,7 +9,7 @@
                     Edit
                 </div>
                 <div class="delete-button">
-                    <a href="/teacher/course/<%= progressingCourse._id %>/delete/<%= material._id %>">Delete</a>
+                    <a href="/teacher/course/<%= progressingCourse._id %>/material/delete/<%= material._id %>">Delete</a>
                 </div>
             </div>
         </div>
@@ -142,7 +142,7 @@
         const formData = new FormData(e.target);
         formData.append('description', description);
 
-        const action = `/teacher/course/<%= material.courseID %>/edit/<%= material._id %>`;
+        const action = `/teacher/course/<%= material.courseID %>/material/edit/<%= material._id %>`;
         try {
             const res = await fetch(action, {
                 method: 'PUT',
