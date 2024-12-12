@@ -246,8 +246,30 @@ class TeacherController {
                 return res.status(404).json({ message: "Course not found" });
             }
             progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
+            const homeworks = await Task.find({ courseID: progressingCourse._id });
 
-            res.render('teacher/course_homework', { user, teacher, progressingCourse });
+            res.render('teacher/course_homework', { user, teacher, progressingCourse, homeworks });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+    
+    // GET /teacher/course/:_id/homework/:_id
+    async homework_detail_get (req, res, next) {
+        const user = res.locals.user;
+        const { _id, hID } = req.params;
+        
+        try {
+            const teacher = await Teacher.findOne({ teacherID: user.userID });
+            
+            let progressingCourse = await ProgressingCourse.findById(_id);
+            const course = await Course.findOne({ courseID: progressingCourse.courseID });
+            progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
+
+            const homework = await Task.findById({ _id: hID });
+            const files = await TaskFile.find({ taskID: homework._id });
+
+            res.render('teacher/course_homework_display', { user, teacher, progressingCourse, homework, files });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
@@ -417,7 +439,7 @@ class TeacherController {
         }
     }
 
-    // put /course/:_id/edit/:_id
+    // put /course/:_id/material/edit/:_id
     async teacher_edit_material(req, res) {
         const { _id } = req.params;
         const {title, description} = req.body;
@@ -471,7 +493,6 @@ class TeacherController {
                 if (!teacher) {
                     return res.status(404).json({ message: "Teacher not found" });
                 }
-                console.log("hello1");
                 if(files.file == null){
                     console.log(courseID, title, description, deadline,teacher.teacherID);
                     await Task.create({
@@ -492,7 +513,6 @@ class TeacherController {
                         dueDate: deadline,
                         assignedBy: teacher.teacherID,
                     });
-                    console.log("hello2");
                     const uploadFiles = files.file.map(file => ({
                         taskID: homework._id,
                         taskName: title,
@@ -501,9 +521,7 @@ class TeacherController {
                         fileType: file.mimetype,
                         fileSize: file.size,
                     }));
-                    console.log("hello3");
                     await TaskFile.create(uploadFiles);
-                    console.log("hello4");
                 }                
                 res.status(201).json({ message: "Homework uploaded successfully" });
             } catch (error) {
