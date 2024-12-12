@@ -6,24 +6,63 @@
     <title>Student list</title>
 
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
+        /* General Table Styling */
         table {
-            width: 100%;
+            width: 90%;
+            margin: 20px auto;
             border-collapse: collapse;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+
         th, td {
             padding: 10px;
             border: 1px solid #ddd;
+            text-align: left;
         }
+
+        /* Header Styling */
         th {
             background-color: #f89b28;
             color: white;
         }
+
+        /* Cell Styling */
+        td {
+            background-color: #fff;
+        }
+
+        /* Hover Effect for Table Rows */
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        /* Button Styling */
+        input[type="submit"], input[type="button"], button {
+            background-color: #f89b28;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        button:hover, input[type="submit"]:hover, input[type="button"]:hover {
+            background-color: #e07b1f;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            table {
+                width: 100%;
+                margin: 10px;
+            }
+
+            .alert-box {
+                width: 90%;
+            }
+        }
+
+        /* Initially hide the edit form */
         .alert-box {
             display: none;
             position: fixed;
@@ -36,17 +75,8 @@
             padding: 20px;
             z-index: 1000;
         }
-        .alert-box input {
-            display: block;
-            margin: 10px 0;
-            padding: 5px;
-            width: 100%;
-        }
-        .alert-box button {
-            margin: 10px 5px 0 0;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
+
+        /* Overlay for background */
         .overlay {
             display: none;
             position: fixed;
@@ -56,17 +86,6 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.5);
             z-index: 999;
-        }
-        input[type="submit"], input[type="button"] {
-            background-color: #f89b28;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-        input[type="submit"]:hover, input[type="button"]:hover {
-            background-color: #e07b1f;
         }
     </style>
 </head>
@@ -78,22 +97,33 @@
             <th>Student Name</th>
             <th>Student Birthday</th>
             <th>Student Email</th>
+            <th>Participate In</th> <!-- Column header styled correctly -->
+            <th>Action</th>
         </tr>
         <% students.forEach(student => { %>
             <tr>
                 <td><%= student.studentID.toUpperCase() %></td>
                 <td><%= student.name %></td>
-                <td><%= student.DoB %></td>
+                <td><%= student.DoB ? new Date(student.DoB).toLocaleDateString('en-GB') : 'No data' %></td>
                 <td><%= student.email %></td>
+                <td><%= Array.isArray(student.courseID) ? student.courseID.join(', ') : student.courseID %></td>
                 <td>
-                    <a href="#" onclick="openForm('<%= student.studentID %>', '<%= student.name %>', '<%= student.DoB %>')">Edit</a>
-                    <a href="/admin/manage_student/delete/<%= student.studentID %>">Delete</a>
+                    <button onclick="openForm('<%= student.studentID %>', '<%= student.name %>', '<%= student.DoB %>')">Edit</button>
+                    <button onclick="deleteStudent('<%= student.studentID %>')">Delete</button>
                 </td>
             </tr>
         <% }); %>
     </table>
 
-    <!-- Alert Box -->
+    <br>
+    <table>
+        <tr>
+            <td><a href="/admin">Back to Home</a></td>
+            <td><a href="/admin/manage_student/insert">Insert new Student</a></td>
+        </tr>
+    </table>
+
+    <!-- Alert Box (Initially hidden) -->
     <div class="overlay" id="overlay"></div>
     <div class="alert-box" id="editForm">
         <h2>Edit Student Information</h2>
@@ -120,10 +150,10 @@
                 </tr>
                 <tr>
                     <td>
-                        <input type="submit" name="" id="" value="Save">
+                        <input type="submit" value="Save">
                     </td>
                     <td>
-                        <input type="button" name="" id="" onclick="closeEditForm()" value="Cancel">
+                        <input type="button" value="Cancel" onclick="closeEditForm()">
                     </td>
                 </tr>
             </table>
@@ -134,40 +164,71 @@
         const form = document.getElementById('editStudentForm');
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-
-            // Get updated values from the form
-            const studentID = document.getElementById('studentID').value;
+            const studentID = document.getElementById('studentID').value.toLowerCase();
             const name = document.getElementById('name').value;
             const DoB = document.getElementById('DoB').value;
-            const email = studentID + '@student.com';
-            const action = '/admin/manage_student/edit/'+studentID
+            const email = studentID + '@student.hcmiu.edu.com';
+            const action = '/admin/manage_student/edit/' + studentID;
 
             try {
                 const res = await fetch(action, {
                     method: 'PUT',
-                    body: JSON.stringify({studentID, name, DoB, email}),
-                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ studentID, name, DoB, email }),
+                    headers: { 'Content-Type': 'application/json' },
                 });
+
+                if (res.status >= 200 && res.status < 300) {
+                    alert(`Student '${studentID.toUpperCase()}' updated successfully`);
+                    location.reload();
+                }
             } catch (error) {
                 console.log(error);
             }
         });
 
-
-        // Function to open the edit form
         openForm = (studentID, name, DoB) => {
             document.getElementById('overlay').style.display = 'block';
             document.getElementById('editForm').style.display = 'block';
 
-            document.getElementById('studentID').value = studentID;
+            document.getElementById('studentID').value = studentID.toUpperCase();
             document.getElementById('name').value = name;
-            document.getElementById('DoB').value = DoB;
-        }
 
-        // Function to close the edit form
+            // Format DoB if valid
+            if (DoB) {
+                let formattedDoB = '';
+                const dateObj = new Date(DoB);
+                if (!isNaN(dateObj)) {
+                    const year = dateObj.getFullYear();
+                    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+                    const day = String(dateObj.getDate()).padStart(2, '0');
+                    formattedDoB = `${year}-${month}-${day}`;
+                }
+                document.getElementById('DoB').value = formattedDoB;
+            } else {
+                document.getElementById('DoB').value = '';
+            }
+        };
+
         function closeEditForm() {
             document.getElementById('editForm').style.display = 'none';
             document.getElementById('overlay').style.display = 'none';
+        }
+
+        async function deleteStudent(studentID) {
+            const action = '/admin/manage_student/delete/' + studentID;
+            try {
+                const res = await fetch(action, {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                });
+
+                if (res.status >= 200 && res.status < 300) {
+                    alert(`Student '${studentID.toUpperCase()}' deleted successfully`);
+                    location.reload();
+                }
+            } catch (error) {
+                console.log(error);
+            }
         }
     </script>
 </body>

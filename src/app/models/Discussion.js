@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const discussionSchema = new mongoose.Schema({
-    courseID: {
+    pCourseID: {
         type: 'string',
         required: [true, 'Please enter a course ID'],
         lowercase: true
@@ -29,6 +29,10 @@ const discussionSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    updateAt: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 const Discussion = mongoose.model('discussion', discussionSchema); // 'discussion' is the name of the collection in the database

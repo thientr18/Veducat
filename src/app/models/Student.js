@@ -11,16 +11,6 @@ const studentSchema = new mongoose.Schema({
         type: 'string',
         required: [true, 'Please enter a name'],
     },
-    // majorID: {
-    //     type: 'string',
-    //     required: [true, 'Please enter a major ID'],
-    //     lowercase: true
-    // },
-    // departmentID: {
-    //     type: 'string',
-    //     required: [true, 'Please enter a department ID'],
-    //     lowercase: true
-    // },
     DoB: {
         type: Date,
     },
@@ -35,6 +25,14 @@ const studentSchema = new mongoose.Schema({
         isEmail: true,
         unique: true,
     },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    updateAt: {
+        type: Date,
+        default: Date.now
+    }
 })
 
 const Student = mongoose.model('student', studentSchema); // 'student' is the name of the collection in the database

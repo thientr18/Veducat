@@ -17,6 +17,14 @@ const userSchema = new mongoose.Schema({
     role: {
         type: 'string',
         default: 'student',
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    updateAt: {
+        type: Date,
+        default: Date.now
     }
 });
 

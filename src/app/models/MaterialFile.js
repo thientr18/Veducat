@@ -6,6 +6,11 @@ const materialFileSchema = new mongoose.Schema({
         required: [true, 'Please enter a material ID'],
         lowercase: true,
     },
+    materialName: {
+        type: 'string',
+        required: [true, 'Please enter a material name'],
+        lowercase: true,
+    },
     fileName: {
         type: 'string',
     },
@@ -18,6 +23,14 @@ const materialFileSchema = new mongoose.Schema({
     },
     fileSize: {
         type: 'number',
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    updateAt: {
+        type: Date,
+        default: Date.now
     }
 });
 

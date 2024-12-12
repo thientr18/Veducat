@@ -11,14 +11,14 @@ router.get('/manage_student/insert', requireAuthZ('admin'), adminController.admi
 router.post('/manage_student/insert', requireAuthZ('admin'), adminController.admin_insert_student_post);
 router.get('/manage_student/list', requireAuthZ('admin'), adminController.admin_edit_student_get);
 router.put('/manage_student/edit/:id', requireAuthZ('admin'), adminController.admin_edit_student_put);
-router.get('/manage_student/delete/:id', requireAuthZ('admin'), adminController.admin_edit_student_delete);
+router.delete('/manage_student/delete/:id', requireAuthZ('admin'), adminController.admin_edit_student_delete);
 
 // Manage Teacher
 router.get('/manage_teacher/insert', requireAuthZ('admin'), adminController.admin_insert_teacher_get);
 router.post('/manage_teacher/insert', requireAuthZ('admin'), adminController.admin_insert_teacher_post);
 router.get('/manage_teacher/list', requireAuthZ('admin'), adminController.admin_edit_teacher_get);
 router.put('/manage_teacher/edit/:id', requireAuthZ('admin'), adminController.admin_edit_teacher_put);
-router.get('/manage_teacher/delete/:id', requireAuthZ('admin'), adminController.admin_edit_teacher_delete);
+router.delete('/manage_teacher/delete/:id', requireAuthZ('admin'), adminController.admin_edit_teacher_delete);
 
 // Manage Course
 router.get('/manage_course/insert', requireAuthZ('admin'), adminController.admin_insert_course_get);
