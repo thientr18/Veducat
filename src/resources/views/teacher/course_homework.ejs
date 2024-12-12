@@ -45,7 +45,7 @@
 <!-- FORM FOR CREATE A HOMEWORK -->
 <section class="new-form new-homework-form">
     <div class="form-container">
-        <form action="">
+        <form action="/teacher/course/<%= progressingCourse._id %>/homework" method="POST" enctype="multipart/form-data">
             <div class="exit-btn" id="exit-homework">
                 <i class="fas fa-times"></i>
             </div>
@@ -109,4 +109,52 @@
         </form>
     </div>
 </section>
+<script>
+    const newHomeworkSection = document.querySelector(".new-homework-form");
+    const newHomeworkForm = newHomeworkSection.querySelector("form");
+    const createButton = document.querySelector("#homework-form");
+    const exitHomework = document.querySelector("#exit-homework");
+
+    // Open the form when clicking the create button
+    createButton.addEventListener("click", function() {
+        newHomeworkSection.style.display = "block";
+    });
+    // Close the form when clicking the exit button
+    exitHomework.addEventListener("click", function() {
+        newHomeworkSection.style.display = "none";
+    });
+</script>
+<script>
+    let progressingCourse = '<%- JSON.stringify(progressingCourse) %>';
+        progressingCourse = JSON.parse(progressingCourse);
+    // Get the form container and form
+    const formContainer = document.querySelector('.form-container');
+    const form = formContainer.querySelector('form');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const title = form.querySelector('input[name="title"]').value;
+        const description = form.querySelector('textarea').value;
+        const files = form.querySelector('input[type="file"]').files;
+        const courseID = progressingCourse._id;
+        const deadline = form.querySelector('input[type="datetime-local"]').value;
+        const formData = new FormData(e.target);
+
+        formData.append('courseID', courseID);
+        formData.append('description', description);
+        try {
+            const res = await fetch(`/teacher/course/${progressingCourse._id}/homework`, {
+                method: 'POST',
+                body: formData,
+            });
+            const data = await res.json();
+            if(res.status >= 200 && res.status < 300) {
+                location.reload();
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    });
+</script>
 <%- include('./partials/footer.ejs'); -%>

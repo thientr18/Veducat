@@ -84,7 +84,10 @@ class AdminController {
     // POST /admin/manage_teacher/insert
     async admin_insert_teacher_post(req, res) {
         const {teacherID, name, DoB, email} = req.body;
+        console.log(teacherID, name, DoB, email);
+        
         try {
+
             await User.create({ userID: teacherID, role: 'teacher' })
             await Teacher.create({teacherID: teacherID,
                                     name: name,
