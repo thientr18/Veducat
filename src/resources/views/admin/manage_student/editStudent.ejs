@@ -173,7 +173,7 @@
             try {
                 const res = await fetch(action, {
                     method: 'PUT',
-                    body: JSON.stringify({ studentID, name, DoB, email }),
+                    body: JSON.stringify({ name, DoB, email }),
                     headers: { 'Content-Type': 'application/json' },
                 });
 

@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Course list</title>
-
+    <title>Course List</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,19 +11,37 @@
             margin: 0;
             padding: 0;
         }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 20px;
+        }
         table {
-            width: 100%;
+            width: 90%;
+            margin: 20px auto;
             border-collapse: collapse;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         th, td {
             padding: 10px;
             border: 1px solid #ddd;
+            text-align: left;
         }
         th {
             background-color: #f89b28;
             color: white;
         }
-        /* Styles for the alert box */
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        a {
+            color: #f89b28;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
         .alert-box {
             display: none;
             position: fixed;
@@ -36,19 +53,12 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             padding: 20px;
             z-index: 1000;
+            width: 90%;
+            max-width: 400px;
         }
-        .alert-box input {
-            display: block;
-            margin: 10px 0;
-            padding: 5px;
+        .alert-box table {
             width: 100%;
         }
-        .alert-box button {
-            margin: 10px 5px 0 0;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-        /* Overlay for background dimming */
         .overlay {
             display: none;
             position: fixed;
@@ -70,31 +80,53 @@
         input[type="submit"]:hover, input[type="button"]:hover {
             background-color: #e07b1f;
         }
+
+        .move-btns a {
+            display: inline-block;
+            margin-left: 40px;
+            color: #f89b28;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            table, th, td {
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>Course list</h1>
+    <h1>Course List</h1>
     <table>
-        <tr>
-            <th>Course ID</th>
-            <th>Course Name</th>
-            <th>Course Description</th>
-            <th>Created At</th>
-        </tr>
-        <% courses.forEach(course => { %>
+        <thead>
             <tr>
-                <td><%= course.courseID.toUpperCase() %></td>
-                <td><%= course.name %></td>
-                <td><%= course.description %></td>
-                <td><%= course.createdAt %></td>
-                <td>
-                    <a href="#" onclick="openForm('<%= course.courseID %>', '<%= course.name %>', '<%= course.description %>', '<%= course.createdAt %>')">Edit</a>
-                    <a href="/admin/manage_course/delete/<%= course.courseID %>">Delete</a>
-                </td>
+                <th>Course ID</th>
+                <th>Course Name</th>
+                <th>Course Description</th>
+                <th>Actions</th>
             </tr>
-        <% }); %>
+        </thead>
+        <tbody>
+            <% courses.forEach(course => { %>
+                <tr>
+                    <td><%= course.courseID.toUpperCase() %></td>
+                    <td><%= course.name %></td>
+                    <td><%= course.description %></td>
+                    <td>
+                        <button onclick="openForm('<%= course.courseID %>', '<%= course.name %>', '<%= course.description %>')">Edit</button>
+                        <button onclick="deleteCourse('<%= course.courseID %>')">Delete</button>
+                    </td>
+                </tr>
+            <% }); %>
+        </tbody>
     </table>
+    <br>
 
+    <div class="move-btns">
+        <a class="move-btn" href="/admin">Back to Home</a> |
+        <a class="move-btn" href="/admin/manage_course/insert">Insert New Course</a>
+    </div>
     <!-- Alert Box -->
     <div class="overlay" id="overlay"></div>
     <div class="alert-box" id="editForm">
@@ -103,37 +135,26 @@
             <input type="hidden" name="id" id="courseId">
             <table>
                 <tr>
-                    <td>Course ID:</td>
-                    <td>
-                        <input type="text" name="courseID" id="courseID" disabled>
-                    </td>
+                    <td><label for="courseID">Course ID:</label></td>
+                    <td><input type="text" id="courseID" disabled></td>
                 </tr>
                 <tr>
-                    <td>Course Name:</td>
-                    <td>
-                        <input type="text" name="name" id="name">
-                    </td>
+                    <td><label for="name">Course Name:</label></td>
+                    <td><input type="text" id="name" required></td>
                 </tr>
                 <tr>
-                    <td>Course Description:</td>
-                    <td>
-                        <input type="date" name="description" id="description">
-                    </td>
+                    <td><label for="description">Course Description:</label></td>
+                    <td><input type="text" id="description" required></td>
                 </tr>
                 <tr>
-                    <td>Created At:</td>
-                    <td>
-                        <input type="text" name="createdAt" id="createdAt" disabled>
-                    </td>
-                <tr>
-                    <td>
-                        <input type="submit" name="" id="" value="Save">
-                    </td>
-                    <td>
-                        <input type="button" name="" id="" onclick="closeEditForm()" value="Cancel">
-                    </td>
+                    <td><label for="createdAt">Created At:</label></td>
+                    <td><input type="text" id="createdAt" disabled></td>
                 </tr>
             </table>
+            <div style="margin-top: 10px;">
+                <input type="submit" value="Save">
+                <input type="button" value="Cancel" onclick="closeEditForm()">
+            </div>
         </form>
     </div>
 
@@ -142,39 +163,60 @@
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // Get updated values from the form
             const courseID = document.getElementById('courseID').value;
             const name = document.getElementById('name').value;
             const description = document.getElementById('description').value;
-            const action = '/admin/manage_course/edit/'+courseID
+            const action = `/admin/manage_course/edit/${courseID}`;
 
             try {
                 const res = await fetch(action, {
                     method: 'PUT',
-                    body: JSON.stringify({courseID, name, description}),
-                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ name, description }),
+                    headers: { 'Content-Type': 'application/json' },
                 });
+                if (res.status >= 200 && res.status < 300) {
+                    alert(`Course ${courseID.toUpperCase()} has been updated successfully.`);
+                    location.reload();
+                }
             } catch (error) {
-                console.log(error);
+                console.error(error);
             }
         });
 
-
-        // Function to open the edit form
-        openForm = (courseID, name, description, createdAt) => {
+        function openForm(courseID, name, description) {
             document.getElementById('overlay').style.display = 'block';
             document.getElementById('editForm').style.display = 'block';
 
             document.getElementById('courseID').value = courseID;
             document.getElementById('name').value = name;
             document.getElementById('description').value = description;
-            document.getElementById('createdAt').value = createdAt;
         }
 
-        // Function to close the edit form
         function closeEditForm() {
             document.getElementById('editForm').style.display = 'none';
             document.getElementById('overlay').style.display = 'none';
+        }
+
+        async function deleteCourse(courseID) {
+            if (confirm(`Are you sure you want to delete course ${courseID.toUpperCase()}?`)) {
+                try {
+                    const res = await fetch(`/admin/manage_course/delete/${courseID}`, {
+                        method: 'DELETE',
+                    });
+                    const data = await res.json();
+
+                    if (res.status >= 200 && res.status < 300) {
+                        alert(`Course ${courseID.toUpperCase()} has been deleted successfully.`);
+                        location.reload();
+                    } else if (res.status === 400) {
+                        if (data.message) {
+                            alert(data.message);
+                        }
+                    }
+                } catch (error) {
+                    console.error(error);
+                }
+            }
         }
     </script>
 </body>

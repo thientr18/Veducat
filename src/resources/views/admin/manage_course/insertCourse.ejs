@@ -20,23 +20,73 @@
       padding: 20px;
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 400px;
     }
     table {
       width: 100%;
+      border-collapse: collapse;
     }
     td {
+      padding: 10px 0;
+    }
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    input[type="text"], input[type="submit"], input[type="reset"] {
+      width: 100%;
       padding: 10px;
+      margin: 5px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    input[type="text"] {
+      width: calc(100% - 20px);
+    }
+    input[type="text"]:focus {
+      outline-color: #f89b28;
     }
     input[type="submit"], input[type="reset"] {
       background-color: #f89b28;
       color: white;
-      border: none;
-      padding: 10px 20px;
       cursor: pointer;
-      border-radius: 4px;
+      font-weight: bold;
     }
     input[type="submit"]:hover, input[type="reset"]:hover {
       background-color: #e07b1f;
+    }
+    a {
+      color: #f89b28;
+      text-decoration: none;
+      font-size: 14px;
+      display: inline-block;
+      margin-top: 10px;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .feedback {
+      margin-top: 10px;
+      font-size: 14px;
+      color: green;
+      display: none;
+    }
+    .feedback.error {
+      color: red;
+    }
+    @media (max-width: 600px) {
+      body {
+        padding: 20px;
+      }
+      form {
+        padding: 15px;
+      }
+      input[type="text"], input[type="submit"], input[type="reset"] {
+        font-size: 12px;
+      }
     }
   </style>
 </head>
@@ -44,41 +94,63 @@
   <form class="form-insert-course" method="POST" action="/admin/manage_course/insert">
     <table>
       <tr>
-        <td>Course ID</td>
-        <td><input type="text" name="course_id" id="course_id" required></td>
+        <td>
+          <label for="course_id">Course ID</label>
+          <input type="text" name="course_id" id="course_id" required>
+        </td>
       </tr>
       <tr>
-        <td>Course Name</td>
-        <td><input type="text" name="course_name" id="course_name" required></td>
+        <td>
+          <label for="course_name">Course Name</label>
+          <input type="text" name="course_name" id="course_name" required>
+        </td>
       </tr>
       <tr>
-        <td>Course Description</td>
-        <td><input type="text" name="course_description" id="course_description"></td>
+        <td>
+          <label for="course_description">Course Description</label>
+          <input type="text" name="course_description" id="course_description">
+        </td>
       </tr>
       <tr>
-        <td><input type="submit" value="Insert"></td>
-        <td><input type="reset" value="Reset"></td>
+        <td>
+          <input type="submit" value="Insert">
+          <input type="reset" value="Reset">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <a href="/admin">Back to Home</a> | <a href="/admin/manage_course/list">Go to Course List</a>
+        </td>
+      </tr>
     </table>
   </form>
 
   <script>
-    const form = document.querySelector('.form-insert-course');
-    form.addEventListener('submit', async (e) => {
+    document.querySelector('.form-insert-course').addEventListener('submit', async (e) => {
       e.preventDefault();
-      
+
       const courseID = document.querySelector('#course_id').value;
       const name = document.querySelector('#course_name').value;
-      const description = document.querySelector('#course_description').value;
-      const createdAt = Date.now();
+      const description = document.querySelector('#course_description').value.trim();
+      const createdAt = new Date().toISOString();
 
       try {
         const res = await fetch('/admin/manage_course/insert', {
           method: 'POST',
           body: JSON.stringify({ courseID, name, description, createdAt }),
-          headers: {'Content-Type': 'application/json'},
+          headers: { 'Content-Type': 'application/json' },
         });
+
+        if (res.status >= 200 && res.status < 300) {
+          alert(`Course ${courseID.toUpperCase()} has been inserted successfully.`);
+          location.reload();
+        } else {
+          alert('An error occurred. Please try again.');
+          location.reload();
+        }
       } catch (error) {
-        console.log(error);
+        alert('An error occurred. Please try again.');
+        location.reload();
       }
     });
   </script>

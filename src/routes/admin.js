@@ -25,14 +25,14 @@ router.get('/manage_course/insert', requireAuthZ('admin'), adminController.admin
 router.post('/manage_course/insert', requireAuthZ('admin'), adminController.admin_insert_course_post);
 router.get('/manage_course/list', requireAuthZ('admin'), adminController.admin_edit_course_get);
 router.put('/manage_course/edit/:id', requireAuthZ('admin'), adminController.admin_edit_course_put);
-router.get('/manage_course/delete/:id', requireAuthZ('admin'), adminController.admin_edit_course_delete);
+router.delete('/manage_course/delete/:id', requireAuthZ('admin'), adminController.admin_edit_course_delete);
 
 // Manage Progressing Course
 router.get('/manage_progressing_course/insert', requireAuthZ('admin'), adminController.admin_insert_progressing_course_get);
 router.post('/manage_progressing_course/insert', requireAuthZ('admin'), adminController.admin_insert_progressing_course_post);
 router.get('/manage_progressing_course/list', requireAuthZ('admin'), adminController.admin_edit_progressing_course_get);
 router.put('/manage_progressing_course/edit/:id', requireAuthZ('admin'), adminController.admin_edit_progressing_course_put);
-router.get('/manage_progressing_course/delete/:id', requireAuthZ('admin'), adminController.admin_edit_progressing_course_delete);
+router.delete('/manage_progressing_course/delete/:id', requireAuthZ('admin'), adminController.admin_edit_progressing_course_delete);
 
 // Annoucement
 router.get('/announcement/send_to_all', requireAuthZ('admin'), adminController.admin_send_to_all_get);

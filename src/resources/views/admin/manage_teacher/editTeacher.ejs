@@ -121,7 +121,7 @@
         <td><%= teacher.DoB ? new Date(teacher.DoB).toLocaleDateString('en-GB') : 'No data' %></td>
         <td><%= teacher.email %></td>
         <td>
-          <button onclick="openForm('<%= teacher.teacherID %>', '<%= teacher.name %>', '<%= teacher.DoB %>')">Edit</button>
+          <button onclick="openForm('<%= teacher.teacherID %>', '<%= teacher.name %>', '<%= teacher.DoB %>', '<%= teacher.email %>')">Edit</button>
           <button onclick="deleteTeacher('<%= teacher.teacherID %>')">Delete</button>
         </td>
       </tr>
@@ -156,6 +156,12 @@
           </td>
         </tr>
         <tr>
+          <td>Email:</td>
+          <td>
+            <input type="text" name="email" id="email">
+          </td>
+        </tr>
+        <tr>
           <td>Birthday:</td>
           <td>
             <input type="date" name="DoB" id="DoB">
@@ -187,16 +193,16 @@
       const teacherID = document.getElementById('teacherID').value.toLowerCase();
       const name = document.getElementById('name').value;
       const DoB = document.getElementById('DoB').value;
-      const email = teacherID + '@teacher.hcmiu.edu.com';
+      const email = document.getElementById('email').value;
       const action = '/admin/manage_teacher/edit/' + teacherID;
 
       try {
         const res = await fetch(action, {
           method: 'PUT',
-          body: JSON.stringify({ teacherID, name, DoB, email }),
+          body: JSON.stringify({ name, DoB, email }),
           headers: { 'Content-Type': 'application/json' },
         });
-
+        console.log(res);
         if (res.status >= 200 && res.status < 300) {
           alert(`Teacher '${teacherID.toUpperCase()}' updated successfully`);
           location.reload();
@@ -206,12 +212,13 @@
       }
     });
 
-    function openForm(teacherID, name, DoB) {
+    function openForm(teacherID, name, DoB, email) {
       document.getElementById('overlay').style.display = 'block';
       document.getElementById('editForm').style.display = 'block';
 
       document.getElementById('teacherID').value = teacherID.toUpperCase();
       document.getElementById('name').value = name;
+      document.getElementById('email').value = email;
 
       if (DoB) {
         let formattedDoB = '';
@@ -241,7 +248,7 @@
             headers: { 'Content-Type': 'application/json' },
             });
 
-            const data = await res.json(); // Await the response and parse it
+            const data = await res.json();
 
             if (res.status >= 200 && res.status < 300) {
                 alert(`Teacher '${teacherID.toUpperCase()}' deleted successfully`);
