@@ -12,19 +12,25 @@
             margin: 0;
             padding: 0;
         }
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
+            margin: 20px auto;
+            max-width: 1200px;
         }
         th, td {
-            padding: 10px;
+            padding: 12px;
             border: 1px solid #ddd;
+            text-align: left;
         }
         th {
             background-color: #f89b28;
             color: white;
         }
-        /* Styles for the alert box */
         .alert-box {
             display: none;
             position: fixed;
@@ -36,19 +42,15 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             padding: 20px;
             z-index: 1000;
+            width: 80%;
+            max-width: 500px;
         }
-        .alert-box input {
+        .alert-box input, .alert-box button {
             display: block;
             margin: 10px 0;
-            padding: 5px;
+            padding: 8px;
             width: 100%;
         }
-        .alert-box button {
-            margin: 10px 5px 0 0;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-        /* Overlay for background dimming */
         .overlay {
             display: none;
             position: fixed;
@@ -59,221 +61,178 @@
             background: rgba(0, 0, 0, 0.5);
             z-index: 999;
         }
-        input[type="submit"], input[type="button"] {
+        button, input[type="submit"], input[type="button"] {
             background-color: #f89b28;
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 8px 12px;
             cursor: pointer;
             border-radius: 4px;
         }
-        input[type="submit"]:hover, input[type="button"]:hover {
+        button:hover, input[type="submit"]:hover, input[type="button"]:hover {
             background-color: #e07b1f;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul li {
+            margin: 5px 0;
         }
     </style>
 </head>
 <body>
-    <h1>Progressing Course list</h1>
+    <h1>Progressing Course List</h1>
     <table>
-        <tr>
-            <th>Course ID</th>
-            <th>Course Teacher</th>
-            <th>Created At</th>
-            <th>Student NOT register(only to check in BE, FE dont care)</th>
-            <th>Actions</th>
-        </tr>
-        <% pCourses.forEach(pCourse => { %>
-            <%
-                const notInpCourse = studentIDs.filter(studentID => 
-                !pCourse.students.includes(studentID)
-            );
-            %>
+        <thead>
+            <tr>
+                <th>Course ID</th>
+                <th>Course Teacher</th>
+                <th>Students</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% pCourses.forEach(pCourse => { %>
             <tr id="<%= pCourse._id %>">
                 <td><%= pCourse.courseID %></td>
                 <td><%= pCourse.teacherID %></td>
-                <td><%= pCourse.createdAt %></td>
-                <td><%= notInpCourse %></td>
-                <td>
-                    <a href="#" onclick="openForm('<%= pCourse._id %>',
-                                                    '<%= pCourse.courseID %>',
-                                                    '<%= pCourse.teacherID %>',
-                                                    '<%= pCourse.students %>',
-                                                    '<%= pCourse.createdAt %>',
-                                                    '<%= notInpCourse %>')">Edit</a>
-                    <a href="/admin/manage_progressing_course/delete/<%= pCourse._id %>">Delete</a>
-                </td>
+                <td><%= pCourse.students %></td>
+                <% if (pCourse.courseID !== 'admin') { %>
+                    <td>
+                        <button onclick="openForm('<%= pCourse._id %>', '<%= pCourse.courseID %>', '<%= pCourse.teacherID %>', '<%= pCourse.students %>', '<%= pCourse.notInpCourse %>')">Edit</button>
+                        <button onclick="deletePCourse('<%= pCourse._id %>')">Delete</button>
+                    </td>
+                <% } %>
             </tr>
-        <% }); %>
+            <% }); %>
+        </tbody>
     </table>
 
-    <!-- Alert Box -->
+    <!-- Overlay and Alert Box -->
     <div class="overlay" id="overlay"></div>
     <div class="alert-box" id="editForm">
         <h2>Edit Progressing Course Information</h2>
         <form id="edit-progressing-course-form">
-            <input type="hidden" name="id" id="pCourseID">
-            <table>
-                <tr>
-                    <td>Created At:</td>
-                    <td>
-                        <input type="text" name="createdAt" id="createdAt" disabled>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Course ID:</td>
-                    <td>
-                        <input type="text" name="courseID" id="courseID">
-                    </td>
-                </tr>
-                <tr>
-                    <td>Teacher ID:</td>
-                    <td>
-                        <input type="text" name="teacherID" id="teacherID">
-                    </td>
-                </tr>
-                <tr>
-                    <td>Students :</td>
-                    <td>
-                        <!-- Students will be added here -->
-                         <ul id="student_ids">
-                            
-                         </ul>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <button type="button" id="insert-student">Insert Student Here: </button>
-                    </td>
-                    <td>
-                        <ul id="insert-student-ul"></ul>
-                    </td>
-                <tr>
-                    <td>
-                        <input type="submit" name="" id="" value="Save">
-                    </td>
-                    <td>
-                        <input type="button" name="" id="" onclick="closeEditForm()" value="Cancel">
-                    </td>
-                </tr>
-            </table>
+            <input type="hidden" name="id" id="pCourseID" >
+            <label for="courseID">Course ID:</label>
+            <input type="text" name="courseID" id="courseID" disabled>
+
+            <label for="teacherID">Teacher ID:</label>
+            <input type="text" name="teacherID" id="teacherID" required>
+
+            <label>Students:</label>
+            <ul id="student_ids"></ul>
+
+            <label>Insert Students:</label>
+            <ul id="insert-student-ul"></ul>
+
+            <input type="submit" value="Save">
+            <input type="button" value="Cancel" onclick="closeEditForm()">
         </form>
     </div>
 
     <script>
-        const form = document.getElementById('edit-progressing-course-form');
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
+        const overlay = document.getElementById('overlay');
+        const editForm = document.getElementById('editForm');
 
-            // Get updated values from the form
-            const progressingCourseID = document.getElementById('progressingCourseID').value;
+        async function handleFormSubmit(event) {
+            event.preventDefault();
+
+            const pCourseID = document.getElementById('pCourseID').value;
             const courseID = document.getElementById('courseID').value;
             const teacherID = document.getElementById('teacherID').value;
-            const studentCheckboxes = document.querySelectorAll('.selected-student');
-            const studentIDs = Array.from(document.querySelectorAll('.selected-student')).map(studentCheckbox => studentCheckbox.id);
-            const action = '/admin/manage_progressing_course/edit/'+progressingCourseID;
+            const studentIDs = Array.from(document.querySelectorAll('#student_ids .selected-student')).map(li => li.id);
+
             try {
-                const res = await fetch(action, {
+                const response = await fetch(`/admin/manage_progressing_course/edit/${pCourseID}`, {
                     method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ courseID, teacherID, studentIDs }),
-                    headers: {'Content-Type': 'application/json'},
                 });
+
+                if (response.status >= 200 && response.status < 300) {
+                    alert(`Progressing course '${pCourseID}' updated successfully`);
+                    location.reload();
+                } else {
+                    console.error('Failed to update progressing course');
+                }
             } catch (error) {
-                console.log(error);
+                console.error(error);
             }
-        });
+        }
+        
+        async function deletePCourse(pCourseID) {
+            try {
+                const res = await fetch(`/admin/manage_progressing_course/delete/${pCourseID}`, { method: 'DELETE' });
 
+                if (res.status >= 200 && res.status < 300) {
+                    alert(`Progressing course '${pCourseID}' deleted successfully`);
+                    location.reload();
+                } else {
+                    console.error('Failed to delete course');
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
 
-        // Function to open the edit form
-        openForm = (progressingCourseID, courseID, teacherID, studentIDs, createdAt, notInProgressingCourse) => {
-            studentIDs = studentIDs.split(','); // to convert the string to an array
-            document.getElementById('progressingCourseID').value = progressingCourseID;
-
-            document.getElementById('overlay').style.display = 'block';
-            document.getElementById('editForm').style.display = 'block';
-
-            document.getElementById('createdAt').value = createdAt;
+        function openForm(pCourseID, courseID, teacherID, studentIDs, notInProgressingCourse) {
+            document.getElementById('pCourseID').value = pCourseID;
             document.getElementById('courseID').value = courseID;
             document.getElementById('teacherID').value = teacherID;
 
             const studentIdsDiv = document.getElementById('student_ids');
             studentIdsDiv.innerHTML = '';
 
-            studentIDs.forEach(studentID => {
+            studentIDs.split(',').forEach(studentID => {
                 const li = document.createElement('li');
-                const div = document.createElement('div');
-
                 li.id = studentID;
                 li.className = 'selected-student';
-                div.textContent = studentID;
-
-                li.appendChild(div);
+                li.textContent = studentID;
 
                 const deleteBtn = document.createElement('button');
                 deleteBtn.textContent = 'Delete';
-                deleteBtn.onclick = () => {
-                    li.remove();
-                };
+                deleteBtn.onclick = () => li.remove();
                 li.appendChild(deleteBtn);
-                
+
                 studentIdsDiv.appendChild(li);
             });
 
-            
-            notInProgressingCourse = notInProgressingCourse.split(','); // to convert the string to an array
-            const insertStudentBtn = document.querySelector('#insert-student');
-            insertStudentBtn.onclick = () => {
-                insertStudent(notInProgressingCourse);
-            };
-        
-        }
+            const insertStudentUl = document.getElementById('insert-student-ul');
+            insertStudentUl.innerHTML = '';
 
-        // Function to close the edit form
-        function closeEditForm() {
-            document.getElementById('editForm').style.display = 'none';
-            document.getElementById('overlay').style.display = 'none';
-        }
-
-        // Function to insert student
-        function insertStudent(notInProgressingCourse) {
-            const insertStudentList = document.getElementById('insert-student-ul');
-            insertStudentList.innerHTML = '';
-            for (let i = 0; i < notInProgressingCourse.length; i++) {
+            notInProgressingCourse.split(',').forEach(studentID => {
                 const li = document.createElement('li');
-                const div = document.createElement('div');
+                li.id = studentID;
+                li.textContent = studentID;
 
-                li.id = notInProgressingCourse[i];
-                li.className = 'selected-student';
-                div.textContent = notInProgressingCourse[i];
-
-                li.appendChild(div);
-
-                const insert = document.createElement('button');
-                insert.textContent = 'Insert';
-                insert.onclick = () => {
-                    const studentIdsDiv = document.getElementById('student_ids');
-                    const student_ids_li = document.createElement('li');
-                    const div = document.createElement('div');
-
-                    student_ids_li.id = notInProgressingCourse[i];
-                    student_ids_li.className = 'selected-student';
-                    div.textContent = notInProgressingCourse[i];
-
-                    student_ids_li.appendChild(div);
+                const insertBtn = document.createElement('button');
+                insertBtn.textContent = 'Insert';
+                insertBtn.onclick = () => {
+                    const newLi = li.cloneNode(true);
+                    newLi.className = 'selected-student';
 
                     const deleteBtn = document.createElement('button');
                     deleteBtn.textContent = 'Delete';
-                    deleteBtn.onclick = () => {
-                        student_ids_li.remove();
-                    };
-                    student_ids_li.appendChild(deleteBtn);
-                    
-                    studentIdsDiv.appendChild(student_ids_li);
+                    deleteBtn.onclick = () => newLi.remove();
+                    newLi.appendChild(deleteBtn);
+
+                    studentIdsDiv.appendChild(newLi);
                     li.remove();
                 };
-                li.appendChild(insert);
-                
-                insertStudentList.appendChild(li);
-            }
+                li.appendChild(insertBtn);
+
+                insertStudentUl.appendChild(li);
+            });
+
+            overlay.style.display = 'block';
+            editForm.style.display = 'block';
+        }
+
+        function closeEditForm() {
+            overlay.style.display = 'none';
+            editForm.style.display = 'none';
         }
     </script>
 </body>

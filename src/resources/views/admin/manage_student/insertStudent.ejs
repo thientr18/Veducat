@@ -81,12 +81,12 @@
           headers: {'Content-Type': 'application/json'},
         });
 
+        if (res.status >= 400 && res.status < 500) {
+          console.log("Request failed because the resource either does not exist or is forbidden", res.responseText);
+        }
         if (res.status >= 200 && res.status < 300) {
           alert(`Student '${studentID.toUpperCase(  )}' inserted successfully`);
           location.reload();
-        }
-        if (res.status >= 400 && res.status < 500) {
-          console.log("Request failed because the resource either does not exist or is forbidden", res.responseText);
         }
       } catch (error) {
         console.log(error);
