@@ -147,8 +147,12 @@ class TeacherController {
             progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
 
             const material = await Material.findById({ _id: mID });
+            if (!material) {
+                return res.status(404).json({ message: "Material not found" }); 
+            }
+            const materialFiles = await MaterialFile.find({ materialID: material._id });
 
-            res.render('teacher/course_material_display', { user, teacher, progressingCourse, material });
+            res.render('teacher/course_material_display', { user, teacher, progressingCourse, material, materialFiles });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }

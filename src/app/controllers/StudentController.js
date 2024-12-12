@@ -6,6 +6,7 @@ const Announcement = require('../models/Announcement');
 const Task = require('../models/Task');
 const Material = require('../models/Material');
 const Teacher = require('../models/Teacher');
+const MaterialFile = require('../models/MaterialFile');
 
 class StudentController {
     // GET /student
@@ -142,7 +143,9 @@ class StudentController {
             progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
 
             const material = await Material.findOne({ _id: mID });
-            res.render('student/course_material_display', { user, student, progressingCourse, material});
+            const materialFiles = await MaterialFile.find({ materialID: material._id });
+
+            res.render('student/course_material_display', { user, student, progressingCourse, material, materialFiles});
         } catch {
             console.error(error);
             res.status(500).send({ message: "An error occurred", error });
