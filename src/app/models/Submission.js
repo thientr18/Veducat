@@ -6,6 +6,11 @@ const submissionSchema = new mongoose.Schema({
         required: [true, 'Please enter a task ID'],
         lowercase: true
     },
+    taskName: {
+        type: 'string',
+        required: [true, 'Please enter a material name'],
+        lowercase: true,
+    },
     studentID: {
         type: 'string',
         required: [true, 'Please enter a student ID'],
@@ -13,7 +18,6 @@ const submissionSchema = new mongoose.Schema({
     },
     description: {
         type: 'string',
-        required: [true, 'Please enter a description']
     },
     submittedAt: {
         type: Date,
@@ -25,7 +29,6 @@ const submissionSchema = new mongoose.Schema({
             {
                 type: {
                     type: 'string',
-                    required: [true, 'Please enter a status']
                 }
             }
         ],
@@ -33,14 +36,6 @@ const submissionSchema = new mongoose.Schema({
     graded: {
         type: 'boolean',
         default: false
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    },
-    updateAt: {
-        type: Date,
-        default: Date.now
     }
 });
 

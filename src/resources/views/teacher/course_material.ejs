@@ -141,7 +141,6 @@
 <script>
     let materials = '<%- JSON.stringify(materials).replace(/\\/g, "\\\\") %>';
     materials = JSON.parse(materials);
-    console.log(materials);
 
     const materialListed = document.querySelector('.material-listed ul');
 
@@ -149,11 +148,17 @@
         const mID = material._id;
         const li = document.createElement('li');
         li.innerHTML = `
-            <a href="/teacher/course/${material.courseID}/material/${mID}" class="title-book">
+            <a href="/teacher/course/${material.pCourseID}/material/${mID}" class="title-book">
                 ${material.title}
             </a>
         `;
         materialListed.appendChild(li);
     });
+    if (materials.length === 0) {
+        const li = document.createElement('li');
+        li.classList.add('empty-content');
+        li.textContent = 'No materials yet';
+        materialListed.appendChild(li);
+    }
 </script>
 <%- include('./partials/footer.ejs'); -%>

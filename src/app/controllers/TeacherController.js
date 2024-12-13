@@ -7,8 +7,8 @@ const Material = require('../models/Material');
 const MaterialFile = require('../models/MaterialFile');
 const Task = require('../models/Task');
 const TaskFile = require('../models/TaskFile');
-const multer = require('multer');
 const Student = require('../models/Student');
+const multer = require('multer');
 
 class TeacherController {
 
@@ -41,7 +41,11 @@ class TeacherController {
                 return res.render('teacher/index', { user, teacher, teacherCourses, announcements: [] });
             }
             const enrichedAnnouncements = announcements.map(announcement => {
+<<<<<<< Updated upstream
                 const pCourse = pCourses.find(pc => pc._id.toString() === announcement.pCourseID);
+=======
+                const pCourse = progressingCourses.find(pc => pc._id.toString() === announcement.pCourseID);
+>>>>>>> Stashed changes
                 const course = courses.find(c => c.courseID === pCourse?.courseID);
                 return {
                     ...announcement._doc,
@@ -89,7 +93,11 @@ class TeacherController {
             const course = await Course.findOne({ courseID: pCourse.courseID });
             pCourse = { ...pCourse._doc, courseName: course.name, courseDescription: course.description };
 
+<<<<<<< Updated upstream
             const announcements = await Announcement.find({ pCourseID: pCourse._id });
+=======
+            const announcements = await Announcement.find({ pCourseID: progressingCourse._id });
+>>>>>>> Stashed changes
 
             res.render('teacher/course_announcement', { user, teacher, pCourse, announcements });
         } catch (error) {
@@ -106,7 +114,11 @@ class TeacherController {
         senderID = senderID.toLowerCase();
         receivers = receivers.map(receiver => receiver.toLowerCase());
         try {
+<<<<<<< Updated upstream
             await Announcement.create({ pCourseID, title, content, senderID, receivers, type: "course" });
+=======
+            await Announcement.create({ pCourseID: courseID, title, content, sender, recipents, type });
+>>>>>>> Stashed changes
             res.status(201).json({ message: "Announcement created successfully" });
         } catch (error) {
             res.status(500).json({ message: error.message });
@@ -126,7 +138,11 @@ class TeacherController {
             const course = await Course.findOne({ courseID: pCourse.courseID });
             pCourse = { ...pCourse._doc, courseName: course.name, courseDescription: course.description };
 
+<<<<<<< Updated upstream
             const materials = await Material.find({ courseID: pCourse._id });
+=======
+            const materials = await Material.find({ pCourseID: progressingCourse._id });
+>>>>>>> Stashed changes
 
             res.render('teacher/course_material', { user, teacher, pCourse, materials });
         } catch (error) {
@@ -137,7 +153,7 @@ class TeacherController {
     async material_detail_get (req, res, next) {
         const user = res.locals.user;
         const { _id, mID } = req.params;
-        console.log(_id, mID);
+
         try {
             const teacher = await Teacher.findOne({ teacherID: user.userID });
             
@@ -146,12 +162,18 @@ class TeacherController {
             pCourse = { ...pCourse._doc, courseName: course.name, courseDescription: course.description };
 
             const material = await Material.findById({ _id: mID });
+<<<<<<< Updated upstream
             if (!material) {
                 return res.status(404).json({ message: "Material not found" }); 
             }
             const materialFiles = await MaterialFile.find({ materialID: material._id });
 
             res.render('teacher/course_material_display', { user, teacher, pCourse, material, materialFiles });
+=======
+            const files = await MaterialFile.find({ materialID: material._id });
+
+            res.render('teacher/course_material_display', { user, teacher, progressingCourse, material,files });
+>>>>>>> Stashed changes
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
@@ -172,12 +194,15 @@ class TeacherController {
                     return res.status(404).json({ message: "Teacher not found" });
                 }
 
+<<<<<<< Updated upstream
                 let pCourse = await ProgressingCourse.findById(_id);
                 const course = await Course.findOne({ courseID: pCourse.courseID });
 
+=======
+>>>>>>> Stashed changes
                 if(files.file == null){
                     await Material.create({
-                        courseID : courseID,
+                        pCourseID : courseID,
                         title : title,
                         description : description,
                         uploadedBy: teacher.teacherID,
@@ -185,7 +210,7 @@ class TeacherController {
 
                 } else{
                     const material = await Material.create({
-                        courseID : courseID,
+                        pCourseID: courseID,
                         title : title,
                         description : description,
                         uploadedBy: teacher.teacherID,
@@ -238,9 +263,19 @@ class TeacherController {
             if (!teacher) {
                 return res.status(404).json({ message: "Teacher not found" });
             }
+<<<<<<< Updated upstream
             let pCourse = await ProgressingCourse.findById(_id)
             const course = await Course.findOne({ courseID: pCourse.courseID });
             pCourse = { ...pCourse._doc, courseName: course.name, courseDescription: course.description };
+=======
+            let progressingCourse = await ProgressingCourse.findById(_id)
+            const course = await Course.findOne({ courseID: progressingCourse.courseID });
+            if (!course) {
+                return res.status(404).json({ message: "Course not found" });
+            }
+            progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
+            const homeworks = await Task.find({ pCourseID: progressingCourse._id });
+>>>>>>> Stashed changes
 
             const homeworks = await Task.find({ courseID: pCourse._id });
 
@@ -410,7 +445,7 @@ class TeacherController {
             res.status(500).json({ message: error.message });
         }
     }
-    // get /course/:_id/delete/:_id
+    // get /course/:_id/material/delete/:_id
     async teacher_delete_material(req, res, next) {
         const { _id } = req.params;
         try {
@@ -419,7 +454,11 @@ class TeacherController {
                 return res.status(404).json({ message: "Material not found" });
             }
 
+<<<<<<< Updated upstream
             let pCourse = await ProgressingCourse.findById(material.courseID);
+=======
+            let progressingCourse = await ProgressingCourse.findById(material.pCourseID);
+>>>>>>> Stashed changes
             await MaterialFile.deleteMany({ materialID: material._id });
             await Material.findByIdAndDelete(_id);
             res.redirect(`/teacher/course/${pCourse._id}/material`);
@@ -473,7 +512,7 @@ class TeacherController {
     async homework_post (req, res, next) {
         const user = res.locals.user;
         const { _id } = req.params;
-        const {courseID, title, description,deadline} = req.body;
+        const { title, description,deadline} = req.body;
         const files = req.files;
 
         upload(req, res, async (err) => {
@@ -484,9 +523,8 @@ class TeacherController {
                     return res.status(404).json({ message: "Teacher not found" });
                 }
                 if(files.file == null){
-                    console.log(courseID, title, description, deadline,teacher.teacherID);
                     await Task.create({
-                        courseID : courseID,
+                        pCourseID :_id,
                         title : title,
                         description : description,
                         taskType: "homework",
@@ -496,7 +534,7 @@ class TeacherController {
 
                 } else{
                     const homework = await Task.create({
-                        courseID : courseID,
+                        pCourseID : _id,
                         title : title,
                         description : description,
                         taskType: "homework",
@@ -519,6 +557,66 @@ class TeacherController {
             }
         });
     }
+    // get /course/:_id/homework/delete/:_id
+    async teacher_delete_homework(req, res, next) {
+        const { _id } = req.params;
+        try {
+            const homework = await Task.findById( _id);
+            if(!homework){
+                return res.status(404).json({ message: "Homework not found" });
+            }
+
+            let progressingCourse = await ProgressingCourse.findById(homework.pCourseID);
+            await TaskFile.deleteMany({ taskID: homework._id });
+            await Task.findByIdAndDelete(_id);
+            res.redirect(`/teacher/course/${progressingCourse._id}/homework`);
+        }
+        catch (err) {
+            res.status(400).json( {err} )
+        }
+    }
+
+    // put /course/:_id/homework/edit/:_id
+    async teacher_edit_homework(req, res) {
+        const { _id } = req.params;
+        const {title, description,dueDate} = req.body;
+        const files = req.files;
+
+        upload(req, res, async (err) => {
+            try {
+                const homework = await Task.findById( _id);
+                if(files.file == null){
+                    await Task.updateOne(
+                        {_id : _id},
+                        {title : title,
+                        description : description,
+                        dueDate: dueDate}
+                    );
+                    await TaskFile.deleteMany({ TaskID: homework._id });
+                } else{
+                    await Task.updateOne(
+                        {_id : _id},
+                        {title : title,
+                        description : description,
+                        dueDate: dueDate}
+                    );
+                    const uploadFiles = files.file.map(file => ({
+                        taskID: homework._id,
+                        taskName: title,
+                        fileName: file.originalname,
+                        filePath: file.path,
+                        fileType: file.mimetype,
+                        fileSize: file.size,
+                    }));
+                    await TaskFile.deleteMany({ TaskID: homework._id });
+                    await TaskFile.create(uploadFiles);
+                }               
+                res.status(201).json({ message: "Homework uploaded successfully" });
+            } catch (error) {
+                res.status(500).json({ message: error.message });
+            }
+        });
+    }
 
 
 }
@@ -526,7 +624,7 @@ class TeacherController {
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './storage');
+        cb(null, './storage/teacher');
     },
     filename: function (req, file, cb) {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);

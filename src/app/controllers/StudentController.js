@@ -3,10 +3,19 @@ const Student = require('../models/Student');
 const ProgressingCourse = require('../models/ProgressingCourse');
 const Course = require('../models/Course');
 const Announcement = require('../models/Announcement');
-const Task = require('../models/Task');
-const Material = require('../models/Material');
 const Teacher = require('../models/Teacher');
+<<<<<<< Updated upstream
 const MaterialFile = require('../models/MaterialFile');
+=======
+const Task = require('../models/Task');
+const TaskFile = require('../models/TaskFile');
+const Material = require('../models/Material');
+const MaterialFile = require('../models/MaterialFile');
+const SubmissionFiles = require('../models/SubmissionFiles');
+const Submission = require('../models/Submission');
+
+const multer = require('multer');
+>>>>>>> Stashed changes
 
 class StudentController {
     // GET /student
@@ -109,12 +118,20 @@ class StudentController {
                 return res.status(404).json({ message: "Student not found" });
             }
 
+<<<<<<< Updated upstream
             /// Current course
+=======
+            // Current course
+>>>>>>> Stashed changes
             let pCourse = await ProgressingCourse.findById(_id);
             const course = await Course.findOne({ courseID: pCourse.courseID });
             pCourse = { ...pCourse._doc, courseName: course.name, courseDescription: course.description };
 
+<<<<<<< Updated upstream
             const materials = await Material.find({ courseID: pCourse._id });
+=======
+            const materials = await Material.find({ pCourseID: pCourse._id });
+>>>>>>> Stashed changes
 
             res.render('student/course_material', { user, student, pCourse, materials });
         } catch {
@@ -184,12 +201,91 @@ class StudentController {
             const course = await Course.findOne({ courseID: pCourse.courseID });
             pCourse = { ...pCourse._doc, courseName: course.name, courseDescription: course.description };
 
+<<<<<<< Updated upstream
             res.render('student/course_homework', { user, student, pCourse});
+=======
+            const homeworks = await Task.find({pCourseID: ProgressingCourse._id})
+
+            res.render('student/course_homework', { user, student, pCourse, homeworks});
+>>>>>>> Stashed changes
         } catch {
             console.error(error);
             res.status(500).send({ message: "An error occurred", error });
         }
     }
+    async homework_detail_get(req, res, next) {
+        const user = res.locals.user;
+        const { _id, hID } = req.params;
+        try {
+            const student = await Student.findOne({ studentID: user.userID });
+            if (!student) {
+                return res.status(404).json({ message: "Student not found" });
+            }
+
+            /// Current course
+            let pCourse = await ProgressingCourse.findById(_id);
+            const course = await Course.findOne({ courseID: pCourse.courseID });
+            pCourse = { ...pCourse._doc, courseName: course.name, courseDescription: course.description };
+
+            const homework = await Task.findOne({ _id: hID });
+            const homeworkFiles = await TaskFile.find({ taskID: homework._id });
+
+            res.render('student/course_homework_display', { user, student, pCourse, homework,homeworkFiles});
+        } catch {
+            console.error(error);
+            res.status(500).send({ message: "An error occurred", error });
+        }
+    }
+    async homework_submit_post(req, res, next) {
+        const user = res.locals.user;
+        const { _id } = req.params;
+        const {submission} = req.body;
+        const files = req.files;
+
+        upload(req, res, async (err) => {
+
+            try {
+                const student = await Student.findOne({ studentID: user.userID });
+                if (!student) {
+                    return res.status(404).json({ message: "Student not found" });
+                }
+                const homework = await Task.findOne({ _id: _id });
+                console.log("hello");
+                if(files.file == null){
+                    console.log("hello1");
+                    await Submission.create({
+                        taskID : homework._id,
+                        taskName: homework.title,
+                        studentID : student.studentID,
+                        description : description,
+                        dueDate: deadline,
+                    });
+
+                } else{
+                    console.log("hello2");
+                    const submission = await Submission.create({
+                        taskID : homework._id,
+                        taskName: homework.title,
+                        studentID : student.studentID,
+                        description : description,
+                        dueDate: deadline,
+                    });
+                    const uploadFiles = files.file.map(file => ({
+                        submissionID: submission._id,
+                        fileName: file.originalname,
+                        filePath: file.path,
+                        fileType: file.mimetype,
+                        fileSize: file.size,
+                    }));
+                    await SubmissionFiles.create(uploadFiles);
+                }                
+                res.status(201).json({ message: "Homework submitted" });
+            } catch (error) {
+                res.status(500).json({ message: error.message });
+            }
+        });
+    }
+
 
     async discussion_get(req, res, next) {
         const user = res.locals.user;
@@ -305,6 +401,28 @@ class StudentController {
         }
     }
 }
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './storage/student');
+    },
+    filename: function (req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, `${uniqueSuffix}-${file.originalname}`);
+    }
+});
+
+const upload = multer({ 
+    storage: storage,
+    limits: { fileSize: 1024*1024 * 1024 * 10 },
+    fileFilter: (req, file, cb) => {
+        const allowedTypes = ['application/pdf', 'image/png', 'image/jpeg', 'application/zip', 'application/x-rar-compressed'];
+        if (allowedTypes.includes(file.mimetype)) {
+            cb(null, true);
+        } else {
+            cb(new Error('Invalid file type'), false);
+        }
+    }
+}).array('files', 1);
 
 module.exports = new StudentController();
 
