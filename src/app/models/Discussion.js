@@ -10,13 +10,16 @@ const discussionSchema = new mongoose.Schema({
         type: 'string',
         required: [true, 'Please enter a topic']
     },
+    description: {
+        type: 'string',
+    },
     participants: {
         type: Array,
         default: [
             {
                 participantID: {
                     type: 'string',
-                    required: [true, 'Please enter a participant ID'],
+                    // required: [true, 'Please enter a participant ID'],
                     lowercase: true
                 },
                 joined: {
@@ -29,10 +32,6 @@ const discussionSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    updateAt: {
-        type: Date,
-        default: Date.now
-    }
 });
 
 const Discussion = mongoose.model('discussion', discussionSchema); // 'discussion' is the name of the collection in the database
