@@ -232,10 +232,10 @@ class StudentController {
 
             try {
                 const student = await Student.findOne({ studentID: user.userID });
+                const homework = await Task.findOne({ _id: hID });
                 if (!student) {
                     return res.status(404).json({ message: "Student not found" });
                 }
-                const homework = await Task.findOne({ _id: hID });
                 if(files.file == null){
                     await Submission.create({
                         taskID : hID,
@@ -244,14 +244,15 @@ class StudentController {
                         description : description,
                     });
                     await TaskforStudent.updateOne({taskID: hID, studentID: student.studentID}, {status: 'Submitted'});
-
                 } else{
+
                     const submission = await Submission.create({
                         taskID : hID,
                         taskName: homework.title,
                         studentID : student.studentID,
                         description : description,
                     });
+
                     await TaskforStudent.updateOne({taskID: hID, studentID: student.studentID}, {status: 'Submitted'});
 
                     const uploadFiles = files.file.map(file => ({
@@ -261,7 +262,6 @@ class StudentController {
                         fileType: file.mimetype,
                         fileSize: file.size,
                     }));
-                    console.log(uploadFiles);
                     await SubmissionFiles.create(uploadFiles);
                 }                
                 res.status(201).json({ message: "Homework submitted" });

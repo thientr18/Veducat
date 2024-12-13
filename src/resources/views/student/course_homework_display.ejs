@@ -27,7 +27,7 @@
                 <i class="fas fa-upload"></i>
                 Browse Local Files
             </label>
-            <input type="file" name="submission" id="upload-submission" multiple>
+            <input type="file" name="file" id="upload-submission" multiple>
             </label>
             <div class="display-file" id="display-file-homework">
                 <ul>
@@ -77,7 +77,7 @@
 <script> 
     let homework = '<%- JSON.stringify(homework).replace(/\\/g, "\\\\") %>';
         homework = JSON.parse(homework);
-    // Get the form container and form
+
     const formSubmition = document.querySelector('.homework-submission');
     const form = formSubmition.querySelector('form');
 
@@ -88,7 +88,7 @@
         const files = form.querySelector('input[type="file"]').files;
         const formData = new FormData(e.target);
         formData.append('description', description);
-        
+      
         const action = `/student/course/<%= homework.pCourseID %>/homework/<%= homework._id %>`;
         try {
             const res = await fetch(`/student/course/${homework.pCourseID}/homework/${ homework._id}`, {
