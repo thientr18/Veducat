@@ -1503,5 +1503,44 @@ td.id, td.fullname{
     border-radius: 1rem;
     cursor: pointer;
 }
+.status-bar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    margin: 2rem;
+}
+.submission-content{
+    width: 50rem;
+    background-color: var(--secondary-color);
+    padding: 1rem;
+    border: solid 0.1rem var(--primary-color);
+    border-radius: 1rem;
+}
+.return-back{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+}
+.return-back a{
+    text-decoration: none;
+    color: var(--white-color);
+    text-align: center;
+    font-size: 1.5rem;
+    width: 100%;
+    padding: 1 auto;
+    background-color: var(--primary-color);
+    padding: 1rem;
+    border-radius: 1rem;
+}
+.return-back a:hover{
+    transition: all 0.3s ease;
+    background-color: var(--white-color);
+    color: var(--primary-color);
+    border-radius: 1rem ;
+    border: solid 0.1rem var(--primary-color);
+    cursor: pointer;
+}
 
 @import 'responsive.scss';
