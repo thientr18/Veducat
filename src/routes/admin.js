@@ -35,10 +35,6 @@ router.put('/manage_progressing_course/edit/:id', requireAuthZ('admin'), adminCo
 router.delete('/manage_progressing_course/delete/:id', requireAuthZ('admin'), adminController.admin_edit_progressing_course_delete);
 
 // Annoucement
-router.get('/announcement/send_to_all', requireAuthZ('admin'), adminController.admin_send_to_all_get);
-router.post('/announcement/send_to_all', requireAuthZ('admin'), adminController.admin_send_to_all_post);
-router.get('/announcement/send_to_all/list', requireAuthZ('admin'), adminController.admin_send_to_all_list);
-router.delete('/announcement/send_to_all/delete/:id', requireAuthZ('admin'), adminController.admin_send_to_all_delete);
 router.get('/announcement/send_to_teacher', requireAuthZ('admin'), adminController.admin_send_to_teacher_get);
 router.post('/announcement/send_to_teacher', requireAuthZ('admin'), adminController.admin_send_to_teacher_post);
 router.get('/announcement/send_to_teacher/list', requireAuthZ('admin'), adminController.admin_send_to_teacher_list);

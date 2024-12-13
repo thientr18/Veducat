@@ -355,63 +355,6 @@ class AdminController {
     /* END PROGRESSING COURSE */
 
     /* START ANNOUNCEMENT */
-    // GET /admin/announcement/send_to_all
-    async admin_send_to_all_get(req, res, next) {
-        const user = res.locals.user;
-        try {        
-            const students = await Student.find();
-            const studentIDs = students.map(personID => personID.studentID); // Create an array of student IDs
-            const teachers = await Teacher.find();
-            const teacherIDs = teachers.map(personID => personID.teacherID); // Create an array of teacher IDs
-            const allPeople = [...studentIDs, ...teacherIDs];
-            res.render('announcement/toAll/sendToAll', { user, allPeople });
-        } catch (err) {
-            console.log(err)
-            res.status(400).json( {err} )
-        }
-    }
-
-    // POST /admin/announcement/send_to_all
-    async admin_send_to_all_post(req, res, next) {
-        let { courseID, title, content, receivers, senderID } = req.body;
-        courseID = courseID.toLowerCase();
-        senderID = senderID.toLowerCase();
-        receivers = receivers.map(receiver => receiver.toLowerCase());
-        try {
-            await Announcement.create({ courseID, title, content, senderID, receivers, type: 'to_all' });
-            res.status(200).json( { message: 'Send announcement to all successfully' })
-        }
-        catch (err) {
-            console.log(err)
-            res.status(400).json( {err} )
-        }
-    }
-
-    // /announcement/send_to_all/list
-    async admin_send_to_all_list(req, res, next) {
-        try {
-            const announcements = await Announcement.find({ type: 'to_all' });
-            res.render('announcement/toAll/list', { announcements });
-        }
-        catch (err) {
-            console.log(err)
-            res.status(400).json( {err} )
-        }
-    }
-
-    // /announcement/send_to_all/delete/:id
-    async admin_send_to_all_delete(req, res, next) {
-        const announcementID = req.params.id;
-        try {
-            await Announcement.deleteOne({ _id: announcementID })
-            res.status(200).json( { message: 'Delete announcement successfully' })
-        }
-        catch (err) {
-            console.log(err)
-            res.status(400).json( {err} )
-        }
-    }
-
     // GET /admin/announcement/send_to_teacher
     async admin_send_to_teacher_get(req, res, next) {
         const user = res.locals.user;
