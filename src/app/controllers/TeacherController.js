@@ -10,6 +10,7 @@ const TaskFile = require('../models/TaskFile');
 const Student = require('../models/Student');
 const TaskforStudent = require('../models/TaskforStudent');
 const multer = require('multer');
+const Discussion = require('../models/Discussion');
 
 class TeacherController {
 
@@ -183,6 +184,52 @@ class TeacherController {
                     const material = await Material.create({
                         pCourseID: courseID,
                         title : title,
+                        description : description,
+                        uploadedBy: teacher.teacherID,
+                    });
+                    const uploadFiles = files.file.map(file => ({
+                        materialID: material._id,
+                        materialName: title,
+                        fileName: file.originalname,
+                        filePath: file.path,
+                        fileType: file.mimetype,
+                        fileSize: file.size,
+                    }));
+                    await MaterialFile.create(uploadFiles);
+                }                
+                res.status(201).json({ message: "Material uploaded successfully" });
+            } catch (error) {
+                res.status(500).json({ message: error.message });
+            }
+        });
+    }
+
+    async discussion_post (req, res, next) {
+        const user = res.locals.user;
+        const { _id } = req.params;
+        const {pCourseID, topic, description, deadline,} = req.body;
+        const files = req.files;
+
+        upload(req, res, async (err) => {
+
+            try {
+                const teacher = await Teacher.findOne({ teacherID: user.userID });
+                if (!teacher) {
+                    return res.status(404).json({ message: "Teacher not found" });
+                }
+
+                if(files.file == null){
+                    await Discussion.create({
+                        pCourseID : pCourseID,
+                        topic: topic,
+                        description : description,
+                        uploadedBy: teacher.teacherID,
+                    });
+
+                } else{
+                    const discussion = await Discussion.create({
+                        pCourseID : pCourseID,
+                        topic: topic,
                         description : description,
                         uploadedBy: teacher.teacherID,
                     });
@@ -385,7 +432,7 @@ class TeacherController {
                 };
             });
 
-            res.render('teacher/discussion', { user, teacher, teacherCourses });
+            res.render('teacher/discussion', { user, teacher, teacherCourses, pCourses });
         }
         catch (error) {
             res.status(500).json({ message: error.message });

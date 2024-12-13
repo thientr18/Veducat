@@ -59,6 +59,7 @@ router.get('/course/:_id/homework/delete/:_id', requireAuthZ('teacher'), teacher
 router.put('/course/:_id/homework/edit/:_id', cpUpload, requireAuthZ('teacher'), teacherController.teacher_edit_homework);
 
 router.get('/course/:_id/discussion', requireAuthZ('teacher'), teacherController.discussion_get);
+router.post('/course/:_id/discussion', requireAuthZ('teacher'), teacherController.discussion_post);
 router.get('/discussion', requireAuthZ('teacher'), teacherController.discussion_all_get);
 
 router.get('/grade', requireAuthZ('teacher'), teacherController.grade_all_get);
