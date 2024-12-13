@@ -30,7 +30,7 @@ const upload = multer({
         }
     }
 })
-const cpUpload = upload.fields([{ name: 'file', maxCount: 1 }])
+const cpUpload = upload.fields([{ name: 'file', maxCount: 10 }])
 
 
 // GET /student
@@ -49,7 +49,7 @@ router.get('/course/:_id/material/:mID', requireAuthZ('student'), studentControl
 
 router.get('/course/:_id/homework/:hID', requireAuthZ('student'), studentController.homework_detail_get);
 router.get('/course/:_id/homework', requireAuthZ('student'), studentController.homework_get);
-router.post('/course/:_id/homework/', cpUpload, requireAuthZ('teacher'), studentController.homework_submit_post);
+router.post('/course/:_id/homework/:hID', cpUpload, requireAuthZ('student'), studentController.homework_submit_post);
 
 
 router.get('/course/:_id/discussion', requireAuthZ('student'), studentController.discussion_get);
