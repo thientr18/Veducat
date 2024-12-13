@@ -19,7 +19,7 @@
     </div>
     <div class="homework-submission">
         <h3>Submission</h3>
-        <form action="" method="post" class="homework-submission-form">
+        <form action="" method="POST" class="homework-submission-form">
             <label for="writing-submission">Writing Submission</label>
             <textarea name="submission" id="writing-submission" cols="30" rows="10" placeholder="Writing the submission"></textarea>
             <label for="upload-submission">Upload Submission</label>
@@ -67,15 +67,6 @@
                 </button>
             </div>
             <script>
-                const textArea = document.querySelector("#writing-submission");
-                const uploadFile = document.querySelector("#upload-submission");
-                if (textArea.value === "" && uploadFile.value === "") {
-                    document.querySelector(".button-form button[type='submit']").onclick = function() {
-                        alert("Please fill in the submission form.");
-                        return false;
-                    };
-                    
-                }
                 document.querySelector("#reset-homework").addEventListener("click", function() {
                     document.querySelector("#display-file-homework ul").innerHTML = "";
                 });
@@ -83,4 +74,44 @@
         </form>
     </div>
 </section>
+<script> 
+    let homework = '<%- JSON.stringify(homework).replace(/\\/g, "\\\\") %>';
+        homework = JSON.parse(homework);
+    // Get the form container and form
+    const formSubmition = document.querySelector('.homework-submission');
+    const form = formSubmition.querySelector('form');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+
+        const submission = form.querySelector('textarea').value;
+        const files = form.querySelector('input[type="file"]').files;
+        
+        const formData = new FormData(e.target);
+        
+        // console.log(submission,files);
+        // if (submission === "" && files.length == 0) {
+        //     document.querySelector(".button-form button[type='submit']").onclick = function() {
+        //         alert("Please fill in the submission form.");
+        //         return;
+        //     };
+        // }
+        console.log(homework.courseID);
+        console.log(homework);
+        const action = `/student/course/<%= homework.courseID %>/homework`;
+        try {
+            const res = await fetch(action, {
+                method: 'POST',
+                body: formData,
+            });
+            const data = await res.json();
+            if(res.status >= 200 && res.status < 300) {
+                location.reload();
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    });
+</script>
 <%- include('partials/footer.ejs'); -%>

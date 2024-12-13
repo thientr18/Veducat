@@ -14,7 +14,7 @@
                     });
                 </script>
                 <div class="delete-button">
-                    Delete
+                    <a href="/teacher/course/<%= progressingCourse._id %>/homework/delete/<%= homework._id %>">Delete</a>
                 </div>
             </div>
         </div>
@@ -34,6 +34,10 @@
         </div>
         <div class="homework-attachment">
             <h3>Attachment</h3>
+            <div class="homework-file">
+                <i class="fas fa-file"></i>
+                <a href="<%= homework.filePath %>" download=""><%= homework.filePath %></a>
+            </div>
         </div>
     </div>
 </section>
@@ -123,4 +127,36 @@
         </form>
     </div>
 </section>
+<script> 
+
+        // Get the form container and form
+    const formContainer = document.querySelector('.form-container');
+    const form = formContainer.querySelector('form');
+ 
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const title = form.querySelector('input[name="title"]').value;
+        const description = form.querySelector('textarea').value;
+        const files = form.querySelector('input[type="file"]').files;
+        const deadline = form.querySelector('input[type="datetime-local"]').value;
+
+        const formData = new FormData(e.target);
+        formData.append('description', description);
+
+        const action = `/teacher/course/<%= homework.pCourseID %>/homework/edit/<%= homework._id %>`;
+        try {
+            const res = await fetch(action, {
+                method: 'PUT',
+                body: formData,
+            });
+            const data = await res.json();
+            if(res.status >= 200 && res.status < 300) {
+                location.reload();
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    });
+</script>
 <%- include('./partials/footer.ejs'); -%>

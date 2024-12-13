@@ -7,18 +7,41 @@
     </div>
     <div class="homework-listed">
         <ul>
-            <!-- <li>
-                <a href="#">
-                    Homework 1: HTML
-                    <span>
-                        Deadline: 10/11/2024
-                    </span>
-                    <div class="homework-status x">
-                        <i class="fa-solid fa-x"></i>
-                    </div>
-                </a>
-            </li> -->
         </ul>
     </div>
 </section>
+
+<script>
+    let homeworks = '<%- JSON.stringify(homeworks) %>';
+    let progressingCourse = '<%- JSON.stringify(pCourse) %>';
+    homeworks = JSON.parse(homeworks);
+    progressingCourse = JSON.parse(progressingCourse);
+
+    const homeworkListed = document.querySelector('.homework-listed ul');
+
+    homeworks.forEach(homework => {
+        const hID = homework._id;
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <a href="/student/course/${progressingCourse._id}/homework/${hID}" class="title-book">
+                ${homework.title}
+                <span>
+                    Deadline: ${new Date(homework.dueDate).toLocaleDateString()}
+                </span>
+                <div class="homework-status ${homework.status}">
+                    <i class="fa-solid fa-${homework.status}"></i>
+                </div>
+            </a>
+        `;
+        homeworkListed.appendChild(li);
+    });
+
+    if (homeworks.length === 0) {
+        const li = document.createElement('li');
+        li.classList.add('empty-content');
+        li.textContent = 'No homeworks yet';
+        homeworkListed.appendChild(li);
+    }
+</script>
+
 <%- include('partials/footer.ejs'); -%>

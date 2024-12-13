@@ -29,6 +29,7 @@
     </div>
 </section>
 <script>
+<<<<<<< Updated upstream
     let files = '<%- JSON.stringify(materialFiles).replace(/\\/g, "\\\\") %>';
     files = JSON.parse(files);
     console.log(files);
@@ -46,11 +47,35 @@
         div.appendChild(a);
         materialContents.appendChild(div);
     });
+=======
+    let material = '<%- JSON.stringify(material).replace(/\\/g, "\\\\") %>';
+        material = JSON.parse(material);
+    let files = '<%- JSON.stringify(files).replace(/\\/g, "\\\\") %>';
+        files = JSON.parse(files);
+        
+        const materialHeader = document.querySelector('.material-header');
+        const materialTitle = document.querySelector('.material-title');
+        const materialDescription = document.querySelector('.material-description p');
+        const materialDue = document.querySelector('.material-due p');
+        const materialAttachment = document.querySelector('.material-attachment');
+        materialTitle.textContent = material.title;
+        materialDescription.textContent = material.description;
+        files.forEach(file => {
+            const div = document.createElement('div');
+            div.classList.add('material-file');
+            const a = document.createElement('a');
+            a.href = file.filePath;
+            a.textContent = file.fileName;
+            div.appendChild(a);
+            materialAttachment.appendChild(div);
+        });
+
+>>>>>>> Stashed changes
 </script>
 <!-- FORM EDIT A NEW MATERIAL -->
 <section class="new-form new-material-form">
     <div class="form-container">
-        <form action = "/teacher/course/<%= material.courseID %>/material/<%= material._id %>" method = "PUT" enctype="multipart/form-data">
+        <form action = "/teacher/course/<%= material.pCourseID %>/material/<%= material._id %>" method = "PUT" enctype="multipart/form-data">
             <div class="exit-btn" id="exit-material">
                 <i class="fas fa-times"></i>
             </div>
@@ -142,9 +167,6 @@
 </script>
 <script> 
 
-    let material = '<%- JSON.stringify(material).replace(/\\/g, "\\\\") %>';
-        material = JSON.parse(material);
-
         // Get the form container and form
     const formContainer = document.querySelector('.form-container');
     const form = formContainer.querySelector('form');
@@ -158,7 +180,7 @@
         const formData = new FormData(e.target);
         formData.append('description', description);
 
-        const action = `/teacher/course/<%= material.courseID %>/material/edit/<%= material._id %>`;
+        const action = `/teacher/course/<%= material.pCourseID %>/material/edit/<%= material._id %>`;
         try {
             const res = await fetch(action, {
                 method: 'PUT',

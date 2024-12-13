@@ -10,7 +10,7 @@ router.use(checkUser);
 //Multer configuration
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'storage');
+        cb(null, 'storage/teacher');
     },
     filename: function (req, file, cb) {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -55,8 +55,8 @@ router.get('/course/:_id/homework', requireAuthZ('teacher'), teacherController.h
 router.post('/course/:_id/homework', cpUpload, requireAuthZ('teacher'), teacherController.homework_post);
 router.get('/homework/task', requireAuthZ('teacher'), teacherController.tasks_get);
 router.get('/course/:_id/homework/:hID', requireAuthZ('teacher'), teacherController.homework_detail_get);
-router.get('/course/:_id/homework/delete/:_id', requireAuthZ('teacher'), teacherController.teacher_delete_material);
-router.put('/course/:_id/homework/edit/:_id', cpUpload, requireAuthZ('teacher'), teacherController.teacher_edit_material);
+router.get('/course/:_id/homework/delete/:_id', requireAuthZ('teacher'), teacherController.teacher_delete_homework);
+router.put('/course/:_id/homework/edit/:_id', cpUpload, requireAuthZ('teacher'), teacherController.teacher_edit_homework);
 
 router.get('/course/:_id/discussion', requireAuthZ('teacher'), teacherController.discussion_get);
 router.get('/discussion', requireAuthZ('teacher'), teacherController.discussion_all_get);
