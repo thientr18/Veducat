@@ -4,9 +4,6 @@ const ProgressingCourse = require('../models/ProgressingCourse');
 const Course = require('../models/Course');
 const Announcement = require('../models/Announcement');
 const Teacher = require('../models/Teacher');
-<<<<<<< Updated upstream
-const MaterialFile = require('../models/MaterialFile');
-=======
 const Task = require('../models/Task');
 const TaskFile = require('../models/TaskFile');
 const Material = require('../models/Material');
@@ -15,7 +12,6 @@ const SubmissionFiles = require('../models/SubmissionFiles');
 const Submission = require('../models/Submission');
 
 const multer = require('multer');
->>>>>>> Stashed changes
 
 class StudentController {
     // GET /student
@@ -118,20 +114,12 @@ class StudentController {
                 return res.status(404).json({ message: "Student not found" });
             }
 
-<<<<<<< Updated upstream
-            /// Current course
-=======
             // Current course
->>>>>>> Stashed changes
             let pCourse = await ProgressingCourse.findById(_id);
             const course = await Course.findOne({ courseID: pCourse.courseID });
             pCourse = { ...pCourse._doc, courseName: course.name, courseDescription: course.description };
 
-<<<<<<< Updated upstream
             const materials = await Material.find({ courseID: pCourse._id });
-=======
-            const materials = await Material.find({ pCourseID: pCourse._id });
->>>>>>> Stashed changes
 
             res.render('student/course_material', { user, student, pCourse, materials });
         } catch {
@@ -201,13 +189,9 @@ class StudentController {
             const course = await Course.findOne({ courseID: pCourse.courseID });
             pCourse = { ...pCourse._doc, courseName: course.name, courseDescription: course.description };
 
-<<<<<<< Updated upstream
-            res.render('student/course_homework', { user, student, pCourse});
-=======
-            const homeworks = await Task.find({pCourseID: ProgressingCourse._id})
+            const homeworks = await Task.find({pCourseID: pCourse._id})
 
             res.render('student/course_homework', { user, student, pCourse, homeworks});
->>>>>>> Stashed changes
         } catch {
             console.error(error);
             res.status(500).send({ message: "An error occurred", error });
@@ -238,8 +222,8 @@ class StudentController {
     }
     async homework_submit_post(req, res, next) {
         const user = res.locals.user;
-        const { _id } = req.params;
-        const {submission} = req.body;
+        const { _id , hID } = req.params;
+        const {description} = req.body;
         const files = req.files;
 
         upload(req, res, async (err) => {
@@ -249,16 +233,15 @@ class StudentController {
                 if (!student) {
                     return res.status(404).json({ message: "Student not found" });
                 }
-                const homework = await Task.findOne({ _id: _id });
+                const homework = await Task.findOne({ _id: hID });
+                console.log(homework);
                 console.log("hello");
                 if(files.file == null){
-                    console.log("hello1");
                     await Submission.create({
-                        taskID : homework._id,
+                        taskID : hID,
                         taskName: homework.title,
                         studentID : student.studentID,
                         description : description,
-                        dueDate: deadline,
                     });
 
                 } else{
@@ -268,7 +251,6 @@ class StudentController {
                         taskName: homework.title,
                         studentID : student.studentID,
                         description : description,
-                        dueDate: deadline,
                     });
                     const uploadFiles = files.file.map(file => ({
                         submissionID: submission._id,
@@ -422,7 +404,7 @@ const upload = multer({
             cb(new Error('Invalid file type'), false);
         }
     }
-}).array('files', 1);
+}).array('files', 10);
 
 module.exports = new StudentController();
 

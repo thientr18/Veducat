@@ -122,7 +122,7 @@
 
         formData.append('courseID', courseID);
         formData.append('description', description);
-
+        
         try {
             const res = await fetch(`/teacher/course/${pCourse._id}/material`, {
                 method: 'POST',

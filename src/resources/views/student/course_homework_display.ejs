@@ -19,7 +19,7 @@
     </div>
     <div class="homework-submission">
         <h3>Submission</h3>
-        <form action="" method="POST" class="homework-submission-form">
+        <form action="/student/course/<%= homework.pCourseID %>/homework/<%= homework._id %>" method="POST" class="homework-submission-form" enctype="multipart/form-data">
             <label for="writing-submission">Writing Submission</label>
             <textarea name="submission" id="writing-submission" cols="30" rows="10" placeholder="Writing the submission"></textarea>
             <label for="upload-submission">Upload Submission</label>
@@ -84,24 +84,14 @@
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-
-        const submission = form.querySelector('textarea').value;
+        const description = form.querySelector('textarea').value;
         const files = form.querySelector('input[type="file"]').files;
-        
         const formData = new FormData(e.target);
+        formData.append('description', description);
         
-        // console.log(submission,files);
-        // if (submission === "" && files.length == 0) {
-        //     document.querySelector(".button-form button[type='submit']").onclick = function() {
-        //         alert("Please fill in the submission form.");
-        //         return;
-        //     };
-        // }
-        console.log(homework.courseID);
-        console.log(homework);
-        const action = `/student/course/<%= homework.courseID %>/homework`;
+        const action = `/student/course/<%= homework.pCourseID %>/homework/<%= homework._id %>`;
         try {
-            const res = await fetch(action, {
+            const res = await fetch(`/student/course/${homework.pCourseID}/homework/${ homework._id}`, {
                 method: 'POST',
                 body: formData,
             });
