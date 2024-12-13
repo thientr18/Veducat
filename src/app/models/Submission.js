@@ -33,6 +33,10 @@ const submissionSchema = new mongoose.Schema({
             }
         ],
     },
+    tagSubmit:{
+        type: 'string',
+        default: 'Submitted'
+    },
     graded: {
         type: 'boolean',
         default: false

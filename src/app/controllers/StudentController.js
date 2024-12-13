@@ -10,8 +10,10 @@ const Material = require('../models/Material');
 const MaterialFile = require('../models/MaterialFile');
 const SubmissionFiles = require('../models/SubmissionFiles');
 const Submission = require('../models/Submission');
+const TaskforStudent = require('../models/TaskforStudent');
 
 const multer = require('multer');
+
 
 class StudentController {
     // GET /student
@@ -234,8 +236,6 @@ class StudentController {
                     return res.status(404).json({ message: "Student not found" });
                 }
                 const homework = await Task.findOne({ _id: hID });
-                console.log(homework);
-                console.log("hello");
                 if(files.file == null){
                     await Submission.create({
                         taskID : hID,
@@ -243,15 +243,17 @@ class StudentController {
                         studentID : student.studentID,
                         description : description,
                     });
+                    await TaskforStudent.updateOne({taskID: hID, studentID: student.studentID}, {status: 'Submitted'});
 
                 } else{
-                    console.log("hello2");
                     const submission = await Submission.create({
-                        taskID : homework._id,
+                        taskID : hID,
                         taskName: homework.title,
                         studentID : student.studentID,
                         description : description,
                     });
+                    await TaskforStudent.updateOne({taskID: hID, studentID: student.studentID}, {status: 'Submitted'});
+
                     const uploadFiles = files.file.map(file => ({
                         submissionID: submission._id,
                         fileName: file.originalname,
@@ -259,6 +261,7 @@ class StudentController {
                         fileType: file.mimetype,
                         fileSize: file.size,
                     }));
+                    console.log(uploadFiles);
                     await SubmissionFiles.create(uploadFiles);
                 }                
                 res.status(201).json({ message: "Homework submitted" });
