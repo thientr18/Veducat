@@ -8,6 +8,7 @@ const MaterialFile = require('../models/MaterialFile');
 const Task = require('../models/Task');
 const TaskFile = require('../models/TaskFile');
 const Student = require('../models/Student');
+const TaskforStudent = require('../models/TaskforStudent');
 const multer = require('multer');
 
 class TeacherController {
@@ -478,6 +479,8 @@ class TeacherController {
                 if (!teacher) {
                     return res.status(404).json({ message: "Teacher not found" });
                 }
+                const progressingCourse = await ProgressingCourse.findById(_id);
+                const students = await Student.find({ studentID: { $in: progressingCourse.students } });
                 if(files.file == null){
                     await Task.create({
                         pCourseID :_id,
@@ -487,7 +490,11 @@ class TeacherController {
                         dueDate: deadline,
                         assignedBy: teacher.teacherID,
                     });
-
+                    console.log(students);
+                    students.forEach(async student => {
+                        await TaskforStudent.create({
+                            studentID: student.studentID, taskID: homework._id});
+                    });
                 } else{
                     const homework = await Task.create({
                         pCourseID : _id,
@@ -497,6 +504,11 @@ class TeacherController {
                         dueDate: deadline,
                         assignedBy: teacher.teacherID,
                     });
+                    students.forEach(async student => {
+                        await TaskforStudent.create({
+                            studentID: student.studentID, taskID: homework._id});
+                    });
+
                     const uploadFiles = files.file.map(file => ({
                         taskID: homework._id,
                         taskName: title,

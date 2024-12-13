@@ -13,24 +13,13 @@ const taskforStudentSchema = new mongoose.Schema({
     },
     status: {
         type: 'string',
-        required: [true, 'Please enter a status']
+        default: 'Not Submitted'
+        
     },
     submittedAt: {
         type: Date,
         default: Date.now
-    },
-    grade: {
-        type: 'number',
-        default: 0
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    },
-    updateAt: {
-        type: Date,
-        default: Date.now
-    }
+    }, 
 });
 
 const TaskforStudent = mongoose.model('taskforstudent', taskforStudentSchema); // 'taskforstudent' is the name of the collection in the database

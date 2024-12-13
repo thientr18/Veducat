@@ -20,8 +20,7 @@ const progressingCourseSchema = new mongoose.Schema({
         default: Date.now
     },
     updateAt: {
-        type: Date,
-        default: Date.now
+        type: Date,   
     }
 });
 
