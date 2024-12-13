@@ -77,6 +77,7 @@
           <td><input type="reset" value="Reset"></td>
         </tr> 
         <tr>
+          <td><a href="/admin">Go to Home</a></td>
           <td><a href="/admin/announcement/send_to_all/list">Go to List</a></td>
         </tr>
       </table>
@@ -91,18 +92,17 @@
       const content = document.querySelector('#announcement_content').value;
       
       const allPeople = '<%- JSON.stringify(allPeople) %>';
-      const peopleObject = JSON.parse(allPeople);
-      const sender = "<%= user.userID %>";
-
+      const receivers = JSON.parse(allPeople);
+      const senderID = "<%= user.userID %>";
       try {
         const res = await fetch('/admin/announcement/send_to_all', {
           method: 'POST',
-          body: JSON.stringify({ courseID, title, content, peopleObject, sender }),
+          body: JSON.stringify({ courseID, title, content, receivers, senderID }),
           headers: {'Content-Type': 'application/json'},
         });
 
         if (res.status >= 200 && res.status < 300) {
-          console.log("Request successful", res.responseText);
+          alert("Announcement has been sent to all users");
           location.reload();
         } else {
           console.error("Request failed", res.statusText);

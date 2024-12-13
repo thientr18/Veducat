@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Insert Announcement to Course API</title>
+  <title>Announcement to Student</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -52,10 +52,10 @@
 </head>
 <body>
   <header>
-    <h1>Announcement List</h1>
+    <h1>Announcement to Student List</h1>
   </header>
   <main>
-    <form class="form-insert-announcement" style="margin: 200px;" method="POST" action="/manage_announcement/insert">
+    <form class="form-insert-announcement" style="margin: 200px;">
       <table>
           <tr>
               <th>Announcement ID</th>
@@ -68,25 +68,48 @@
           </tr>
           <% announcements.forEach(announcement => { %>
               <tr id="<%= announcement._id %>">
-                  <td><%= announcement._id %></td>
-                  <td><%= announcement.title %></td>
-                  <td><%= announcement.content %></td>
-                  <td><%= announcement.recipents %></td>
-                  <td><%= announcement.sender %></td>
-                  <td><%= announcement.createdAt %></td>
-                  <td>
-                      <a href="/teacher/course/:<%= announcement.courseID %>/announcement/<%= announcement._id %>/delete/">Delete</a>
-                  </td>
+                <td><%= announcement._id %></td>
+                <td><%= announcement.title %></td>
+                <td><%= announcement.content %></td>
+                <td><%= announcement.recipents %></td>
+                <td><%= announcement.senderID %></td>
+                <td id="createdAt"><%= announcement.createdAt %></td>
+                <td>
+                  <button onclick="deleteAnnouncement('<%= announcement._id %>')">Delete</button>
+                </td>
               </tr>
           <% }); %>
           <tr>
-            <a href="/admin/announcement/send_to_student">Go to Insert</a>
+            <td><a href="/admin">Go to Home</a></td>
+            <td><a href="/admin/announcement/send_to_student">Go to Insert</a></td>
           </tr>
       </table>
     </form>
   </main>
   <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const createdAtElement = document.getElementById('createdAt');
+      if (createdAtElement) {
+        const rawDate = createdAtElement.textContent; // Get the raw date string
+        const date = new Date(rawDate); // Convert it to a Date object
+  
+        const options = { year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true };
+        const formattedDate = date.toLocaleString('en-US', options);
+  
+        createdAtElement.textContent = formattedDate;
+      }
+    });
 
-  </script>
+    // To delete an announcement
+    async function deleteAnnouncement(id) {
+      const res = await fetch(`/admin/announcement/send_to_student/delete/${id}`, {
+        method: 'DELETE'
+      });
+      if(res.status === 200) {
+        alert('Announcement deleted successfully');
+        location.reload();
+      }
+    }
+  </script>  
 </body>
 </html>

@@ -357,13 +357,14 @@ class AdminController {
     /* START ANNOUNCEMENT */
     // GET /admin/announcement/send_to_all
     async admin_send_to_all_get(req, res, next) {
+        const user = res.locals.user;
         try {        
             const students = await Student.find();
             const studentIDs = students.map(personID => personID.studentID); // Create an array of student IDs
             const teachers = await Teacher.find();
             const teacherIDs = teachers.map(personID => personID.teacherID); // Create an array of teacher IDs
             const allPeople = [...studentIDs, ...teacherIDs];
-            res.render('announcement/toAll/sendToAll', { allPeople });
+            res.render('announcement/toAll/sendToAll', { user, allPeople });
         } catch (err) {
             console.log(err)
             res.status(400).json( {err} )
@@ -372,19 +373,12 @@ class AdminController {
 
     // POST /admin/announcement/send_to_all
     async admin_send_to_all_post(req, res, next) {
-        const { courseID, title, content, peopleObject, sender } = req.body;
+        let { courseID, title, content, receivers, senderID } = req.body;
         courseID = courseID.toLowerCase();
-        sender = sender.toLowerCase();
-
+        senderID = senderID.toLowerCase();
+        receivers = receivers.map(receiver => receiver.toLowerCase());
         try {
-            await Announcement.create({ 
-                courseID: courseID,
-                title: title,
-                content: content,
-                recipents: peopleObject.map(person => person.toLowerCase()),
-                sender: sender.toLowerCase(),
-                type: 'send_to_all',
-            });
+            await Announcement.create({ courseID, title, content, senderID, receivers, type: 'to_all' });
             res.status(200).json( { message: 'Send announcement to all successfully' })
         }
         catch (err) {
@@ -395,9 +389,8 @@ class AdminController {
 
     // /announcement/send_to_all/list
     async admin_send_to_all_list(req, res, next) {
-        res.locals.user = req.user;
         try {
-            const announcements = await Announcement.find({ type: 'send_to_all' });
+            const announcements = await Announcement.find({ type: 'to_all' });
             res.render('announcement/toAll/list', { announcements });
         }
         catch (err) {
@@ -410,8 +403,8 @@ class AdminController {
     async admin_send_to_all_delete(req, res, next) {
         const announcementID = req.params.id;
         try {
-            // Delete announcement
-            console.log('Delete announcement: ', announcementID);
+            await Announcement.deleteOne({ _id: announcementID })
+            res.status(200).json( { message: 'Delete announcement successfully' })
         }
         catch (err) {
             console.log(err)
@@ -421,9 +414,10 @@ class AdminController {
 
     // GET /admin/announcement/send_to_teacher
     async admin_send_to_teacher_get(req, res, next) {
+        const user = res.locals.user;
         try {
             const teachers = await Teacher.find();
-            res.render('announcement/toTeacher/sendToTeacher', { teachers } );
+            res.render('announcement/toTeacher/sendToTeacher', { user, teachers } );
         } catch (err) {
             console.log(err)
             res.status(400).json( {err} )
@@ -432,17 +426,11 @@ class AdminController {
 
     // POST /admin/announcement/send_to_teacher
     async admin_send_to_teacher_post(req, res, next) {
-        const { courseID, title, content, teacherIDs, sender } = req.body;
-        console.log(req.body)
+        let { title, content, teacherIDs, senderID } = req.body;
+        teacherIDs = teacherIDs.map(teacherID => teacherID.toLowerCase());
+        senderID = senderID.toLowerCase();
         try {
-            await Announcement.create({
-                courseID: courseID,
-                title: title,
-                content: content,
-                recipents: teacherIDs.map(teacherID => teacherID.toLowerCase()),
-                sender: sender.toLowerCase(),
-                type: 'send_to_teacher',
-            });
+            await Announcement.create({ title, content, receivers: teacherIDs, senderID, type: 'to_teacher' });
             res.status(200).json( { message: 'Send announcement to teachers successfully' })
         }
         catch (err) {
@@ -455,7 +443,7 @@ class AdminController {
     async admin_send_to_teacher_list(req, res, next) {
         res.locals.user = req.user;
         try {
-            const announcements = await Announcement.find( { type: 'send_to_teacher' } );
+            const announcements = await Announcement.find( { type: 'to_teacher' } );
             res.render('announcement/toTeacher/list', { announcements });
         }
         catch (err) {
@@ -468,7 +456,7 @@ class AdminController {
         const announcementID = req.params.id;
         try {
             await Announcement.deleteOne({ _id: announcementID })
-            res.redirect('/admin/announcement/send_to_teacher/list');
+            res.status(200).json( { message: 'Delete announcement successfully' })
         }
         catch (err) {
             console.log(err)
@@ -478,9 +466,10 @@ class AdminController {
 
     // GET /admin/announcement/send_to_student
     async admin_send_to_student_get(req, res, next) {
+        const user = res.locals.user;
         try {
             const students = await Student.find();
-            res.render('announcement/toStudent/sendToStudent', { students });
+            res.render('announcement/toStudent/sendToStudent', { user, students });
         } catch (err) {
             console.log(err)
             res.status(400).json( {err} )
@@ -489,16 +478,17 @@ class AdminController {
 
     // POST /admin/announcement/send_to_student
     async admin_send_to_student_post(req, res, next) {
-        const { courseID, title, content, studentIDs, sender } = req.body;
+        let { pCourseID, title, content, studentIDs, senderID } = req.body;
+        pCourseID = pCourseID.toLowerCase();
+        studentIDs = studentIDs.map(studentID => studentID.toLowerCase());
+        senderID = senderID.toLowerCase();
         try {
-            await Announcement.create({
-                courseID: courseID,
-                title: title,
-                content: content,
-                recipents: studentIDs.map(studentID => studentID.toLowerCase()),
-                sender: sender.toLowerCase(),
-                type: 'send_to_student',
-            });
+            const pCourse = await ProgressingCourse.findOne({ courseID: pCourseID });
+            console.log(pCourse)
+            if (!pCourse) {
+                return res.status(400).json({ message: 'Course does not exist' });
+            }
+            await Announcement.create({ pCourseID: pCourse._id, title, content, receivers: studentIDs, senderID, type: 'to_student' });
             res.status(200).json( { message: 'Send announcement to students successfully' })
         }
         catch (err) {
@@ -511,7 +501,7 @@ class AdminController {
     async admin_send_to_student_list(req, res, next) {
         res.locals.user = req.user;
         try {
-            const announcements = await Announcement.find( { type: 'send_to_student' } );
+            const announcements = await Announcement.find( { type: 'to_student' } );
             res.render('announcement/toStudent/list', { announcements });
         }
         catch (err) {
@@ -525,7 +515,7 @@ class AdminController {
         const announcementID = req.params.id;
         try {
             await Announcement.deleteOne({ _id: announcementID })
-            res.redirect('/admin/announcement/send_to_student/list');
+            res.status(200).json( { message: 'Delete announcement successfully' });
         }
         catch (err) {
             console.log(err)
