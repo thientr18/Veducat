@@ -25,12 +25,7 @@ const announcementSchema = new mongoose.Schema({
     },
     type: {
         type: 'string',
-        required: [true, 'Please enter a type'],
         lowercase: true
-    },
-    sentAt: {
-        type: Date,
-        default: Date.now
     },
     createdAt: {
         type: Date,

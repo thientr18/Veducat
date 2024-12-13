@@ -39,20 +39,20 @@
 </section>
 <!-- Script to send announcement creationg request -->
 <script>
-    let progressingCourse = '<%- JSON.stringify(progressingCourse) %>';
-    progressingCourse = JSON.parse(progressingCourse);
+    let pCourse = '<%- JSON.stringify(pCourse) %>';
+    pCourse = JSON.parse(pCourse);
 
     const formCreateAnnouncement = document.querySelector(".form-create-announcement form");
 
     formCreateAnnouncement.addEventListener("submit", async function(e) {
         e.preventDefault();
 
-        const courseID = progressingCourse._id;
+        const courseID = pCourse._id;
         const title = formCreateAnnouncement.querySelector("input[name='title']").value;
         const content = formCreateAnnouncement.querySelector("textarea").value;
-        const sender = progressingCourse.teacherID;
-        const recipents = progressingCourse.students;
-        const type = 'course_announcement';
+        const senderID = pCourse.teacherID;
+        const receivers = pCourse.students;
+        const type = 'course';
         const router = `/teacher/course/${courseID}/announcement`
 
         try {
@@ -61,7 +61,7 @@
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ courseID, title, content, sender, recipents, type })
+                body: JSON.stringify({ courseID, title, content, senderID, receivers, type })
             });
 
             if (res.status >= 200 && res.status < 300) {
@@ -80,6 +80,7 @@
 <script>
     let announcements = '<%- JSON.stringify(announcements) %>';
     announcements = JSON.parse(announcements);
+    announcements = announcements.reverse();
 
     const announcementListed = document.querySelector(".announcement-listed ul");
 

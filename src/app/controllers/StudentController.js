@@ -19,15 +19,12 @@ class StudentController {
                 return res.status(404).json({ message: "Student not found" });
             }
 
-            // Fetch ProgressingCourses that include this student's ID
-            const progressingCourses = await ProgressingCourse.find({ students: student.studentID });
-            if (!progressingCourses.length) {
+            const pCourses = await ProgressingCourse.find({ students: student.studentID });
+            if (!pCourses.length) {
                 return res.render('student/index', { user, student, studentCourses: [], announcements: [] });
             }
-            const courses = await Course.find({ courseID: { $in: progressingCourses.map(c => c.courseID) } });
-
-            // Enrich progressing courses with course names and descriptions
-            const studentCourses = progressingCourses.map(pCourse => {
+            const courses = await Course.find({ courseID: { $in: pCourses.map(c => c.courseID) } });
+            const studentCourses = pCourses.map(pCourse => {
                 const course = courses.find(c => c.courseID === pCourse.courseID);
                 return {
                     ...pCourse._doc,
@@ -36,31 +33,29 @@ class StudentController {
                 };
             });
 
-            // Fetch announcements where the student is listed as a recipient
-            const announcements = await Announcement.find({ recipents: student.studentID });
-
+            const announcements = await Announcement.find({ receivers: student.studentID });
             if (!announcements.length) {
                 return res.render('student/index', { user, student, studentCourses, announcements: [] });
             }
 
-            // Match announcements to progressing courses and their associated courses
             const enrichedAnnouncements = announcements.map(announcement => {
-                const pCourse = progressingCourses.find(pc => pc._id.toString() === announcement.courseID);
+                const pCourse = pCourses.find(pc => pc._id.toString() === announcement.pCourseID);
                 const course = courses.find(c => c.courseID === pCourse?.courseID);
                 return {
                     ...announcement._doc,
-                    courseName: course?.name || null, // Add the name of the associated Course
-                    courseDescription: course?.description || null // Add the description of the associated Course
+                    courseName: course?.name || null,
+                    courseDescription: course?.description || null
                 };
             });
 
-            // Render the student dashboard with enriched data
             res.render('student/index', { user, student, studentCourses, announcements: enrichedAnnouncements });
         } catch (error) {
             console.error(error);
             res.status(500).send({ message: "An error occurred", error });
         }
     }
+
+    // GET /student/course/:_id
     async course_get(req, res, next) {
         const user = res.locals.user;
         const { _id } = req.params;
@@ -71,11 +66,11 @@ class StudentController {
             }
 
             // Current course
-            let progressingCourse = await ProgressingCourse.findById(_id);
-            const course = await Course.findOne({ courseID: progressingCourse.courseID });
-            progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
+            let pCourse = await ProgressingCourse.findById(_id);
+            const course = await Course.findOne({ courseID: pCourse.courseID });
+            pCourse = { ...pCourse._doc, courseName: course.name, courseDescription: course.description };
 
-            res.render('student/course', { user, student, progressingCourse });
+            res.render('student/course', { user, student, pCourse });
         } catch (error) {
             console.error(error);
             res.status(500).send({ message: "An error occurred", error });
@@ -92,13 +87,13 @@ class StudentController {
             }
 
             // Current course
-            let progressingCourse = await ProgressingCourse.findById(_id);
-            const course = await Course.findOne({ courseID: progressingCourse.courseID });
-            progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
+            let pCourse = await ProgressingCourse.findById(_id);
+            const course = await Course.findOne({ courseID: pCourse.courseID });
+            pCourse = { ...pCourse._doc, courseName: course.name, courseDescription: course.description };
 
-            const announcements = await Announcement.find({ courseID: progressingCourse._id });
+            const announcements = await Announcement.find({ pCourseID: pCourse._id, receivers: student.studentID });
 
-            res.render('student/course_announcement', { user, student, progressingCourse, announcements});
+            res.render('student/course_announcement', { user, student, pCourse, announcements});
         } catch {
             console.error(error);
             res.status(500).send({ message: "An error occurred", error });
@@ -114,14 +109,14 @@ class StudentController {
                 return res.status(404).json({ message: "Student not found" });
             }
 
-            // Current course
-            let progressingCourse = await ProgressingCourse.findById(_id);
-            const course = await Course.findOne({ courseID: progressingCourse.courseID });
-            progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
+            /// Current course
+            let pCourse = await ProgressingCourse.findById(_id);
+            const course = await Course.findOne({ courseID: pCourse.courseID });
+            pCourse = { ...pCourse._doc, courseName: course.name, courseDescription: course.description };
 
-            const materials = await Material.find({ courseID: progressingCourse._id });
+            const materials = await Material.find({ courseID: pCourse._id });
 
-            res.render('student/course_material', { user, student, progressingCourse, materials });
+            res.render('student/course_material', { user, student, pCourse, materials });
         } catch {
             console.error(error);
             res.status(500).send({ message: "An error occurred", error });
@@ -137,15 +132,15 @@ class StudentController {
                 return res.status(404).json({ message: "Student not found" });
             }
 
-            // Current course
-            let progressingCourse = await ProgressingCourse.findById(_id);
-            const course = await Course.findOne({ courseID: progressingCourse.courseID });
-            progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
+            /// Current course
+            let pCourse = await ProgressingCourse.findById(_id);
+            const course = await Course.findOne({ courseID: pCourse.courseID });
+            pCourse = { ...pCourse._doc, courseName: course.name, courseDescription: course.description };
 
             const material = await Material.findOne({ _id: mID });
             const materialFiles = await MaterialFile.find({ materialID: material._id });
 
-            res.render('student/course_material_display', { user, student, progressingCourse, material, materialFiles});
+            res.render('student/course_material_display', { user, student, pCourse, material, materialFiles});
         } catch {
             console.error(error);
             res.status(500).send({ message: "An error occurred", error });
@@ -161,14 +156,14 @@ class StudentController {
                 return res.status(404).json({ message: "Student not found" });
             }
 
-            // Current course
-            let progressingCourse = await ProgressingCourse.findById(_id);
-            const course = await Course.findOne({ courseID: progressingCourse.courseID });
-            progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description};
+            /// Current course
+            let pCourse = await ProgressingCourse.findById(_id);
+            const course = await Course.findOne({ courseID: pCourse.courseID });
+            pCourse = { ...pCourse._doc, courseName: course.name, courseDescription: course.description };
 
-            const teacher = await Teacher.findOne({ teacherID: progressingCourse.teacherID });
+            const teacher = await Teacher.findOne({ teacherID: pCourse.teacherID });
 
-            res.render('student/course_contact', { user, student, progressingCourse, teacher});
+            res.render('student/course_contact', { user, student, pCourse, teacher});
         } catch {
             console.error(error);
             res.status(500).send({ message: "An error occurred", error });
@@ -184,12 +179,12 @@ class StudentController {
                 return res.status(404).json({ message: "Student not found" });
             }
 
-            // Current course
-            let progressingCourse = await ProgressingCourse.findById(_id);
-            const course = await Course.findOne({ courseID: progressingCourse.courseID });
-            progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
+            /// Current course
+            let pCourse = await ProgressingCourse.findById(_id);
+            const course = await Course.findOne({ courseID: pCourse.courseID });
+            pCourse = { ...pCourse._doc, courseName: course.name, courseDescription: course.description };
 
-            res.render('student/course_homework', { user, student, progressingCourse});
+            res.render('student/course_homework', { user, student, pCourse});
         } catch {
             console.error(error);
             res.status(500).send({ message: "An error occurred", error });
@@ -205,12 +200,12 @@ class StudentController {
                 return res.status(404).json({ message: "Student not found" });
             }
 
-            // Current course
-            let progressingCourse = await ProgressingCourse.findById(_id);
-            const course = await Course.findOne({ courseID: progressingCourse.courseID });
-            progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
+            /// Current course
+            let pCourse = await ProgressingCourse.findById(_id);
+            const course = await Course.findOne({ courseID: pCourse.courseID });
+            pCourse = { ...pCourse._doc, courseName: course.name, courseDescription: course.description };
 
-            res.render('student/course_discussion', { user, student, progressingCourse});
+            res.render('student/course_discussion', { user, student, pCourse});
         } catch {
             console.error(error);
             res.status(500).send({ message: "An error occurred", error });
@@ -226,12 +221,12 @@ class StudentController {
                 return res.status(404).json({ message: "Student not found" });
             }
 
-            // Current course
-            let progressingCourse = await ProgressingCourse.findById(_id);
-            const course = await Course.findOne({ courseID: progressingCourse.courseID });
-            progressingCourse = { ...progressingCourse._doc, courseName: course.name, courseDescription: course.description };
+            /// Current course
+            let pCourse = await ProgressingCourse.findById(_id);
+            const course = await Course.findOne({ courseID: pCourse.courseID });
+            pCourse = { ...pCourse._doc, courseName: course.name, courseDescription: course.description };
 
-            res.render('student/course_grade', { user, student, progressingCourse});
+            res.render('student/course_grade', { user, student, pCourse});
         } catch {
             console.error(error);
             res.status(500).send({ message: "An error occurred", error });
@@ -272,7 +267,7 @@ class StudentController {
             if (!student) {
                 return res.status(404).json({ message: "Student not found" });
             }
-            const announcements = await Announcement.find({ recipents: student.studentID });
+            const announcements = await Announcement.find({ receivers: student.studentID });
 
             res.render('student/announcement', { user, student, announcements});
         } 

@@ -98,6 +98,7 @@
           <td><input type="reset" value="Reset"></td>
         </tr> 
         <tr>
+          <td><a href="/admin">Go to Home</a></td>
           <td><a href="/admin/announcement/send_to_teacher/list">Go to List</a></td>
         </tr>
       </table>
@@ -109,7 +110,6 @@
     const form = document.querySelector('.form-insert-announcement');
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const courseID = 'admin';
       const title = document.querySelector('#announcement_title').value;
       const content = document.querySelector('#announcement_content').value;
       const teacherIDs = [];
@@ -119,17 +119,17 @@
           teacherIDs.push(checkbox.value);
         }
       });
-      const sender = "<%= user.userID %>";
+      const senderID = "<%= user.userID %>";
 
       try {
         const res = await fetch('/admin/announcement/send_to_teacher', {
           method: 'POST',
-          body: JSON.stringify({ courseID, title, content, teacherIDs, sender }),
+          body: JSON.stringify({ title, content, teacherIDs, senderID }),
           headers: {'Content-Type': 'application/json'},
         });
 
         if (res.status >= 200 && res.status < 300) {
-          console.log("Request successful", res.responseText);
+          alert("Announcement has been sent to selected teachers");
           location.reload();
         } else {
           console.error("Request failed", res.statusText);

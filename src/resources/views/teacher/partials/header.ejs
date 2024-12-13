@@ -10,7 +10,7 @@
 
 <div class="course-name">
     <a href="">
-        <%= progressingCourse.courseName %>
+        <%= pCourse.courseName %>
     </a>
 </div>
 <main id="main-in-course">
@@ -19,27 +19,27 @@
                 <i class="fas fa-angles-left"></i>
             </div>
             <div class="dropdown-content">
-                <a href="/teacher/course/<%= progressingCourse._id %>/announcement" id="announcement-selected">
+                <a href="/teacher/course/<%= pCourse._id %>/announcement" id="announcement-selected">
                     <i class="fa-regular fa-bell"></i>
                     <span>Annoucement</span>
                 </a>
-                <a href="/teacher/course/<%= progressingCourse._id %>/material" id="material-selected">
+                <a href="/teacher/course/<%= pCourse._id %>/material" id="material-selected">
                     <i class="fa-regular fa-folder"></i>
                     <span>Material</span>
                 </a>
-                <a href="/teacher/course/<%= progressingCourse._id %>/contact" id="contact-selected">
+                <a href="/teacher/course/<%= pCourse._id %>/contact" id="contact-selected">
                     <i class="fa-regular fa-envelope"></i>
                     <span>Contact</span>
                 </a>
-                <a href="/teacher/course/<%= progressingCourse._id %>/homework" id="homework-selected">
+                <a href="/teacher/course/<%= pCourse._id %>/homework" id="homework-selected">
                     <i class="fas fa-tasks"></i>
                     <span>Homework</span>
                 </a>
-                <a href="/teacher/course/<%= progressingCourse._id %>/discussion" id="discussion-selected">
+                <a href="/teacher/course/<%= pCourse._id %>/discussion" id="discussion-selected">
                     <i class="fa-regular fa-comments"></i>
                     <span>Discussion</span>
                 </a>
-                <a href="/teacher/course/<%= progressingCourse._id %>/grade" id="grade-selected">
+                <a href="/teacher/course/<%= pCourse._id %>/grade" id="grade-selected">
                     <i class="fa-solid fa-marker"></i>
                     <span>Graded</span>
                 </a>

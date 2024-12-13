@@ -97,6 +97,7 @@
           <td><input type="reset" value="Reset"></td>
         </tr> 
         <tr>
+          <td><a href="/admin">Go to Home</a></td>
           <td><a href="/admin/announcement/send_to_student/list">Go to List</a></td>
         </tr>
       </table>
@@ -106,7 +107,7 @@
     const form = document.querySelector('.form-insert-announcement');
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const courseID = '675131e566d7d835b17c61a9'; // _id of admin course
+      const pCourseID = 'admin'; // _id of admin course
       const title = document.querySelector('#announcement_title').value;
       const content = document.querySelector('#announcement_content').value;
       const studentIDs = [];
@@ -116,16 +117,16 @@
           studentIDs.push(checkbox.value);
         }
       });
-      const sender = "<%= user.userID %>";
+      const senderID = "<%= user.userID %>";
       try {
         const res = await fetch('/admin/announcement/send_to_student', {
           method: 'POST',
-          body: JSON.stringify({ courseID, title, content, studentIDs, sender }),
+          body: JSON.stringify({ pCourseID, title, content, studentIDs, senderID }),
           headers: {'Content-Type': 'application/json'},
         });
 
         if (res.status >= 200 && res.status < 300) {
-          console.log("Request successful", res.responseText);
+          alert('Announcement inserted successfully');
           location.reload();
         } else {
           console.error("Request failed", res.statusText);
