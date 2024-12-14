@@ -113,7 +113,7 @@
 </section>
 <section class="new-form new-discussion-form">
     <div class="form-container">
-        <form action="">
+        <form action = "teacher/course/<%=pCourse._id%>/discussion" method="POST" enctype="multipart/form-data">
             <div class="exit-btn" id="exit-discussion">
                 <i class="fas fa-times"></i>
             </div>
@@ -126,9 +126,9 @@
             <label for="title">Title</label>
             <input type="text" name="title" id="" placeholder="Title of discussion (Ex: Discussion 1)" required>
             <label for="description">Topic</label>
-            <textarea placeholder="Type the topic here..."></textarea>
-            <label for="deadline">Deadline</label>
-            <input type="datetime-local" name="deadline" id="deadline" required>
+            <input type="text" name="topic" id="" placeholder="Topic of discussion " required>
+            <label for="description">Description</label>
+            <textarea placeholder="Type the description here..."></textarea>
             <label for="file">File</label>
             <label for="file-upload-discussion" id="add-btn">Browse Local File</label>
             <input type="file" name="file" id="file-upload-discussion" multiple placeholder="Upload yourfile">
@@ -231,4 +231,38 @@
         </form>
     </div>
 </section>
+<script> 
+    let pCourse = '<%- JSON.stringify(pCourse) %>';
+    pCourse = JSON.parse(pCourse);
+    // Get the form container and form
+    const formContainer = document.querySelector('.form-container');
+    const form = formContainer.querySelector('form');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const pCourseID = pCourse._id;
+        const topic = form.querySelector('input[name="topic"]').value;
+        const description = form.querySelector('textarea').value;
+        const title = form.querySelector('input[name="title"]').value;
+        const files = form.querySelector('input[type="file"]').files;
+        const formData = new FormData(e.target);
+
+        formData.append('description', description);
+        formData.append('pCourseID', pCourseID);
+        try {
+            const res = await fetch(`/teacher/course/${pCourse._id}/discussion`, {
+                method: 'POST',
+                body: formData,
+            });
+            console.log(res);
+            const data = await res.json();
+            if(res.status >= 200 && res.status < 300) {
+                location.reload();
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    });
+</script>
 <%- include('./partials/footer.ejs'); -%>
