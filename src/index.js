@@ -4,8 +4,9 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan')
 const route = require('./routes/index')
-
 const dotenv = require('dotenv');
+
+
 dotenv.config();
 
 const app = express();
@@ -32,6 +33,36 @@ route(app)
 mongoose.connect(process.env.MONGO_DB)
   .then((result) => {
     console.log('Connected to MongoDB: http://localhost:3000');
-    app.listen(process.env.PORT)
+    const server = app.listen(process.env.PORT)
+
+    const io = require('socket.io')(server)
+
+    var usp = io.of('/user')
+    usp.on('connection', onConnected)
+    // io.on('connection', onConnected)
+    function onConnected(socket) {
+      console.log('Socket connected')
+      // socketsConected.add(socket.id)
+      // io.emit('clients-total', socketsConected.size)
+    
+      socket.on('disconnect', () => {
+        console.log('Socket disconnected')
+        // socketsConected.delete(socket.id)
+        // io.emit('clients-total', socketsConected.size)
+      })
+    
+      // socket.on('message', (data) => {
+      //   // console.log(data)
+      //   socket.broadcast.emit('chat-message', data)
+      // })
+    
+      // socket.on('feedback', (data) => {
+      //   socket.broadcast.emit('feedback', data)
+      // })
+    }
+
   })
   .catch((err) => console.log(err));
+
+
+

@@ -2,8 +2,13 @@ const express = require('express');
 const teacherController = require('../app/controllers/TeacherController');
 const { requireAuthZ } = require('../app/middlewares/authZ');
 const { checkUser } = require('../app/middlewares/authN');
-const router = express.Router()
-const multer  = require('multer')
+const router = express.Router();
+const multer  = require('multer');
+
+
+
+
+
 
 router.use(checkUser);
 
@@ -58,10 +63,11 @@ router.get('/course/:_id/homework/:hID', requireAuthZ('teacher'), teacherControl
 router.get('/course/:_id/homework/delete/:_id', requireAuthZ('teacher'), teacherController.teacher_delete_homework);
 router.put('/course/:_id/homework/edit/:hID', cpUpload, requireAuthZ('teacher'), teacherController.teacher_edit_homework);
 
-router.get('/course/:_id/discussion', requireAuthZ('teacher'), teacherController.discussion_get);
+router.get('/course/:_id/discussion/:dID', requireAuthZ('teacher'), teacherController.discussion_get);
 router.post('/discussion',cpUpload, requireAuthZ('teacher'), teacherController.discussion_post);
 router.get('/discussion', requireAuthZ('teacher'), teacherController.discussion_all_get);
 router.post('/course/:_id/discussion',cpUpload, requireAuthZ('teacher'), teacherController.discussion_post);
+router.post('/course/:_id/discussion/:dID', requireAuthZ('teacher'), teacherController.discussion_save_chat);
 
 router.get('/grade', requireAuthZ('teacher'), teacherController.grade_all_get);
 router.get('/course/:_id/grade', requireAuthZ('teacher'), teacherController.grade_get);
