@@ -6,20 +6,20 @@
     <div class="homework-information">
         <div class="homework-description">
             <h3>Description</h3>
-            <p>Write a program that reads a string from the user containing a date in the form mm/dd/yyyy. It should print the date in the form March 12, 2014.</p>
+            <p></p>
         </div>
         <div class="homework-due">
             <h3>Due Date</h3>
-            <p>2025-09-30</p>
+            <p></p>
         </div>
         <div class="homework-attachment">
             <h3>Attachment</h3>
-            <a href="#">Homework 1</a>
+            
         </div>
     </div>
     <div class="homework-submission">
         <h3>Submission</h3>
-        <form action="/student/course/<%= homework.pCourseID %>/homework/<%= homework._id %>" method="POST" class="homework-submission-form" enctype="multipart/form-data">
+        <form action="/student/course/<%= homework.pCourseID %>/homework/<%= homework._id %>" method="POST" class="homework-submission-form" enctype="multipart/form-data" >
             <label for="writing-submission">Writing Submission</label>
             <textarea name="submission" id="writing-submission" cols="30" rows="10" placeholder="Writing the submission"></textarea>
             <label for="upload-submission">Upload Submission</label>
@@ -74,6 +74,28 @@
         </form>
     </div>
 </section>
+<script>
+    let hDetail = '<%- JSON.stringify(homework).replace(/\\/g, "\\\\") %>';
+        hDetail = JSON.parse(hDetail);
+    const homeworkTitle = document.querySelector('.homework-title');
+    const homeworkDescription = document.querySelector('.homework-description p');
+    const homeworkDue = document.querySelector('.homework-due p');
+    const homeworkAttachment = document.querySelector('.homework-attachment');
+    
+    homeworkTitle.textContent = hDetail.title;
+    homeworkDescription.textContent = hDetail.description;
+    homeworkDue.textContent = new Date(hDetail.dueDate).toLocaleDateString();
+    hDetail.files.forEach(file => {
+        const div = document.createElement('div');
+        div.classList.add('homework-file');
+        const a = document.createElement('a');
+        a.href = file.filePath;
+        a.textContent = file.fileName;
+        div.appendChild(a);
+        homeworkAttachment.appendChild(div);
+    });
+
+</script>
 <script> 
     let homework = '<%- JSON.stringify(homework).replace(/\\/g, "\\\\") %>';
         homework = JSON.parse(homework);

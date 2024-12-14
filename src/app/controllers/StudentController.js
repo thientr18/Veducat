@@ -192,7 +192,12 @@ class StudentController {
             pCourse = { ...pCourse._doc, courseName: course.name, courseDescription: course.description };
 
             const homeworks = await Task.find({pCourseID: pCourse._id})
+            const homeworkForStudent = await TaskforStudent.find({studentID: student.studentID});
 
+            for (let i = 0; i < homeworks.length; i++) {
+                let status = homeworkForStudent.find(h => h.taskID.toString() === homeworks[i]._id.toString());
+                homeworks[i] = {...homeworks[i]._doc, status: status?.status || 'Not Submitted'};
+            }
             res.render('student/course_homework', { user, student, pCourse, homeworks});
         } catch {
             console.error(error);
@@ -213,10 +218,14 @@ class StudentController {
             const course = await Course.findOne({ courseID: pCourse.courseID });
             pCourse = { ...pCourse._doc, courseName: course.name, courseDescription: course.description };
 
+            const taskforStudent = await TaskforStudent.findOne({ taskID: hID, studentID: student.studentID });
             const homework = await Task.findOne({ _id: hID });
             const homeworkFiles = await TaskFile.find({ taskID: homework._id });
-
-            res.render('student/course_homework_display', { user, student, pCourse, homework,homeworkFiles});
+            if (taskforStudent.status === 'Submitted') {
+                return res.redirect(`/student/course/${_id}/homework/${hID}/submission`);
+            } else {
+                res.render('student/course_homework_display', { user, student, pCourse, homework,homeworkFiles});
+            }
         } catch {
             console.error(error);
             res.status(500).send({ message: "An error occurred", error });
@@ -229,7 +238,7 @@ class StudentController {
         const files = req.files;
 
         upload(req, res, async (err) => {
-
+            console.log("hello1")
             try {
                 const student = await Student.findOne({ studentID: user.userID });
                 const homework = await Task.findOne({ _id: hID });
@@ -244,6 +253,7 @@ class StudentController {
                         description : description,
                     });
                     await TaskforStudent.updateOne({taskID: hID, studentID: student.studentID}, {status: 'Submitted'});
+
                 } else{
 
                     const submission = await Submission.create({
@@ -254,7 +264,6 @@ class StudentController {
                     });
 
                     await TaskforStudent.updateOne({taskID: hID, studentID: student.studentID}, {status: 'Submitted'});
-
                     const uploadFiles = files.file.map(file => ({
                         submissionID: submission._id,
                         fileName: file.originalname,
@@ -262,6 +271,7 @@ class StudentController {
                         fileType: file.mimetype,
                         fileSize: file.size,
                     }));
+                    console.log(uploadFiles)
                     await SubmissionFiles.create(uploadFiles);
                 }                
                 res.status(201).json({ message: "Homework submitted" });
@@ -271,6 +281,39 @@ class StudentController {
         });
     }
 
+    async homework_submission_get(req, res, next) {
+        const user = res.locals.user;
+        const { _id, hID } = req.params;
+        try {
+            const student = await Student.findOne({ studentID: user.userID });
+            if (!student) {
+                return res.status(404).json({ message: "Student not found" });
+            }
+
+            // Current course
+            let pCourse = await ProgressingCourse.findById(_id);
+            const course = await Course.findOne({ courseID: pCourse.courseID });
+            pCourse = { ...pCourse._doc, courseName: course.name, courseDescription: course.description };
+
+            const homework = await Task.findOne({ _id: hID });
+            const submission = await Submission.findOne({ taskID: hID, studentID: student.studentID });
+            const homeworkFiles = await TaskFile.find({ taskID: homework._id });
+
+            const taskForStudent = await TaskforStudent.findOne({ taskID: hID, studentID: student.studentID });
+            console.log(taskForStudent)
+            if (taskForStudent.status !== 'Submitted') {
+                return res.render('student/course_homework_display', { user, student, pCourse, homework, homeworkFiles });
+            } else {
+                const submissionFiles = await SubmissionFiles.find({ submissionID: submission._id });
+                const submissionDetails = { ...submission._doc, submissionFiles };
+
+                res.render('student/course_homework_submitted', { user, student, pCourse, submissionDetails, homework });
+            }
+        } catch {
+            console.error(error);
+            res.status(500).send({ message: "An error occurred", error });
+        }
+    }
 
     async discussion_get(req, res, next) {
         const user = res.locals.user;
@@ -321,7 +364,23 @@ class StudentController {
             if (!student) {
                 return res.status(404).json({ message: "Student not found" });
             }
-            res.render('student/task', { user, student});
+            const pCourses = await ProgressingCourse.find({ students: student.studentID });
+            const courses = await Course.find({ courseID: { $in: pCourses.map(c => c.courseID) } });
+            
+            const tasks = await Task.find({ pCourseID: { $in: pCourses.map(c => c._id) } });
+            const taskForStudent = await TaskforStudent.find({ studentID: student.studentID });
+
+            for (let i = 0; i < tasks.length; i++) {
+                let status = taskForStudent.find(h => h.taskID.toString() === tasks[i]._id.toString());
+                let pCourse = pCourses.find(c => c._id.toString() === tasks[i].pCourseID.toString());
+                let course = courses.find(c => c.courseID === pCourse.courseID);
+                tasks[i] = {...tasks[i]._doc, 
+                    status: status?.status || 'Not Submitted',
+                    courseName: course?.name || null,
+                };
+            }
+
+            res.render('student/task', { user, student, tasks });
         } catch (error) {
             console.error(error);
             res.status(500).send({ message: "An error occurred", error });
@@ -408,6 +467,7 @@ const upload = multer({
         }
     }
 }).array('files', 10);
+
 
 module.exports = new StudentController();
 

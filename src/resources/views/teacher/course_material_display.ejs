@@ -1,7 +1,7 @@
 <%- include('./partials/header.ejs'); -%>
 <section class="material-detail">
     <div class="material-title">
-        <h2><%= material.title %></h2>
+        <h2> </h2>
         <div class="bar-menu" id="bar-menu">
             <i class="fas fa-ellipsis"></i>
             <div class="dropdown-content hide" id="dropdown-option">
@@ -34,11 +34,10 @@
     let files = '<%- JSON.stringify(files).replace(/\\/g, "\\\\") %>';
         files = JSON.parse(files);
         
-        const materialHeader = document.querySelector('.material-header');
-        const materialTitle = document.querySelector('.material-title');
+        const materialTitle = document.querySelector('.material-title h2');
         const materialDescription = document.querySelector('.material-description p');
         const materialDue = document.querySelector('.material-due p');
-        const materialAttachment = document.querySelector('.material-attachment');
+        const materialAttachment = document.querySelector('.material-contents');
         materialTitle.textContent = material.title;
         materialDescription.textContent = material.description;
         files.forEach(file => {

@@ -19,21 +19,21 @@
     </div>
 </section>
 <script>
-    let homeworks = '<%- JSON.stringify(homeworks).replace(/\\/g, "\\\\") %>';
-        homeworks = JSON.parse(homeworks);
+    let tasks = '<%- JSON.stringify(homeworks).replace(/\\/g, "\\\\") %>';
+        tasks = JSON.parse(tasks);
     let pCourse = '<%- JSON.stringify(pCourse) %>';
         pCourse = JSON.parse(pCourse);
 
     const homeworkListed = document.querySelector('.homework-listed ul');
 
-    homeworks.forEach(homework => {
-        const hID = homework._id;
+    tasks.forEach(task => {
+        const hID = task._id;
         const li = document.createElement('li');
         li.innerHTML = `
             <a href="/teacher/course/${pCourse._id}/homework/${hID}" class="title-book">
-                ${homework.title}
+                ${task.title}
                 <span>
-                    Deadline: ${new Date(homework.dueDate).toLocaleDateString()}
+                    Deadline: ${new Date(task.dueDate).toLocaleDateString()}
                 </span>
             </a>
         `;

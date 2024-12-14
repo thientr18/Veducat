@@ -8,12 +8,26 @@
     </div>
     <div class="homework-listed">
         <ul>
-            <!-- <li>
-                <a href="">
-                    <div class="homework-name">Homework 3: JavaScript</div>
-                </a>
-            </li> -->
+            
         </ul>
     </div>
 </section>
+<script>
+    let tasks = '<%- JSON.stringify(tasks).replace(/\\/g, "\\\\") %>';
+    let progressingCourse = '<%- JSON.stringify(pCourse) %>';
+    tasks = JSON.parse(tasks);
+    progressingCourse = JSON.parse(progressingCourse);
+
+    const homeworkListed = document.querySelector('.homework-listed ul');
+    tasks.forEach(task => {
+        const hID = task._id;
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <a href="/teacher/course/${progressingCourse._id}/homework/${hID}/grade" class="title-book">
+                ${task.title}
+            </a>
+        `;
+        homeworkListed.appendChild(li);
+    });
+</script>
 <%- include('./partials/footer.ejs'); -%>

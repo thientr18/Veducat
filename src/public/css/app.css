@@ -41,6 +41,10 @@ ul li p {
   color: var(--href-color);
   font-weight: bold; }
 
+.fa-file-pdf {
+  color: var(--red-color);
+  padding-right: 1rem; }
+
 .header {
   position: fixed;
   top: 0;
@@ -338,7 +342,8 @@ ul li p {
   width: 100%;
   border: solid 0.1rem var(--primary-color);
   border-radius: 1rem;
-  background-color: var(--secondary-color); }
+  background-color: var(--secondary-color);
+  box-shadow: 0 0.5rem 1rem 0.1rem var(--primary-color); }
 
 .display-area .course-announcement, .course-material, .course-contact, .course-homework, .course-graded, .homework-detail, .material-detail {
   display: block; }
@@ -351,7 +356,7 @@ ul li p {
   cursor: pointer;
   padding: 0.1rem;
   background-color: var(--primary-color);
-  border-radius: 0.5rem; }
+  border-radius: 0.5rem 0.5rem 0 0; }
 
 .announcement-listed ul {
   list-style: none;
@@ -671,7 +676,7 @@ ul li p {
 .homework-status.x {
   color: var(--red-color); }
 
-.homework-status.tick {
+.homework-status .fa-check {
   color: var(--green-color); }
 
 .course-discussion, .course-discussions {
@@ -1200,6 +1205,9 @@ ul li p {
 .student-submission-list {
   padding: 1rem; }
 
+.student-submission-list table {
+  width: 100%; }
+
 .student-submission-list table, .student-submission-list th, .student-submission-list td {
   border: 0.2rem solid var(--primary-color);
   border-collapse: collapse;
@@ -1219,11 +1227,41 @@ ul li p {
   width: 5rem;
   height: 5rem; }
 
-td.id, td.fullname {
+td.id {
+  width: 10rem;
   text-align: center;
   max-width: 10rem;
   overflow: hidden;
   word-wrap: break-word; }
+
+td.fullname {
+  width: 15rem;
+  text-align: center;
+  max-width: 20rem;
+  overflow: hidden;
+  word-wrap: break-word; }
+
+th.writing, td.writing {
+  width: calc(100% - 50rem); }
+
+td.attach {
+  width: 10rem;
+  text-align: center;
+  max-width: 10rem;
+  overflow: hidden;
+  word-wrap: break-word; }
+
+td.time-submission {
+  width: 10rem;
+  text-align: center;
+  max-width: 10rem;
+  overflow: hidden;
+  word-wrap: break-word; }
+
+td.grading {
+  width: 8rem;
+  text-align: center;
+  max-width: 10rem; }
 
 .homework-container {
   display: flex;
