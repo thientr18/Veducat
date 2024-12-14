@@ -104,6 +104,11 @@
           body: JSON.stringify({ courseID, teacherID, studentIDs }),
           headers: { 'Content-Type': 'application/json' },
         });
+
+        if (res.status >= 200 || res.status < 300) {
+          alert('Progressing course inserted successfully.');
+          location.reload();
+        }
       } catch (error) {
         console.error(error);
       }

@@ -34,29 +34,23 @@ const cpUpload = upload.fields([{ name: 'file', maxCount: 10 }])
 
 
 // GET /student
-
-router.get('/course/:_id/', requireAuthZ('student'), studentController.course_get);
+router.get('/grade', requireAuthZ('student'), studentController.grade_all_get);
+router.get('/discussion', requireAuthZ('student'), studentController.discussion_all_get);
 router.get('/homework/task', requireAuthZ('student'), studentController.task_get);
-router.get('/', requireAuthZ('student'), studentController.index_get);
+router.get('/announcement', requireAuthZ('student'), studentController.announcement_all_get);
 router.get('/profile', requireAuthZ('student'), studentController.profile_get);
-router.get('/course/:_id/contact', requireAuthZ('student'), studentController.contact_get);
 
 router.get('/course/:_id/announcement', requireAuthZ('student'), studentController.announcement_get);
-router.get('/announcement', requireAuthZ('student'), studentController.announcement_all_get);
-
-router.get('/course/:_id/material', requireAuthZ('student'), studentController.material_get);
-router.get('/course/:_id/material/:mID', requireAuthZ('student'), studentController.material_detail_get);
-
-router.get('/course/:_id/homework/:hID', requireAuthZ('student'), studentController.homework_detail_get);
-router.get('/course/:_id/homework/:hID/submission', requireAuthZ('student'), studentController.homework_submission_get);
-router.get('/course/:_id/homework', requireAuthZ('student'), studentController.homework_get);
-router.post('/course/:_id/homework/:hID', cpUpload, requireAuthZ('student'), studentController.homework_submit_post);
-
-
-router.get('/course/:_id/discussion', requireAuthZ('student'), studentController.discussion_get);
-router.get('/discussion', requireAuthZ('student'), studentController.discussion_all_get);
-
-router.get('/grade', requireAuthZ('student'), studentController.grade_all_get);
+router.get('/course/:_id/contact', requireAuthZ('student'), studentController.contact_get);
 router.get('/course/:_id/grade', requireAuthZ('student'), studentController.grade_get);
+router.get('/course/:_id/discussion', requireAuthZ('student'), studentController.discussion_get);
+router.get('/course/:_id/material/:mID', requireAuthZ('student'), studentController.material_detail_get);
+router.get('/course/:_id/material', requireAuthZ('student'), studentController.material_get);
+router.get('/course/:_id/homework/:hID/submission', requireAuthZ('student'), studentController.homework_submission_get);
+router.get('/course/:_id/homework/:hID', requireAuthZ('student'), studentController.homework_detail_get);
+router.post('/course/:_id/homework/:hID', cpUpload, requireAuthZ('student'), studentController.homework_submit_post);
+router.get('/course/:_id/homework', requireAuthZ('student'), studentController.homework_get);
+router.get('/course/:_id/', requireAuthZ('student'), studentController.course_get);
+router.get('/', requireAuthZ('student'), studentController.index_get);
 
 module.exports = router;
