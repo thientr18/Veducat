@@ -6,6 +6,10 @@ const discussionSchema = new mongoose.Schema({
         required: [true, 'Please enter a course ID'],
         lowercase: true
     },
+    title:{
+        type: 'string',
+        required: [true, 'Please enter a title']
+    },
     topic: {
         type: 'string',
         required: [true, 'Please enter a topic']
@@ -13,20 +17,25 @@ const discussionSchema = new mongoose.Schema({
     description: {
         type: 'string',
     },
-    participants: {
-        type: Array,
-        default: [
-            {
-                participantID: {
-                    type: 'string',
-                    // required: [true, 'Please enter a participant ID'],
-                    lowercase: true
-                },
-                joined: {
-                    default: false,
-                }
-            }
-        ],
+    // participants: {
+    //     type: Array,
+    //     default: [
+    //         {
+    //             participantID: {
+    //                 type: 'string',
+    //                 // required: [true, 'Please enter a participant ID'],
+    //                 lowercase: true
+    //             },
+    //             joined: {
+    //                 default: false,
+    //             }
+    //         }
+    //     ],
+    // },
+    uploadedBy: {
+        type: 'string',
+        required: [true, 'Please enter a user ID'],
+        lowercase: true,
     },
     createdAt: {
         type: Date,

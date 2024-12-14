@@ -13,17 +13,17 @@
             <div class="content-list">
                 <section class="new-homework-form">
                     <div class="form-container">
-                        <form action="/teacher/course/<%= pCourse._id %>/discussion"method="POST" enctype="multipart/form-data">
-                            <h2>Create Discussion Form</h2>
+                        <form action = "teacher/discussion" method="POST" enctype="multipart/form-data">
+                            <h2>Create Discussion Form </h2>
                             <label for="course">Select your course</label>
                             <select name="course" id="course" required>
                             </select>
+                            <label for="title">Title</label>
+                            <input type="text" name="title" id="" placeholder="Title of discussion" required>
                             <label for="title">Topic</label>
                             <input type="text" name="topic" id="" placeholder="Topic of the discussion" required>
                             <label for="description">Description</label>
                             <textarea placeholder="Type the description here..."></textarea>
-                            <label for="deadline">Deadline</label>
-                            <input type="datetime-local" name="deadline" id="deadline" required>
                             <label for="file">File</label>
                             <label for="file-upload-homework" id="add-btn">Browse Local File</label>
                             <input type="file" name="file" id="file-upload-homework" multiple placeholder="Upload yourfile">
@@ -81,9 +81,6 @@
         });
     </script>
     <script> 
-
-        let pCourse = '<%- JSON.stringify(pCourse) %>';
-            pCourse = JSON.parse(pCourse);
         // Get the form container and form
         const formContainer = document.querySelector('.form-container');
         const form = formContainer.querySelector('form');
@@ -94,19 +91,18 @@
             const pCourseID = form.querySelector('select[name="course"]').value;
             const topic = form.querySelector('input[name="topic"]').value;
             const description = form.querySelector('textarea').value;
-            const deadline = form.querySelector('input[name="deadline"]').value;
+            const title = form.querySelector('input[name="title"]').value;
             const files = form.querySelector('input[type="file"]').files;
             const formData = new FormData(e.target);
 
             formData.append('description', description);
-            for(items of formData.entries()){
-                console.log(items);
-            }
+            formData.append('pCourseID', pCourseID);
             try {
-                const res = await fetch(`/teacher/course/${pCourseID}/discussion`, {
+                const res = await fetch(`/teacher/discussion`, {
                     method: 'POST',
                     body: formData,
                 });
+                console.log(res);
                 const data = await res.json();
                 if(res.status >= 200 && res.status < 300) {
                     location.reload();

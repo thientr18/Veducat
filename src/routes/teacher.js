@@ -56,10 +56,10 @@ router.post('/course/:_id/homework', cpUpload, requireAuthZ('teacher'), teacherC
 router.get('/homework/task', requireAuthZ('teacher'), teacherController.tasks_get);
 router.get('/course/:_id/homework/:hID', requireAuthZ('teacher'), teacherController.homework_detail_get);
 router.get('/course/:_id/homework/delete/:_id', requireAuthZ('teacher'), teacherController.teacher_delete_homework);
-router.put('/course/:_id/homework/edit/:_id', cpUpload, requireAuthZ('teacher'), teacherController.teacher_edit_homework);
+router.put('/course/:_id/homework/edit/:hID', cpUpload, requireAuthZ('teacher'), teacherController.teacher_edit_homework);
 
 router.get('/course/:_id/discussion', requireAuthZ('teacher'), teacherController.discussion_get);
-router.post('/course/:_id/discussion', requireAuthZ('teacher'), teacherController.discussion_post);
+router.post('/discussion',cpUpload, requireAuthZ('teacher'), teacherController.discussion_post);
 router.get('/discussion', requireAuthZ('teacher'), teacherController.discussion_all_get);
 
 router.get('/grade', requireAuthZ('teacher'), teacherController.grade_all_get);

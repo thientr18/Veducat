@@ -11,6 +11,7 @@ const Student = require('../models/Student');
 const TaskforStudent = require('../models/TaskforStudent');
 const multer = require('multer');
 const Discussion = require('../models/Discussion');
+const DiscussionFile = require('../models/DiscussionFile');
 
 class TeacherController {
 
@@ -207,7 +208,7 @@ class TeacherController {
     async discussion_post (req, res, next) {
         const user = res.locals.user;
         const { _id } = req.params;
-        const {pCourseID, topic, description, deadline,} = req.body;
+        const {pCourseID, topic, description,title} = req.body;
         const files = req.files;
 
         upload(req, res, async (err) => {
@@ -221,29 +222,32 @@ class TeacherController {
                 if(files.file == null){
                     await Discussion.create({
                         pCourseID : pCourseID,
+                        title : title,
                         topic: topic,
                         description : description,
                         uploadedBy: teacher.teacherID,
                     });
-
                 } else{
                     const discussion = await Discussion.create({
                         pCourseID : pCourseID,
+                        title : title,
                         topic: topic,
                         description : description,
                         uploadedBy: teacher.teacherID,
                     });
+                    
                     const uploadFiles = files.file.map(file => ({
-                        materialID: material._id,
-                        materialName: title,
+                        discussionID: discussion._id,
+                        discussionTopic: topic,
                         fileName: file.originalname,
                         filePath: file.path,
                         fileType: file.mimetype,
                         fileSize: file.size,
                     }));
-                    await MaterialFile.create(uploadFiles);
+                    await DiscussionFile.create(uploadFiles);
                 }                
-                res.status(201).json({ message: "Material uploaded successfully" });
+                res.status(201).json({ message: "Dicussion uploaded successfully" });
+
             } catch (error) {
                 res.status(500).json({ message: error.message });
             }
@@ -536,6 +540,7 @@ class TeacherController {
                         taskType: "homework",
                         dueDate: deadline,
                         assignedBy: teacher.teacherID,
+                        createdAt: Date.now(),
                     });
                     console.log(students);
                     students.forEach(async student => {
@@ -550,6 +555,7 @@ class TeacherController {
                         taskType: "homework",
                         dueDate: deadline,
                         assignedBy: teacher.teacherID,
+                        createdAt: Date.now(),
                     });
                     students.forEach(async student => {
                         await TaskforStudent.create({
@@ -593,27 +599,32 @@ class TeacherController {
 
     // put /course/:_id/homework/edit/:_id
     async teacher_edit_homework(req, res) {
-        const { _id } = req.params;
-        const {title, description,dueDate} = req.body;
+        const { _id,hID } = req.params;
+        const {title, description,deadline} = req.body;
         const files = req.files;
+
+        console.log(files, title, description, deadline);
 
         upload(req, res, async (err) => {
             try {
-                const homework = await Task.findById( _id);
+                const homework = await Task.findById( hID);
+                console.log(homework);
                 if(files.file == null){
                     await Task.updateOne(
-                        {_id : _id},
+                        {_id : hID},
                         {title : title,
                         description : description,
-                        dueDate: dueDate}
+                        dueDate: deadline,
+                        updateAt: Date.now()}
                     );
-                    await TaskFile.deleteMany({ TaskID: homework._id });
+                    await TaskFile.deleteMany({ taskID: homework._id });
                 } else{
                     await Task.updateOne(
-                        {_id : _id},
+                        {_id : hID},
                         {title : title,
                         description : description,
-                        dueDate: dueDate}
+                        dueDate: deadline,
+                        updateAt: Date.now()}
                     );
                     const uploadFiles = files.file.map(file => ({
                         taskID: homework._id,
@@ -623,7 +634,7 @@ class TeacherController {
                         fileType: file.mimetype,
                         fileSize: file.size,
                     }));
-                    await TaskFile.deleteMany({ TaskID: homework._id });
+                    await TaskFile.deleteMany({ taskID: homework._id });
                     await TaskFile.create(uploadFiles);
                 }               
                 res.status(201).json({ message: "Homework uploaded successfully" });
