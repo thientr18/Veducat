@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const sendAnnouncementEmail = require('../utilitis/sendMail');
 const Teacher = require('../models/Teacher');
 const Course = require('../models/Course');
 const ProgressingCourse = require('../models/ProgressingCourse');
@@ -113,7 +114,12 @@ class TeacherController {
         senderID = senderID.toLowerCase();
         receivers = receivers.map(receiver => receiver.toLowerCase());
         try {
-            await Announcement.create({ pCourseID: courseID, title, content, sender, recipents, type });
+            const announcement = await Announcement.create({ pCourseID, title, content, senderID, receivers, type: "course" });
+            const pCourse = await ProgressingCourse.findById(pCourseID);
+            const course = await Course.findOne({ courseID: pCourse.courseID });
+            const cName = course.name;
+            const students = await Student.find({ studentID: { $in: receivers } });
+            sendAnnouncementEmail(students, cName, announcement);
             res.status(201).json({ message: "Announcement created successfully" });
         } catch (error) {
             res.status(500).json({ message: error.message });

@@ -59,7 +59,7 @@
             console.log(announcement);
             const li = document.createElement('li');
             const a = document.createElement('a');
-            a.href = `/student/course/${announcement.courseID}/announcement`;
+            a.href = `/student/course/${announcement.pCourseID}/announcement`;
             a.textContent = `${announcement.courseName}: ${announcement.title}`;
             li.appendChild(a);
             announcementUl.appendChild(li);

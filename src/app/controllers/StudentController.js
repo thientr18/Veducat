@@ -55,6 +55,8 @@ class StudentController {
                 };
             });
 
+            console.log(enrichedAnnouncements);
+
             res.render('student/index', { user, student, studentCourses, announcements: enrichedAnnouncements });
         } catch (error) {
             console.error(error);
@@ -101,7 +103,7 @@ class StudentController {
             const announcements = await Announcement.find({ pCourseID: pCourse._id, receivers: student.studentID });
 
             res.render('student/course_announcement', { user, student, pCourse, announcements});
-        } catch {
+        } catch (error) {
             console.error(error);
             res.status(500).send({ message: "An error occurred", error });
         }
@@ -226,7 +228,7 @@ class StudentController {
             } else {
                 res.render('student/course_homework_display', { user, student, pCourse, homework,homeworkFiles});
             }
-        } catch {
+        } catch (error) {
             console.error(error);
             res.status(500).send({ message: "An error occurred", error });
         }
