@@ -16,7 +16,7 @@ const DiscussionFile = require('../models/DiscussionFile');
 const Submission = require('../models/Submission');
 const SubmissionFile = require('../models/SubmissionFiles');
 const Message = require('../models/Message');
-
+const Grade = require('../models/Grade');
 class TeacherController {
 
     // GET /teacher
@@ -393,6 +393,7 @@ class TeacherController {
                     ...sub._doc,
                     studentName: student?.name || null,
                     studentID: student?.studentID || null,
+                    submissionID: sub._id,
                     files
                 };
             }));
@@ -402,6 +403,59 @@ class TeacherController {
             res.status(500).json({ message: error.message });
         }
     }
+    // POST /teacher/course/:_id/homework/:hID/grade
+    async grade_post (req, res, next) {
+        const user = res.locals.user;
+        const { _id, hID } = req.params;
+        const grade = req.body;
+        try {
+            const teacher = await Teacher.findOne({ teacherID: user.userID });
+            if (!teacher) {
+                return res.status(404).json({ message: "Teacher not found" });
+            }
+            const pCourse = await ProgressingCourse.findById(_id);
+            const homework = await Task.findById(hID);
+            grade.grades.forEach(async ({ submissionID, studentID, grade }) => {
+                const presentGrade = await Grade.findOne({ submissionID: submissionID });
+                if (presentGrade) {
+                    await Grade.updateOne({ submissionID: submissionID }, { grade: grade });
+                }else{
+                    await Grade.create({ 
+                        submissionID: submissionID, 
+                        taskID: hID,
+                        studentID, studentID,
+                        grade: grade,
+                        gradedBy: teacher.teacherID,
+                        createdAt: Date.now(),});
+                    await Submission.updateOne({ _id: submissionID }, { graded: true });
+                }
+            });
+            res.status(201).json({ message: "Homework uploaded successfully" });
+           
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+    async grade_completed (req, res, next) {
+        const user = res.locals.user;
+        const { _id, hID } = req.params;
+
+        try {
+            const teacher = await Teacher.findOne({ teacherID: user.userID });
+
+            let pCourse = await ProgressingCourse.findById(_id)
+            const course = await Course.findOne({ courseID: pCourse.courseID });
+            pCourse = { ...pCourse._doc, courseName: course.name, courseDescription: course.description };
+            
+            const homework = await Task.findById(hID);
+            const submission = await Submission.find({ taskID: homework._id });
+            const students = await Student.find({ studentID: { $in: submission.map(s => s.studentID) } });
+            res.render('teacher/grade', { user, teacher, pCourse, homework });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
 
 
     // GET /teacher/announcement

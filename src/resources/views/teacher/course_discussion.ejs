@@ -38,45 +38,56 @@
             document.querySelector("#discussion-id").addEventListener("click", function() {
                 document.querySelector("#discussion-content-id").classList.remove("hide");
                 document.querySelector("#discussion-content-id").classList.add("show");
+                const discussion = document.querySelector("#discussion-content-id").value;
+                window.location.href = `/teacher/course/${pCourse._id}/discussion/${rightSide.id}`;
             });
         </script>
     </div>
     <!-- Container -->
 </section>
 <script>
-    const discussions = [
-        {
-            _id: "discussion-content-id",
-            title: "Discussion 1",
-            senderID: "Student 1",
-            messages: [
-                {
-                    content: "Hi, I have a question about the homework.",
-                    time: "10:00 AM"
-                },
-                {
-                    content: "What is your question?",
-                    time: "10:05 AM"
-                }
-            ]
-        },
-        {
-            _id: "discussion-content-id",
-            title: "Discussion 2",
-            senderID: "Student 2",
-            messages: [
-                {
-                    content: "Hi, I have a question about the homework.",
-                    time: "10:00 AM"
-                },
-                {
-                    content: "What is your question?",
-                    time: "10:05 AM"
-                }
-            ]
-        }
-    ]
-    const userID = "Teacher 1";
+    // const discussions = [
+    //     {
+    //         _id: "discussion-content-id",
+    //         title: "Discussion 1",
+    //         senderID: "Student 1",
+    //         messages: [
+    //             {
+    //                 content: "Hi, I have a question about the homework.",
+    //                 time: "10:00 AM"
+    //             },
+    //             {
+    //                 content: "What is your question?",
+    //                 time: "10:05 AM"
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         _id: "discussion-content-id",
+    //         title: "Discussion 2",
+    //         senderID: "Student 2",
+    //         messages: [
+    //             {
+    //                 content: "Hi, I have a question about the homework.",
+    //                 time: "10:00 AM"
+    //             },
+    //             {
+    //                 content: "What is your question?",
+    //                 time: "10:05 AM"
+    //             }
+    //         ]
+    //     }
+    // ]
+    // const userID = "Teacher 1";
+    let discussions = '<%- JSON.stringify(discussions) %>';
+    discussions = JSON.parse(discussions);
+    let user = '<%- JSON.stringify(user) %>';
+    user = JSON.parse(user);
+    const userID = user._id;
+    let messages = '<%- JSON.stringify(messages) %>';
+    messages = JSON.parse(messages);
+
+
     discussions.forEach(discussion => {
         const courseDiscussion = document.querySelector(".course-discussion");
         const rightSide = document.createElement("div");
@@ -97,57 +108,59 @@
 
         const discussionBoard = document.createElement("div");
         discussionBoard.classList.add("discussion-board");
-        for (let i = 0; i < discussion.messages.length; i++) {
-            if (discussion.senderID !== userID ){
-                const otherMsg = document.createElement("div");
-                otherMsg.classList.add("other-msg");
-                const userName = document.createElement("div");
-                userName.classList.add("user-name");
-                const userIcon = document.createElement("i");
-                userIcon.classList.add("fas", "fa-user-circle");
-                const userSpan = document.createElement("span");
-                userSpan.textContent = discussion.senderID;
-                userName.appendChild(userIcon);
-                userName.appendChild(userSpan);
-                const msg = document.createElement("div");
-                msg.classList.add("msg");
-                const p = document.createElement("p");
-                p.textContent = discussion.messages[i].content;
-                msg.appendChild(p);
-                const time = document.createElement("div");
-                time.classList.add("time");
-                const timeSpan = document.createElement("span");
-                timeSpan.textContent = discussion.messages[i].time;
-                time.appendChild(timeSpan);
-                otherMsg.appendChild(userName);
-                otherMsg.appendChild(msg);
-                otherMsg.appendChild(time);
-                discussionBoard.appendChild(otherMsg);
-            } else {
-                const ownerMsg = document.createElement("div");
-                ownerMsg.classList.add("owner-msg");
-                const userName = document.createElement("div");
-                userName.classList.add("user-name");
-                const userIcon = document.createElement("i");
-                userIcon.classList.add("fas", "fa-user-circle");
-                const userSpan = document.createElement("span");
-                userSpan.textContent = discussion.senderID;
-                userName.appendChild(userIcon);
-                userName.appendChild(userSpan);
-                const msg = document.createElement("div");
-                msg.classList.add("msg");
-                const p = document.createElement("p");
-                p.textContent = discussion.messages[i].content;
-                msg.appendChild(p);
-                const time = document.createElement("div");
-                time.classList.add("time");
-                const timeSpan = document.createElement("span");
-                timeSpan.textContent = discussion.messages[i].time;
-                time.appendChild(timeSpan);
-                ownerMsg.appendChild(userName);
-                ownerMsg.appendChild(msg);
-                ownerMsg.appendChild(time);
-                discussionBoard.appendChild(ownerMsg);
+        if(messages){
+            for (let i = 0; i < messages.length; i++) {
+                if (discussion.senderID !== userID ){
+                    const otherMsg = document.createElement("div");
+                    otherMsg.classList.add("other-msg");
+                    const userName = document.createElement("div");
+                    userName.classList.add("user-name");
+                    const userIcon = document.createElement("i");
+                    userIcon.classList.add("fas", "fa-user-circle");
+                    const userSpan = document.createElement("span");
+                    userSpan.textContent = discussion.senderID;
+                    userName.appendChild(userIcon);
+                    userName.appendChild(userSpan);
+                    const msg = document.createElement("div");
+                    msg.classList.add("msg");
+                    const p = document.createElement("p");
+                    p.textContent = discussion.messages[i].content;
+                    msg.appendChild(p);
+                    const time = document.createElement("div");
+                    time.classList.add("time");
+                    const timeSpan = document.createElement("span");
+                    timeSpan.textContent = discussion.messages[i].time;
+                    time.appendChild(timeSpan);
+                    otherMsg.appendChild(userName);
+                    otherMsg.appendChild(msg);
+                    otherMsg.appendChild(time);
+                    discussionBoard.appendChild(otherMsg);
+                } else {
+                    const ownerMsg = document.createElement("div");
+                    ownerMsg.classList.add("owner-msg");
+                    const userName = document.createElement("div");
+                    userName.classList.add("user-name");
+                    const userIcon = document.createElement("i");
+                    userIcon.classList.add("fas", "fa-user-circle");
+                    const userSpan = document.createElement("span");
+                    userSpan.textContent = discussion.senderID;
+                    userName.appendChild(userIcon);
+                    userName.appendChild(userSpan);
+                    const msg = document.createElement("div");
+                    msg.classList.add("msg");
+                    const p = document.createElement("p");
+                    p.textContent = discussion.messages[i].content;
+                    msg.appendChild(p);
+                    const time = document.createElement("div");
+                    time.classList.add("time");
+                    const timeSpan = document.createElement("span");
+                    timeSpan.textContent = discussion.messages[i].time;
+                    time.appendChild(timeSpan);
+                    ownerMsg.appendChild(userName);
+                    ownerMsg.appendChild(msg);
+                    ownerMsg.appendChild(time);
+                    discussionBoard.appendChild(ownerMsg);
+                }
             }
         }
         rightSide.appendChild(discussionBoard);
@@ -169,6 +182,7 @@
         textarea.placeholder = "Type your message here...";
         const button = document.createElement("button");
         button.type = "submit";
+        button.id = "send-message";
         const i = document.createElement("i");
         i.classList.add("fas", "fa-paper-plane");
         button.appendChild(i);
@@ -192,22 +206,22 @@
 
 </script>
 <script>
-    document.querySelector("#fullscreen").addEventListener("click", function() {
-        document.querySelector(".left-side").classList.toggle("hide");
-        var icon = document.querySelector("#screen");
-        if (icon.classList.contains("fa-expand")) {
-            icon.classList.remove("fa-expand");
-            icon.classList.add("fa-compress");
-        } else {
-            icon.classList.remove("fa-compress");
-            icon.classList.add("fa-expand");
-        }
-    });
+    // document.querySelector("#fullscreen").addEventListener("click", function() {
+    //     document.querySelector(".left-side").classList.toggle("hide");
+    //     var icon = document.querySelector("#screen");
+    //     if (icon.classList.contains("fa-expand")) {
+    //         icon.classList.remove("fa-expand");
+    //         icon.classList.add("fa-compress");
+    //     } else {
+    //         icon.classList.remove("fa-compress");
+    //         icon.classList.add("fa-expand");
+    //     }
+    // });
 </script>
 <script>
-    document.querySelector(".grading-btn button").addEventListener("click", function() {
-        document.querySelector(".grading-discussion").style.display = "block";
-    });
+    // document.querySelector("#send-message button").addEventListener("click", function() {
+    //     document.querySelector(".grading-discussion").style.display = "block";
+    // });
 </script>
 <section class="new-form new-discussion-form">
     <div class="form-container">
@@ -275,6 +289,7 @@
         </form>
     </div>
 </section>
+<!-- end form -->
 <section class="new-form grading-discussion">
     <div class="form-container">
         <form action="">
@@ -322,18 +337,19 @@
                 </button>
             </div>
             <script>
-                document.querySelector("#reset-grading").addEventListener("click", function() {
-                    document.querySelector("#display-file-grading ul").innerHTML = "";
-                });
+                // document.querySelector("#reset-grading").addEventListener("click", function() {
+                //     document.querySelector("#display-file-grading ul").innerHTML = "";
+                // });
             </script>
         </form>
     </div>
 </section>
-<script> 
+<!-- <script> 
     let pCourse = '<%- JSON.stringify(pCourse) %>';
     pCourse = JSON.parse(pCourse);
     // Get the form container and form
-    const formContainer = document.querySelector('.form-container');
+    const formDiscussion = document.querySelector('.new-form new-discussion-form');
+    const formContainer = formDiscussion.querySelector('.form-container');
     const form = formContainer.querySelector('form');
 
     form.addEventListener('submit', async (e) => {
@@ -362,11 +378,11 @@
             console.log(error);
         }
     });
-</script>
+</script> -->
 <script
-src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.28.0/moment.min.js"
-integrity="sha512-Q1f3TS3vSt1jQ8AwP2OuenztnLU6LwxgyyYOG1jgMW/cbEMHps/3wjvnl1P3WTrF3chJUWEoxDUEjMxDV8pujg=="
-crossorigin="anonymous"
+    src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.28.0/moment.min.js"
+    integrity="sha512-Q1f3TS3vSt1jQ8AwP2OuenztnLU6LwxgyyYOG1jgMW/cbEMHps/3wjvnl1P3WTrF3chJUWEoxDUEjMxDV8pujg=="
+    crossorigin="anonymous"
 ></script>
  <script >
     const socket = io('/user');

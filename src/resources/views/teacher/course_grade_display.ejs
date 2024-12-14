@@ -9,7 +9,7 @@
         <div class="homework-name">
             <h3><%= homework.title%></h3>
         </div>
-        <form action="" method="">
+        <form action="/teacher/course/<%= pCourse._id %>homework/<%= homework._id %>/grade/" method="POST">
             <table>
                 <tr>
                     <th class="id">ID</th>
@@ -30,7 +30,6 @@
 <script>
     let list = '<%- JSON.stringify(list).replace(/\\/g, "\\\\") %>';
     list = JSON.parse(list);
-    console.log(list);
     const studentSubmissionList = document.querySelector('.student-submission-list table');
     list.forEach(student => {
         const sID = student._id;
@@ -78,6 +77,7 @@
         tr.appendChild(td5);
         tr.appendChild(td6);
         studentSubmissionList.appendChild(tr);
+
     });
     if (list.length === 0) {
         const tr = document.createElement('tr');
@@ -88,5 +88,40 @@
         tr.appendChild(td);
         studentSubmissionList.appendChild(tr);
     }
+    let homework = '<%- JSON.stringify(homework).replace(/\\/g, "\\\\") %>';
+    homework = JSON.parse(homework);
+    let pCourse = '<%- JSON.stringify(pCourse) %>';
+    pCourse = JSON.parse(pCourse);
+    const formContainer = document.querySelector('.student-submission-list');
+    const form = formContainer.querySelector('form');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        let gradeList = [];
+        list.forEach(student => {
+            console.log(student);
+            const grade = form.querySelector(`input[name="grade"]`).value;
+            gradeList.push({
+                submissionID: student.submissionID,
+                studentID: student.studentID,
+                grade: grade,
+            });
+        });
+        try {
+            const res = await fetch(`/teacher/course/${pCourse._id}/homework/${homework._id}/grade`, {
+                method: 'POST',
+                body: JSON.stringify({ grades: gradeList }),
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            const data = await res.json();
+            if(res.status >= 200 && res.status < 300) {
+                window.location.href = `/teacher/course/${pCourse._id}/homework/${homework._id}/grade/completed`;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    });
 </script>
 <%- include('./partials/footer.ejs'); -%>
