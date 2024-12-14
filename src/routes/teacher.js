@@ -68,7 +68,7 @@ router.get('/course/:_id/discussion/:dID', requireAuthZ('teacher'), teacherContr
 router.post('/discussion',cpUpload, requireAuthZ('teacher'), teacherController.discussion_post);
 router.get('/discussion', requireAuthZ('teacher'), teacherController.discussion_all_get);
 router.post('/course/:_id/discussion',cpUpload, requireAuthZ('teacher'), teacherController.discussion_post);
-router.post('/course/:_id/discussion/:dID', requireAuthZ('teacher'), teacherController.discussion_save_chat);
+router.post('/course/:_id/discussion/:dID/saveChat', requireAuthZ('teacher'), teacherController.discussion_save_chat);
 
 router.get('/grade', requireAuthZ('teacher'), teacherController.grade_all_get);
 router.get('/course/:_id/grade', requireAuthZ('teacher'), teacherController.grade_get);

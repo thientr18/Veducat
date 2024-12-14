@@ -547,17 +547,20 @@ class TeacherController {
     // post /course/:_id/discussion/save-chat
     async discussion_save_chat (req, res, next) {
         const user = res.locals.user;
-        const { _id } = req.params;
-        const { message, dID } = req.body;
+        const { _id, dID } = req.params;
+        const { message } = req.body;
+
         try {
             const teacher = await Teacher.findOne({ teacherID: user.userID });
             if (!teacher) {
                 return res.status(404).json({ message: "Teacher not found" });
             }
+
             await Message.create(
-                { discussionID: discussionID, 
-                    message, 
-                    sender: teacher.teacherID });      
+                { discussionID: dID, 
+                    message: message, 
+                    senderID: teacher.teacherID });  
+   
             res.status(201).json({ message: "Message uploaded successfully" });
         } catch (error) {
             res.status(500).json({ message: error.message });

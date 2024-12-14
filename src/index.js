@@ -51,10 +51,10 @@ mongoose.connect(process.env.MONGO_DB)
         // io.emit('clients-total', socketsConected.size)
       })
     
-      // socket.on('message', (data) => {
-      //   // console.log(data)
-      //   socket.broadcast.emit('chat-message', data)
-      // })
+      socket.on('message', (data) => {
+        // console.log(data)
+        socket.broadcast.emit('chat-message', data)
+      })
     
       // socket.on('feedback', (data) => {
       //   socket.broadcast.emit('feedback', data)
