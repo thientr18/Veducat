@@ -3,7 +3,12 @@ const mongoose = require('mongoose');
 const discussionFilesSchema = new mongoose.Schema({
     discussionID: {
         type: 'string',
-        required: [true, 'Please enter a material ID'],
+        required: [true, 'Please enter a discussion ID'],
+        lowercase: true,
+    },
+    discussionTopic: {
+        type: 'string',
+        required: [true, 'Please enter a discussion ID'],
         lowercase: true,
     },
     fileName: {

@@ -25,17 +25,12 @@ const taskSchema = new mongoose.Schema({
         type: Date,
         required: [true, 'Please enter a due date']
     },
-    assignedAt: {
-        type: Date,
-        default: Date.now
-    },
     createdAt: {
         type: Date,
-        default: Date.now
+        required: [true, 'Please enter a creation date'],
     },
     updateAt: {
         type: Date,
-        default: Date.now
     }
 });
 
