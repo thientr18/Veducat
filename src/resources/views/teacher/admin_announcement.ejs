@@ -23,7 +23,7 @@
     </main>
 
 <script>
-    let announcements = '<%- JSON.stringify(announcements) %>';
+    let announcements = '<%- JSON.stringify(announcements).replace(/\\/g, "\\\\") %>';
     announcements = JSON.parse(announcements);
 
     const announcementList = document.querySelector('.announcement-listed');

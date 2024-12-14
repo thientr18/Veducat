@@ -23,17 +23,11 @@ const gradeSchema = new mongoose.Schema({
         type: 'string',
         required: [true, 'Please enter the name of the person who graded the submission']
     },
-    gradedAt: {
-        type: Date,
-        default: Date.now
-    },
     createdAt: {
         type: Date,
-        default: Date.now
     },
     updateAt: {
         type: Date,
-        default: Date.now
     }
 });
 
