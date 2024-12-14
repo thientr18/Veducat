@@ -14,6 +14,7 @@ const Discussion = require('../models/Discussion');
 const DiscussionFile = require('../models/DiscussionFile');
 const Submission = require('../models/Submission');
 const SubmissionFile = require('../models/SubmissionFiles');
+const Message = require('../models/Message');
 
 class TeacherController {
 
@@ -323,7 +324,7 @@ class TeacherController {
     // GET /teacher/course/:_id/discussion
     async discussion_get (req, res, next) {
         const user = res.locals.user;
-        const { _id } = req.params;
+        const { _id, dID } = req.params;
         try {
             const teacher = await Teacher.findOne({ teacherID: user.userID });
             if (!teacher) {
@@ -331,9 +332,13 @@ class TeacherController {
             }
             let pCourse = await ProgressingCourse.findById(_id)
             const course = await Course.findOne({ courseID: pCourse.courseID });
+            const student = await Student.findOne({ studentID: pCourse.students });
+            const discussions = await Discussion.find({ pCourseID: pCourse._id });
+            const presentDiscussion = await Discussion.findById(dID);   
+            const messages = await Message.find({ discussionID: { $in: discussions.map(d => d._id) } });
             pCourse = { ...pCourse._doc, courseName: course.name, courseDescription: course.description };
 
-            res.render('teacher/course_discussion', { user, teacher, pCourse });
+            res.render('teacher/course_discussion', { user, teacher, pCourse, student, discussions, messages, presentDiscussion });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
@@ -477,6 +482,27 @@ class TeacherController {
         catch (error) {
             res.status(500).json({ message: error.message });
         }
+    }
+
+    // post /course/:_id/discussion/save-chat
+    async discussion_save_chat (req, res, next) {
+        const user = res.locals.user;
+        const { _id } = req.params;
+        const { message, dID } = req.body;
+        try {
+            const teacher = await Teacher.findOne({ teacherID: user.userID });
+            if (!teacher) {
+                return res.status(404).json({ message: "Teacher not found" });
+            }
+            await Message.create(
+                { discussionID: discussionID, 
+                    message, 
+                    sender: teacher.teacherID });      
+            res.status(201).json({ message: "Message uploaded successfully" });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+        
     }
 
     async grade_all_get (req, res, next) {

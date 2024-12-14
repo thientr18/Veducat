@@ -42,75 +42,173 @@
         </script>
     </div>
     <!-- Container -->
-    <div class="right-side" id="discussion-content-id">
-        <div class="topic-header">
-            <div class="topic-info">
-                <i class="fas fa-comments"></i>
-                <p>Discussion 1: Something</p>
-            </div>
-        </div>
-        <div class="discussion-board">
-            <div class="other-msg">
-                <div class="user-name">
-                    <i class="fas fa-user-circle"></i>
-                    <span>Student 1</span>
-                </div>
-                <div class="msg">
-                    <p>Hi, I have a question about the homework.</p>
-                </div>
-                <div class="time">
-                    <span>10:00 AM</span>
-                </div>
-            </div>
-            <div class="owner-msg">
-                <div class="user-name">
-                    <i class="fas fa-user-circle"></i>
-                    <span>Teacher 1</span>
-                </div>
-                <div class="msg">
-                    <p>What is your question?</p>
-                </div>
-                <div class="time">
-                    <span>10:05 AM</span>
-                </div>
-            </div>
-        </div>
-        <div class="fullscreen" id="fullscreen">
-            <i class="fa-solid fa-expand" id="screen"></i>
-        </div>
-        <script>
-            document.querySelector("#fullscreen").addEventListener("click", function() {
-                document.querySelector(".left-side").classList.toggle("hide");
-                var icon = document.querySelector("#screen");
-                if (icon.classList.contains("fa-expand")) {
-                    icon.classList.remove("fa-expand");
-                    icon.classList.add("fa-compress");
-                } else {
-                    icon.classList.remove("fa-compress");
-                    icon.classList.add("fa-expand");
-                }
-            });
-        </script>
-        <div class="chat-form-container">
-            <form action="" class="chat-form-teacher">
-                <textarea placeholder="Type your message here..."></textarea>
-                <button type="submit">
-                    <i class="fas fa-paper-plane"></i>
-                </button>
-            </form>
-            <div class="grading-btn">
-                <button>
-                    <i class="fas fa-marker"></i>
-                </button>
-                <script>
-                    document.querySelector(".grading-btn button").addEventListener("click", function() {
-                        document.querySelector(".grading-discussion").style.display = "block";
-                    });
-                </script>
-            </div>
-        </div>
-    </div>
 </section>
+<script>
+    const discussions = [
+        {
+            _id: "discussion-content-id",
+            title: "Discussion 1",
+            senderID: "Student 1",
+            messages: [
+                {
+                    content: "Hi, I have a question about the homework.",
+                    time: "10:00 AM"
+                },
+                {
+                    content: "What is your question?",
+                    time: "10:05 AM"
+                }
+            ]
+        },
+        {
+            _id: "discussion-content-id",
+            title: "Discussion 2",
+            senderID: "Student 2",
+            messages: [
+                {
+                    content: "Hi, I have a question about the homework.",
+                    time: "10:00 AM"
+                },
+                {
+                    content: "What is your question?",
+                    time: "10:05 AM"
+                }
+            ]
+        }
+    ]
+    const userID = "Teacher 1";
+    discussions.forEach(discussion => {
+        const courseDiscussion = document.querySelector(".course-discussion");
+        const rightSide = document.createElement("div");
+        rightSide.classList.add("right-side");
+        rightSide.id = discussion._id;
+        const topicHeader = document.createElement("div");
+        topicHeader.classList.add("topic-header");
+        const topicInfo = document.createElement("div");
+        topicInfo.classList.add("topic-info");
+        const icon = document.createElement("i");
+        icon.classList.add("fas", "fa-comments");
+        const p = document.createElement("p");
+        p.textContent = discussion.title;
+        topicInfo.appendChild(icon);
+        topicInfo.appendChild(p);
+        topicHeader.appendChild(topicInfo);
+        rightSide.appendChild(topicHeader);
+
+        const discussionBoard = document.createElement("div");
+        discussionBoard.classList.add("discussion-board");
+        for (let i = 0; i < discussion.messages.length; i++) {
+            if (discussion.senderID !== userID ){
+                const otherMsg = document.createElement("div");
+                otherMsg.classList.add("other-msg");
+                const userName = document.createElement("div");
+                userName.classList.add("user-name");
+                const userIcon = document.createElement("i");
+                userIcon.classList.add("fas", "fa-user-circle");
+                const userSpan = document.createElement("span");
+                userSpan.textContent = discussion.senderID;
+                userName.appendChild(userIcon);
+                userName.appendChild(userSpan);
+                const msg = document.createElement("div");
+                msg.classList.add("msg");
+                const p = document.createElement("p");
+                p.textContent = discussion.messages[i].content;
+                msg.appendChild(p);
+                const time = document.createElement("div");
+                time.classList.add("time");
+                const timeSpan = document.createElement("span");
+                timeSpan.textContent = discussion.messages[i].time;
+                time.appendChild(timeSpan);
+                otherMsg.appendChild(userName);
+                otherMsg.appendChild(msg);
+                otherMsg.appendChild(time);
+                discussionBoard.appendChild(otherMsg);
+            } else {
+                const ownerMsg = document.createElement("div");
+                ownerMsg.classList.add("owner-msg");
+                const userName = document.createElement("div");
+                userName.classList.add("user-name");
+                const userIcon = document.createElement("i");
+                userIcon.classList.add("fas", "fa-user-circle");
+                const userSpan = document.createElement("span");
+                userSpan.textContent = discussion.senderID;
+                userName.appendChild(userIcon);
+                userName.appendChild(userSpan);
+                const msg = document.createElement("div");
+                msg.classList.add("msg");
+                const p = document.createElement("p");
+                p.textContent = discussion.messages[i].content;
+                msg.appendChild(p);
+                const time = document.createElement("div");
+                time.classList.add("time");
+                const timeSpan = document.createElement("span");
+                timeSpan.textContent = discussion.messages[i].time;
+                time.appendChild(timeSpan);
+                ownerMsg.appendChild(userName);
+                ownerMsg.appendChild(msg);
+                ownerMsg.appendChild(time);
+                discussionBoard.appendChild(ownerMsg);
+            }
+        }
+        rightSide.appendChild(discussionBoard);
+        const fullscreen = document.createElement("div");
+        fullscreen.classList.add("fullscreen");
+        fullscreen.id = "fullscreen";
+        const screen = document.createElement("i");
+        screen.classList.add("fa-solid", "fa-expand");
+        screen.id = "screen";
+        fullscreen.appendChild(screen);
+        rightSide.appendChild(fullscreen);
+
+        const chatFormContainer = document.createElement("div");
+        chatFormContainer.classList.add("chat-form-container");
+        const chatForm = document.createElement("form");
+        chatForm.action = "";
+        chatForm.classList.add("chat-form-teacher");
+        const textarea = document.createElement("textarea");
+        textarea.placeholder = "Type your message here...";
+        const button = document.createElement("button");
+        button.type = "submit";
+        const i = document.createElement("i");
+        i.classList.add("fas", "fa-paper-plane");
+        button.appendChild(i);
+        chatForm.appendChild(textarea);
+        chatForm.appendChild(button);
+
+        const gradingBtn = document.createElement("div");
+        gradingBtn.classList.add("grading-btn");
+        const gradingButton = document.createElement("button");
+        const gradingIcon = document.createElement("i");
+        gradingIcon.classList.add("fas", "fa-marker");
+        gradingButton.appendChild(gradingIcon);
+        gradingBtn.appendChild(gradingButton);
+        chatFormContainer.appendChild(chatForm);
+        chatFormContainer.appendChild(gradingBtn);
+
+        rightSide.appendChild(chatFormContainer);
+        courseDiscussion.appendChild(rightSide);
+    
+    });
+
+</script>
+<script>
+    document.querySelector("#fullscreen").addEventListener("click", function() {
+        document.querySelector(".left-side").classList.toggle("hide");
+        var icon = document.querySelector("#screen");
+        if (icon.classList.contains("fa-expand")) {
+            icon.classList.remove("fa-expand");
+            icon.classList.add("fa-compress");
+        } else {
+            icon.classList.remove("fa-compress");
+            icon.classList.add("fa-expand");
+        }
+    });
+</script>
+<script>
+    document.querySelector(".grading-btn button").addEventListener("click", function() {
+        document.querySelector(".grading-discussion").style.display = "block";
+    });
+</script>
 <section class="new-form new-discussion-form">
     <div class="form-container">
         <form action = "teacher/course/<%=pCourse._id%>/discussion" method="POST" enctype="multipart/form-data">
@@ -265,4 +363,67 @@
         }
     });
 </script>
+<script
+src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.28.0/moment.min.js"
+integrity="sha512-Q1f3TS3vSt1jQ8AwP2OuenztnLU6LwxgyyYOG1jgMW/cbEMHps/3wjvnl1P3WTrF3chJUWEoxDUEjMxDV8pujg=="
+crossorigin="anonymous"
+></script>
+ <script >
+    const socket = io('/user');
+
+    const formChatContainer = document.querySelector('.chat-form-teacher');
+    const formChat = formChatContainer.querySelector('form');
+    formChat.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const message = formChat.querySelector('textarea').value;
+        const discussionID = discussionID;
+        console.log(message);
+        try {
+            if(message) {
+                socket.emit('message', message);
+                // outputMessage(message);
+
+                $.ajax( {
+                    url: `/teacher/course/${pCourse._id}/discussion/saveChat`,
+                    type: 'POST',
+                    data: {
+                        message: message,
+                        discussionID: discussionID,
+                    },
+                    success: function(res) {
+                        if(res.success) {
+                            alert("done");
+                        }
+                        alert(data.message);
+                    }
+                });
+
+                message.value = '';
+
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    });
+
+    function outputMessage(message) {
+        const div = document.createElement('div');
+        div.classList.add('other-msg');
+        div.innerHTML = `<div class="user-name">
+                            <i class="fas fa-user-circle"></i>
+                            <span>${teacher.name}</span>
+                        </div>
+                        <div class="msg">
+                            <p>${message}</p>
+                        </div>
+                        <div class="time">
+                            <span>${moment(data.dateTime).fromNow()}</span>
+                        </div>`;
+        document.querySelector('.discussion-board').appendChild(div);
+    }
+
+
+
+ </script>
 <%- include('./partials/footer.ejs'); -%>
