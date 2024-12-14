@@ -12,6 +12,8 @@ const TaskforStudent = require('../models/TaskforStudent');
 const multer = require('multer');
 const Discussion = require('../models/Discussion');
 const DiscussionFile = require('../models/DiscussionFile');
+const Submission = require('../models/Submission');
+const SubmissionFile = require('../models/SubmissionFiles');
 
 class TeacherController {
 
@@ -350,7 +352,41 @@ class TeacherController {
             const course = await Course.findOne({ courseID: pCourse.courseID });
             pCourse = { ...pCourse._doc, courseName: course.name, courseDescription: course.description };
 
-            res.render('teacher/course_grade', { user, teacher, pCourse });
+            const tasks = await Task.find({ pCourseID: pCourse._id });
+
+            res.render('teacher/course_grade', { user, teacher, pCourse, tasks });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
+    async grade_detail_get (req, res, next) {
+        const user = res.locals.user;
+        const { _id, hID } = req.params;
+
+        try {
+            const teacher = await Teacher.findOne({ teacherID: user.userID });
+
+            let pCourse = await ProgressingCourse.findById(_id)
+            const course = await Course.findOne({ courseID: pCourse.courseID });
+            pCourse = { ...pCourse._doc, courseName: course.name, courseDescription: course.description };
+            
+            const homework = await Task.findById(hID);
+            const submission = await Submission.find({ taskID: homework._id });
+            const students = await Student.find({ studentID: { $in: submission.map(s => s.studentID) } });
+
+            const list = await Promise.all(submission.map(async sub => {
+                const student = students.find(s => s.studentID === sub.studentID);
+                const files = await SubmissionFile.find({ submissionID: sub._id });
+                return {
+                    ...sub._doc,
+                    studentName: student?.name || null,
+                    studentID: student?.studentID || null,
+                    files
+                };
+            }));
+
+            res.render('teacher/course_grade_display', { user, teacher, pCourse, homework, list });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }

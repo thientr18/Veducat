@@ -48,6 +48,7 @@ router.get('/course/:_id/material', requireAuthZ('student'), studentController.m
 router.get('/course/:_id/material/:mID', requireAuthZ('student'), studentController.material_detail_get);
 
 router.get('/course/:_id/homework/:hID', requireAuthZ('student'), studentController.homework_detail_get);
+router.get('/course/:_id/homework/:hID/submission', requireAuthZ('student'), studentController.homework_submission_get);
 router.get('/course/:_id/homework', requireAuthZ('student'), studentController.homework_get);
 router.post('/course/:_id/homework/:hID', cpUpload, requireAuthZ('student'), studentController.homework_submit_post);
 

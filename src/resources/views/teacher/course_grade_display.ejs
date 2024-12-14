@@ -7,7 +7,7 @@
     </div>
     <div class="student-submission-list">
         <div class="homework-name">
-            <h3>Homework 1</h3>
+            <h3><%= homework.title%></h3>
         </div>
         <form action="" method="">
             <table>
@@ -19,20 +19,6 @@
                     <th class="time-submission">Submission Time</th>
                     <th class="grade">Grade</th>
                 </tr>
-                <tr>
-                    <td class="id">ITITIU21284</td>
-                    <input type="hidden" name="studentID" value="_id">
-                    <td class="fullname">Nguyen Van A</td>
-                    <input type="hidden" name="HomeworkID" value="_id">
-                    <td class="writing">Write a program that reads a string from the user containing a date in the form mm/dd/yyyy. It should print the date in the form March 12, 2014.</td>
-                    <td class="attach">
-                        <a href="homework1.pdf" target="_blank">homework1.pdf</a>
-                    </td>
-                    <td class="time-submisson">2025-09-30</td>
-                    <td class="grading">
-                        <input type="number" name="grade" id="grade" min="0" max="100">
-                    </td>
-                </tr>
             </table>
             <div class="button-form">
                 <button type="reset">Reset</button>
@@ -41,4 +27,66 @@
         </form>
     </div>
 </section>
+<script>
+    let list = '<%- JSON.stringify(list).replace(/\\/g, "\\\\") %>';
+    list = JSON.parse(list);
+    console.log(list);
+    const studentSubmissionList = document.querySelector('.student-submission-list table');
+    list.forEach(student => {
+        const sID = student._id;
+        const tr = document.createElement('tr');
+        const studentID = student.studentID;
+        const studentName = student.studentName;
+        const writing = student.description;
+        const attach = student.files;
+        const td1 = document.createElement('td');
+        const td2 = document.createElement('td');
+        const td3 = document.createElement('td');
+        const td4 = document.createElement('td');
+        const td5 = document.createElement('td');
+        const td6 = document.createElement('td');
+        td1.classList.add('id');
+        td2.classList.add('fullname');
+        td3.classList.add('writing');
+        td4.classList.add('attach');
+        td5.classList.add('time-submission');
+        td6.classList.add('grading');
+        td1.textContent = studentID;
+        td2.textContent = studentName;
+        td3.textContent = writing;
+        attach.forEach(file => {
+            const div = document.createElement('div');
+            div.classList.add('submission-file');
+            const a = document.createElement('a');
+            a.href = `\\..\\..\\${file.filePath}`;
+            a.textContent = file.fileName;
+            div.appendChild(a);
+            td4.appendChild(div);
+        });
+        td5.textContent = new Date(student.submittedAt).toLocaleDateString();
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.name = 'grade';
+        input.id = 'grade';
+        input.min = '0';
+        input.max = '100';
+        td6.appendChild(input);
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        tr.appendChild(td3);
+        tr.appendChild(td4);
+        tr.appendChild(td5);
+        tr.appendChild(td6);
+        studentSubmissionList.appendChild(tr);
+    });
+    if (list.length === 0) {
+        const tr = document.createElement('tr');
+        tr.classList.add('empty-content');
+        const td = document.createElement('td');
+        td.colSpan = 6;
+        td.textContent = 'No submission yet';
+        tr.appendChild(td);
+        studentSubmissionList.appendChild(tr);
+    }
+</script>
 <%- include('./partials/footer.ejs'); -%>

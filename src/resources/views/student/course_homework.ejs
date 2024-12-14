@@ -12,9 +12,10 @@
 </section>
 
 <script>
-    let homeworks = '<%- JSON.stringify(homeworks) %>';
+    let homeworks = '<%- JSON.stringify(homeworks).replace(/\\/g, "\\\\") %>';
     let progressingCourse = '<%- JSON.stringify(pCourse) %>';
     homeworks = JSON.parse(homeworks);
+    console.log(homeworks);
     progressingCourse = JSON.parse(progressingCourse);
 
     const homeworkListed = document.querySelector('.homework-listed ul');
@@ -22,14 +23,22 @@
     homeworks.forEach(homework => {
         const hID = homework._id;
         const li = document.createElement('li');
+        var status, link;
+        if (homework.status === 'Submitted') {
+            status = 'check'
+            link = '/student/course/' + progressingCourse._id + '/homework/' + hID + '/submission'
+        } else{
+            status = ''
+            link = '/student/course/' + progressingCourse._id + '/homework/' + hID
+        }
         li.innerHTML = `
-            <a href="/student/course/${progressingCourse._id}/homework/${hID}" class="title-book">
+            <a href="${link}" class="title-book">
                 ${homework.title}
                 <span>
                     Deadline: ${new Date(homework.dueDate).toLocaleDateString()}
                 </span>
-                <div class="homework-status ${homework.status}">
-                    <i class="fa-solid fa-${homework.status}"></i>
+                <div class="homework-status ${status}">
+                    <i class="fa-solid fa-${status}"></i>
                 </div>
             </a>
         `;

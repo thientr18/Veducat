@@ -21,12 +21,6 @@
                         <th>Due Date</th>
                         <th>Action</th>
                     </tr>
-                    <tr>
-                        <td>Course 1</td>
-                        <td>Homework 1</td>
-                        <td>2025-09-27</td>
-                        <td><a href="#">Do Homework</a></td>
-                    </tr>
                 </table>
             </section>
             <section class="homework-submitted" id="submitted-list">
@@ -36,12 +30,6 @@
                         <th>Homework Title</th>
                         <th>Due Date</th>
                         <th>Submission</th>
-                    </tr>
-                    <tr>
-                        <td>Course 2</td>
-                        <td>Homework 2</td>
-                        <td>2025-09-01</td>
-                        <td><a href="#">View Submission</a></td>
                     </tr>
                 </table>
             </section>
@@ -70,4 +58,34 @@
             </script>
         </div>
     </div>
+    <script>
+        let tasks = '<%- JSON.stringify(tasks).replace(/\\/g, "\\\\") %>';
+            tasks = JSON.parse(tasks);
+            console.log(tasks);
+        const unsubmittedTable = document.querySelector('.homework-unsubmitted table');
+        const submittedTable = document.querySelector('.homework-submitted table');
+        tasks.forEach(task => {
+            const cName = task.courseName;
+            const hTitle = task.title;
+            const hDeadline = new Date(task.dueDate).toLocaleDateString();
+            const tr = document.createElement('tr');
+            if (task.status === 'Submitted') {
+                tr.innerHTML = `
+                    <td>${cName}</td>
+                    <td>${hTitle}</td>
+                    <td>${hDeadline}</td>
+                    <td><a href="/student/course/${task.pCourseID}/homework/${task._id}">View Submission</a></td>
+                `;
+                submittedTable.appendChild(tr);
+            } else {
+                tr.innerHTML = `
+                    <td>${cName}</td>
+                    <td>${hTitle}</td>
+                    <td>${hDeadline}</td>
+                    <td><a href="/student/course/${task.pCourseID}/homework/${task._id}">Do Homework</a></td>
+                `;
+                unsubmittedTable.appendChild(tr);
+            }
+        });
+    </script>
     <%- include('../partials/main/footer.ejs'); -%>

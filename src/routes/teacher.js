@@ -65,6 +65,7 @@ router.post('/course/:_id/discussion',cpUpload, requireAuthZ('teacher'), teacher
 
 router.get('/grade', requireAuthZ('teacher'), teacherController.grade_all_get);
 router.get('/course/:_id/grade', requireAuthZ('teacher'), teacherController.grade_get);
+router.get('/course/:_id/homework/:hID/grade', requireAuthZ('teacher'), teacherController.grade_detail_get);
 
 
 

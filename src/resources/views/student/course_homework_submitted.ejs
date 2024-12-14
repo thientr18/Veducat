@@ -1,24 +1,58 @@
 <%- include('partials/header.ejs'); -%>
 <section class="homework-submission-complete">
     <div class="status-bar">
-        <h3>You have been submitted the homework</h3>
+        <h3></h3>
     </div>
     <div class="submission-content">
         <div class="homework-writing">
             <h4>Your Writing Submission</h4>
-            Hello Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati vel repudiandae praesentium minima eum ullam ducimus aliquam saepe, placeat, vero iure. Voluptatum ad porro deserunt dolorum magnam officia, necessitatibus exercitationem.
+            <p>You already submitted the </p>
         </div>
         <div class="homework-file">
             <h4>Your File Submission </h4>
-            <a href="#">Download</a>
         </div>
         <div class="submission-time">
             <h4>Submission Time</h4>
-            <p>2025-09-01 12:00:00</p>
+            <p></p>
         </div>
         <div class="return-back">
-            <a href="#">Another Homework</a>
+            <a>Another Homework</a>
         </div>
     </div>
 </section>
+<script>
+    let sDetails = '<%- JSON.stringify(submissionDetails).replace(/\\/g, "\\\\") %>';
+    sDetails = JSON.parse(sDetails);
+    console.log(sDetails);
+    const title = document.querySelector('.status-bar h3');
+    const homeworkWriting = document.querySelector('.homework-writing p');
+    const homeworkFile = document.querySelector('.homework-file');
+    const a = document.createElement('a');
+    const submissionTime = document.querySelector('.submission-time p');
+    const returnBack = document.querySelector('.return-back a');
+    title.textContent = "You already submitted the " + sDetails.taskName;
+    homeworkWriting.textContent = sDetails.description;
+    const files = sDetails.submissionFiles;
+    files.forEach(file => {
+        const div = document.createElement('div');
+        const icon = document.createElement('i');
+        const a = document.createElement('a');
+        icon.classList.add('fas', 'fa-file-pdf');
+        div.classList.add('material-file');
+        a.href = "\\..\\..\\" + file.filePath;
+        a.textContent = file.fileName;
+        a.target = "_blank";
+        div.appendChild(icon);
+        div.appendChild(a);
+        homeworkFile.appendChild(div);
+    });
+    if (files.length === 0) {
+        const div = document.createElement('div');
+        div.classList.add('material-file');
+        div.textContent = 'No file submission';
+        homeworkFile.appendChild(div);
+    }
+    submissionTime.textContent = new Date(sDetails.submittedAt).toLocaleString();
+    returnBack.href = '/student/course/<%= pCourse._id%>/homework';
+</script>
 <%- include('partials/footer.ejs'); -%>
