@@ -121,9 +121,12 @@ class StudentController {
             let pCourse = await ProgressingCourse.findById(_id);
             const course = await Course.findOne({ courseID: pCourse.courseID });
             pCourse = { ...pCourse._doc, courseName: course.name, courseDescription: course.description };
-
-            const materials = await Material.find({ courseID: pCourse._id });
-
+            let materials = await Material.find({ pCourseID: pCourse._id });
+            const materialFiles = await MaterialFile.find({ materialID: { $in: materials.map(m => m._id) } });
+            materials = materials.map(material => {
+                const files = materialFiles.filter(f => f.materialID.toString() === material._id.toString());
+                return { ...material._doc, files };
+            });
             res.render('student/course_material', { user, student, pCourse, materials });
         } catch {
             console.error(error);
