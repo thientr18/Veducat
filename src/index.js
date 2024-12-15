@@ -39,26 +39,19 @@ mongoose.connect(process.env.MONGO_DB)
 
     var usp = io.of('/user')
     usp.on('connection', onConnected)
-    // io.on('connection', onConnected)
     function onConnected(socket) {
       console.log('Socket connected')
-      // socketsConected.add(socket.id)
-      // io.emit('clients-total', socketsConected.size)
+
     
       socket.on('disconnect', () => {
         console.log('Socket disconnected')
-        // socketsConected.delete(socket.id)
-        // io.emit('clients-total', socketsConected.size)
+
       })
     
       socket.on('message', (data) => {
-        // console.log(data)
         socket.broadcast.emit('chat-message', data)
       })
-    
-      // socket.on('feedback', (data) => {
-      //   socket.broadcast.emit('feedback', data)
-      // })
+
     }
 
   })

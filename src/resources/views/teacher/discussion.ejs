@@ -104,10 +104,10 @@
                 });
                 const data = await res.json();
                 if(res.status >= 200 && res.status < 300) {
-                    location.reload();
+                    window.location.href = `/teacher/course/${pCourseID}/discussion`;
                 }
             } catch (error) {
-                window.location.href = `/teacher/discussion`;
+                console.log(error);
             }
         });
     </script>
