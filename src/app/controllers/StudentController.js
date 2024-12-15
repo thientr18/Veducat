@@ -457,7 +457,26 @@ class StudentController {
             if (!student) {
                 return res.status(404).json({ message: "Student not found" });
             }
-            res.render('student/discussion', { user, student});
+            let pCourses = await ProgressingCourse.find({ students: student.studentID });
+            const courses = await Course.find({ courseID: { $in: pCourses.map(c => c.courseID) } });
+            let discussions = await Discussion.find({ pCourseID: { $in: pCourses.map(c => c._id) } });
+            pCourses = pCourses.map(pCourse => {
+                const course = courses.find(c => c.courseID === pCourse.courseID);
+                return {
+                    ...pCourse._doc,
+                    courseName: course?.name || null,
+                    courseDescription: course?.description || null
+                };
+            });
+            discussions = discussions.map(discussion => {
+                const pCourse = pCourses.find(pc => pc._id.toString() === discussion.pCourseID);
+                return {
+                    ...discussion._doc,
+                    courseName: pCourse?.courseName || null,
+                    courseDescription: pCourse?.courseDescription || null
+                };
+            });
+            res.render('student/discussion', { user, student, discussions });
         }
         catch (error) {
             console.error(error);
@@ -471,7 +490,7 @@ class StudentController {
             if (!student) {
                 return res.status(404).json({ message: "Student not found" });
             }
-            res.render('student/grade', { user, student});
+            res.render('student/grade', { user, student });
         } 
         catch (error) {
             console.error(error);
