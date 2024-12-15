@@ -1,0 +1,349 @@
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+    *{
+        font-family: 'Roboto', sans-serif;
+    }
+    :root{
+        --primary-color: #f89b28;
+        --secondary-color: #f4f4f4;
+        --dark-color: #333;
+        --second-dark-color: #444;
+        --delete-color: #ff4d4d;
+        --green-color: #4CAF50;
+    }
+    .admin-nav{
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%;
+        background-color: var(--dark-color);
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+    }
+    .admin-nav h1{
+        margin: 0;
+        padding: 10px;
+        color: var(--primary-color);
+    }
+    .admin-nav ul{
+        display: flex;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    .admin-nav ul li{
+        margin: 0;
+        padding: 15px;
+    }
+    .admin-nav ul li a{
+        color: white;
+        font-weight: bold;
+        text-decoration: none;
+    }
+    .admin-nav ul li a:hover{
+        color: var(--primary-color);
+    }
+    .container{
+        display: flex;
+        height: 100vh;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .container h1{
+        width: 340px;
+        padding: 10px;
+        color: var(--secondary-color);
+        background-color: var(--dark-color);
+        margin-bottom: 0;
+    }
+    .container .option-manage{
+        width: 360px;
+        height: 60px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+    .container .option-manage div{
+        width: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--second-dark-color);;
+    }
+    .container .option-manage div{
+        border-right: solid 1px var(--secondary-color);
+    }
+    .container .option-manage div:last-child{
+        border-right: none;
+        transition: all 0.3s ease-in-out;
+    }
+    .container .option-manage div:hover{
+        background-color: var(--primary-color);
+        transition: all 0.3s ease-in-out;
+    }
+    .container .option-manage div a{
+        color: white;
+        font-weight: bold;
+        text-decoration: none;
+        padding: 20px;
+    }
+    .form-insert {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 360px;
+        border: solid 1px var(--dark-color);
+        padding: 20px;
+    }
+    input[type="submit"], input[type="reset"]{
+        background-color: var(--primary-color);
+        font-weight: bold;
+        padding: 10px 20px;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    input[type="submit"]:hover, input[type="reset"]:hover{
+        background-color: var(--secondary-color);
+        color: var(--primary-color);
+        border: solid 1px var(--primary-color);
+    }
+    .return-back{
+        position: absolute;
+        border-radius: 50%;
+        border: solid 1px var(--dark-color);
+        background-color: var(--primary-color);
+        top: -18px;
+        left: -18px;
+        padding: 8px;
+        z-index: 1000;
+    }
+    .return-back a{
+        color: white;
+        font-weight: bold;
+        text-decoration: none;
+    }
+    .return-back a:hover{
+        color: var(--dark-color);
+    }
+    .list-direct{
+        position: absolute;
+        border: solid 1px var(--dark-color);
+        background-color: var(--primary-color);
+        bottom: -37px;
+        right: -2px;
+        padding: 8px;
+        z-index: 1000;
+    }
+    .list-direct a{
+        color: white;
+        font-weight: bold;
+        text-decoration: none;
+    }
+    .list-direct a:hover{
+        color: var(--dark-color);
+    }
+    .nav-option{
+        height : 100px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        top: 75px; left: 0;
+        width: 100%;
+        background-color: var(--dark-color);
+    }
+    .nav-option h2{
+        color: var(--primary-color);
+        margin: 0;
+        padding: 10px;
+    }
+    .option{
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        width: 100vw;
+        border-bottom: solid 2px var(--secondary-color);
+    }
+    .option a{
+        width: 50%;
+        text-align: center;
+        color: white;
+        font-weight: bold;
+        text-decoration: none;
+        padding: 10px;
+        padding-top: 22px;
+        transition: all 0.3s ease-in-out;
+    }
+    .option a:first-child{
+        border-right: solid 2px var(--secondary-color);
+    }
+    .option a:hover{
+        color: var(--primary-color);
+        background-color: var(--secondary-color);
+        transition: all 0.3s ease-in-out;
+    }
+    .table-list{
+        width: 90%;
+        margin-top: 300px;
+        margin: 30px;
+        border: solid 1px var(--dark-color);
+        border-collapse: collapse;
+    }
+    .table-list tr{
+        border: solid 1px var(--dark-color);
+        border-collapse: collapse;
+    }
+    .table-list tr td{
+        border: solid 1px var(--dark-color);
+        border-collapse: collapse;
+        padding: 10px;
+    }
+    .table-list tr th{
+        border-right: solid 1px var(--secondary-color);
+        border-collapse: collapse;
+        padding: 10px;
+        background-color: var(--dark-color);
+        color: white;
+    }
+    .table-list tr th:last-child{
+        border-right: none;
+        min-width: 148px;
+    }
+    .edit-btn{
+        background-color: var(--primary-color);
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    .edit-btn:hover{
+        background-color: var(--secondary-color);
+        color: var(--primary-color);
+        border: solid 1px var(--primary-color);
+    }
+    .delete-btn{
+        max-width: 80px;
+        background-color: var(--delete-color);
+        color: var(--secondary-color);
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    .delete-btn:hover{
+        background-color: var(--secondary-color);
+        color: var(--delete-color);
+        border: solid 1px var(--delete-color);
+    }
+    .form-insert-announcement{
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 90%;
+        border: solid 1px var(--dark-color);
+        padding: 20px;
+    }
+    .form-insert-announcement table{
+        width: 100%;
+    }
+    .form-insert-announcement input[type="text"]{
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0;
+        box-sizing: border-box;
+        outline-color: var(--primary-color) ;
+        border: solid 1px var(--primary-color);
+        color: var(--primary-color);
+        font-weight: bold;
+    }
+    .form-insert-announcement textarea{
+        width: 100%;
+        height: 100px;
+        padding: 10px;
+        margin: 5px 0;
+        box-sizing: border-box;
+        border: solid 1px var(--primary-color);
+        outline-color: var(--primary-color) ;
+        color: var(--primary-color);
+        font-weight: bold;
+    }
+    textarea{
+        resize: none;
+    }
+    td.aID{
+        text-align: center;
+        word-wrap: break-word;
+        overflow: hidden;
+        max-width: 100px;
+    }
+    .aAction{
+        max-width: 80px;
+    }
+    .aAction button{
+        background-color: var(--delete-color);
+        color: white;
+        font-weight: bold;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .aAction button:hover{
+        background-color: var(--second-dark-color);
+        color: var(--delete-color);
+    }
+    .edit-course-form{
+        width: 400px;
+    }
+    .alert-box input[type="text"]{
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0;
+        box-sizing: border-box;
+        outline-color: var(--primary-color) ;
+        border: solid 1px var(--primary-color);
+        
+    }
+    .action{
+        min-width: 148px;
+        max-width: 160px;
+    }
+    .student-inclass{
+        display: flex;
+        flex-direction: column;
+        list-style: none;
+    }
+    .selected-student{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 5px;
+    }
+    .insert-btn{
+        background-color: var(--green-color);
+        max-width: 80px;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .student-outside{
+        display: flex;
+        flex-direction: column;
+        list-style: none;
+    }
+</style>

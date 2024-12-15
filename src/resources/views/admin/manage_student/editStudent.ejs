@@ -6,61 +6,6 @@
     <title>Student list</title>
 
     <style>
-        /* General Table Styling */
-        table {
-            width: 90%;
-            margin: 20px auto;
-            border-collapse: collapse;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        th, td {
-            padding: 10px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
-
-        /* Header Styling */
-        th {
-            background-color: #f89b28;
-            color: white;
-        }
-
-        /* Cell Styling */
-        td {
-            background-color: #fff;
-        }
-
-        /* Hover Effect for Table Rows */
-        tr:hover {
-            background-color: #f9f9f9;
-        }
-
-        /* Button Styling */
-        input[type="submit"], input[type="button"], button {
-            background-color: #f89b28;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-
-        button:hover, input[type="submit"]:hover, input[type="button"]:hover {
-            background-color: #e07b1f;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            table {
-                width: 100%;
-                margin: 10px;
-            }
-
-            .alert-box {
-                width: 90%;
-            }
-        }
 
         /* Initially hide the edit form */
         .alert-box {
@@ -88,32 +33,42 @@
             z-index: 999;
         }
     </style>
+    <%- include ('../partials/style.ejs'); -%>
 </head>
 <body>
-    <h1>Student list</h1>
-    <table>
-        <tr>
-            <th>Student ID</th>
-            <th>Student Name</th>
-            <th>Student Birthday</th>
-            <th>Student Email</th>
-            <th>Participate In</th> <!-- Column header styled correctly -->
-            <th>Action</th>
-        </tr>
-        <% students.forEach(student => { %>
+    <%- include ('../partials/navigation.ejs'); -%>
+    <div class="nav-option">
+        <div class="option">
+          <a href="/admin/manage_student">Back to Manage</a>
+          <a href="/admin/manage_student/insert">Insert New Student</a>
+        </div>
+        <h2>Teacher's List</h2>
+    </div>
+    <div class="container">
+        <table class="table-list">
             <tr>
-                <td><%= student.studentID.toUpperCase() %></td>
-                <td><%= student.name %></td>
-                <td><%= student.DoB ? new Date(student.DoB).toLocaleDateString('en-GB') : 'No data' %></td>
-                <td><%= student.email %></td>
-                <td><%= Array.isArray(student.courseID) ? student.courseID.join(', ') : student.courseID %></td>
-                <td>
-                    <button onclick="openForm('<%= student.studentID %>', '<%= student.name %>', '<%= student.DoB %>')">Edit</button>
-                    <button onclick="deleteStudent('<%= student.studentID %>')">Delete</button>
-                </td>
+                <th>Student ID</th>
+                <th>Student Name</th>
+                <th>Student Birthday</th>
+                <th>Student Email</th>
+                <th>Participate In</th> <!-- Column header styled correctly -->
+                <th>Action</th>
             </tr>
-        <% }); %>
-    </table>
+            <% students.forEach(student => { %>
+                <tr>
+                    <td><%= student.studentID.toUpperCase() %></td>
+                    <td><%= student.name %></td>
+                    <td><%= student.DoB ? new Date(student.DoB).toLocaleDateString('en-GB') : 'No data' %></td>
+                    <td><%= student.email %></td>
+                    <td><%= Array.isArray(student.courseID) ? student.courseID.join(', ') : student.courseID %></td>
+                    <td>
+                        <button onclick="openForm('<%= student.studentID %>', '<%= student.name %>', '<%= student.DoB %>')">Edit</button>
+                        <button onclick="deleteStudent('<%= student.studentID %>')">Delete</button>
+                    </td>
+                </tr>
+            <% }); %>
+        </table>
+    </div>
 
     <br>
     <table>

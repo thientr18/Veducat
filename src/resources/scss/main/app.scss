@@ -735,12 +735,26 @@ ul li p{
     border-radius: 1rem;
     cursor: pointer;
 }
+.course-discussion .discussion-listed ul li:hover a{
+    color: var(--secondary-color);
+}
 .course-discussion .discussion-listed ul li .discussion-name, .course-discussions .discussion-listed ul li .discussion-name{
     align-items: center;
     padding: 1rem;
 }
 .discussion-name .position{
     font-weight: lighter;
+}
+.discussion-item{
+    transition: all 0.3s ease-in-out;
+}
+.discussion-item:hover{
+    background-color: var(--primary-color);
+    transition: all 0.3s ease-in-out;
+}
+.discussion-item:hover .discussion-name{
+    color: var(--secondary-color);
+    transition: all 0.3s ease-in-out;
 }
 .course-discussion .topic-header, .course-discussions .topic-header{
     width: 100%;
