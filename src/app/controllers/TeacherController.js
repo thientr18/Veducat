@@ -416,19 +416,7 @@ class TeacherController {
             const pCourse = await ProgressingCourse.findById(_id);
             const homework = await Task.findById(hID);
             grade.grades.forEach(async ({ submissionID, studentID, grade }) => {
-                const presentGrade = await Grade.findOne({ submissionID: submissionID });
-                if (presentGrade) {
-                    await Grade.updateOne({ submissionID: submissionID }, { grade: grade });
-                }else{
-                    await Grade.create({ 
-                        submissionID: submissionID, 
-                        taskID: hID,
-                        studentID, studentID,
-                        grade: grade,
-                        gradedBy: teacher.teacherID,
-                        createdAt: Date.now(),});
-                    await Submission.updateOne({ _id: submissionID }, { graded: true });
-                }
+                    await Submission.updateOne({ _id: submissionID }, { graded: true, grade : grade });
             });
             res.status(201).json({ message: "Homework uploaded successfully" });
            
@@ -591,7 +579,7 @@ class TeacherController {
                 return res.status(404).json({ message: "Material not found" });
             }
 
-            let pCourse = await ProgressingCourse.findById(material.courseID);
+            let pCourse = await ProgressingCourse.findById(material.pCourseID);
             await MaterialFile.deleteMany({ materialID: material._id });
             await Material.findByIdAndDelete(_id);
             res.redirect(`/teacher/course/${pCourse._id}/material`);
@@ -715,6 +703,10 @@ class TeacherController {
             let progressingCourse = await ProgressingCourse.findById(homework.pCourseID);
             await TaskFile.deleteMany({ taskID: homework._id });
             await Task.findByIdAndDelete(_id);
+            await TaskforStudent.deleteMany({ taskID: homework._id });
+            await Submission.deleteMany({ taskID: homework._id });
+            await SubmissionFile.deleteMany({ taskID: homework._id });
+
             res.redirect(`/teacher/course/${progressingCourse._id}/homework`);
         }
         catch (err) {
@@ -767,6 +759,38 @@ class TeacherController {
                 res.status(500).json({ message: error.message });
             }
         });
+    }
+    //post /course/:_id/homework/:dID/
+    async grade_dicussion_post (req, res, next) {
+        const user = res.locals.user;
+        const { _id, dID } = req.params;
+        const grade = req.body;
+        try {
+            const teacher = await Teacher.findOne({ teacherID: user.userID });
+            if (!teacher) {
+                return res.status(404).json({ message: "Teacher not found" });
+            }
+            const pCourse = await ProgressingCourse.findById(_id);
+            const homework = await Task.findById(hID);
+            grade.grades.forEach(async ({ studentID, content, grade }) => {
+                const presentGrade = await Grade.findOne({ submissionID: submissionID });
+                if (presentGrade) {
+                    await Grade.updateOne({ _id: submissionID }, { grade : grade });
+                } else {
+                    await Grade.create({
+                        discussionID: dID,
+                        discussionContent: content,
+                        studentID: studentID,
+                        grade: grade,
+                        gradedBy: teacher.teacherID,
+                    });
+                }
+            });
+            res.status(201).json({ message: "Homework uploaded successfully" });
+           
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
     }
 
 

@@ -18,7 +18,9 @@
         </div>
     </main>
     <script>
-        let announcements = '<%- JSON.stringify(announcements) %>';
+        // let announcements = '<%- JSON.stringify(announcements).replace(/\\/g, "\\\\") %>';
+        let announcements = '<%- JSON.stringify(announcements).replace("\\n"," ") %>';
+
         announcements = JSON.parse(announcements);
 
         announcements.sort((a, b) => new Date(b.sentAt).getTime() - new Date(a.sentAt).getTime());

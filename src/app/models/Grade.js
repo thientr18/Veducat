@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
 const gradeSchema = new mongoose.Schema({
-    submissionID: {
+    discussionID: {
         type: 'string',
         required: [true, 'Please enter a submission ID'],
         lowercase: true
     },
-    taskID: {
+    discussionContent: {
         type: 'string',
         required: [true, 'Please enter a task ID'],
         lowercase: true
@@ -25,10 +25,8 @@ const gradeSchema = new mongoose.Schema({
     },
     createdAt: {
         type: Date,
+        default: Date.now
     },
-    updateAt: {
-        type: Date,
-    }
 });
 
 const Grade = mongoose.model('grade', gradeSchema); // 'grade' is the name of the collection in the database
