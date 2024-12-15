@@ -338,25 +338,15 @@ class TeacherController {
             }
             let pCourse = await ProgressingCourse.findById(_id)
             const course = await Course.findOne({ courseID: pCourse.courseID });
-            const students = await Student.find({ studentID: pCourse.students });
+            let students = await Student.find({ studentID: pCourse.students });
             const discussions = await Discussion.find({ pCourseID: pCourse._id });
             const presentDiscussion = await Discussion.findById(dID);   
             const messages = await Message.find({ discussionID: { $in: discussions.map(d => d._id) } });
             pCourse = { ...pCourse._doc, courseName: course.name, courseDescription: course.description };
-            console.log(messages);
 
-            const list = await Promise.all(messages.map(async msg => {
-                const student = students.find(s => s.studentID === msg.senderID);
-                const message = await Message.find({ senderID: student.studentID });
-                console.log(messages);
-                return {
-                    ...msg._doc,
-                    studentName: student?.name || null,
-                    studentID: student?.studentID || null,
-                };
-            }));
 
-            res.render('teacher/course_discussion', { user, teacher, pCourse, students, discussions, messages, presentDiscussion, list });
+
+            res.render('teacher/course_discussion', { user, teacher, pCourse, students, discussions, messages, presentDiscussion });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
@@ -565,6 +555,7 @@ class TeacherController {
                 return { ...m._doc, isSender: m.senderID === teacher.teacherID };
             });
             const lastMessage = messages[messages.length - 1];
+            console.log(messages);
             res.status(201).json({ message : lastMessage.message, senderID: lastMessage.senderID, createdAt: lastMessage.createAt });
         } catch (error) {
             res.status(500).json({ message: error.message });
@@ -672,6 +663,7 @@ class TeacherController {
                         assignedBy: teacher.teacherID,
                         createdAt: Date.now(),
                     });
+                    console.log(students);
                     students.forEach(async student => {
                         await TaskforStudent.create({
                             studentID: student.studentID, taskID: homework._id});
@@ -736,9 +728,12 @@ class TeacherController {
         const {title, description,deadline} = req.body;
         const files = req.files;
 
+        console.log(files, title, description, deadline);
+
         upload(req, res, async (err) => {
             try {
                 const homework = await Task.findById( hID);
+                console.log(homework);
                 if(files.file == null){
                     await Task.updateOne(
                         {_id : hID},
