@@ -55,8 +55,6 @@ class StudentController {
                 };
             });
 
-            console.log(enrichedAnnouncements);
-
             res.render('student/index', { user, student, studentCourses, announcements: enrichedAnnouncements });
         } catch (error) {
             console.error(error);
@@ -240,7 +238,6 @@ class StudentController {
         const files = req.files;
 
         upload(req, res, async (err) => {
-            console.log("hello1")
             try {
                 const student = await Student.findOne({ studentID: user.userID });
                 const homework = await Task.findOne({ _id: hID });

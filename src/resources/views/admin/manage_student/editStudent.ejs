@@ -42,7 +42,7 @@
           <a href="/admin/manage_student">Back to Manage</a>
           <a href="/admin/manage_student/insert">Insert New Student</a>
         </div>
-        <h2>Teacher's List</h2>
+        <h2>Student's List</h2>
     </div>
     <div class="container">
         <table class="table-list">
@@ -51,7 +51,7 @@
                 <th>Student Name</th>
                 <th>Student Birthday</th>
                 <th>Student Email</th>
-                <th>Participate In</th> <!-- Column header styled correctly -->
+                <th>Participate In</th>
                 <th>Action</th>
             </tr>
             <% students.forEach(student => { %>
@@ -60,7 +60,17 @@
                     <td><%= student.name %></td>
                     <td><%= student.DoB ? new Date(student.DoB).toLocaleDateString('en-GB') : 'No data' %></td>
                     <td><%= student.email %></td>
-                    <td><%= Array.isArray(student.courseID) ? student.courseID.join(', ') : student.courseID %></td>
+                    <td>
+                        <% if (Array.isArray(student.courseIDs) && student.courseIDs.length > 0) { %>
+                            <ul>
+                                <% student.courseIDs.forEach(courseID => { %>
+                                    <li><%= courseID %></li>
+                                <% }); %>
+                            </ul>
+                        <% } else { %>
+                            No courses
+                        <% } %>
+                    </td>
                     <td>
                         <button onclick="openForm('<%= student.studentID %>', '<%= student.name %>', '<%= student.DoB %>')">Edit</button>
                         <button onclick="deleteStudent('<%= student.studentID %>')">Delete</button>

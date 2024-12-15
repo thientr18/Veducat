@@ -60,13 +60,24 @@ class AdminController {
     // GET /admin/manage_student/list
     async admin_edit_student_get(req, res, next) {
         try {
-            let students = await Student.find();
-            const courseOfStudent = await ProgressingCourse.find({ students: { $in: students.map(student => student.studentID) } });
-            students = students.map(student => {
-                const course = courseOfStudent.find(course => course.students.includes(student.studentID));
-                return { ...student._doc, courseID: course.courseID };
+            // Retrieve all students and progressing courses from the database
+            const students = await Student.find();
+            const courses = await ProgressingCourse.find();
+
+            // Map students and associate them with all courseIDs they are enrolled in
+            const updatedStudents = students.map(student => {
+                const enrolledCourses = courses
+                    .filter(course => course.students.includes(student.studentID)) // Find all courses the student is in
+                    .map(course => course.courseID); // Extract the courseIDs
+                
+                return {
+                    ...student._doc, // Keep all existing student fields
+                    courseIDs: enrolledCourses // Attach an array of courseIDs
+                };
             });
-            res.render('admin/manage_student/editStudent', { students });
+
+            console.log(updatedStudents);
+            res.render('admin/manage_student/editStudent', { students: updatedStudents });
         }
         catch (err) {
             console.log(err)
@@ -283,6 +294,7 @@ class AdminController {
         
         try {
             await ProgressingCourse.create({ courseID, teacherID, students });
+
             res.status(201).json( { message: 'Insert progressing course successfully' })
         } catch (err) {
             console.log(err)
@@ -435,7 +447,6 @@ class AdminController {
         senderID = senderID.toLowerCase();
         try {
             const pCourse = await ProgressingCourse.findOne({ courseID: pCourseID });
-            console.log(pCourse)
             if (!pCourse) {
                 return res.status(400).json({ message: 'Course does not exist' });
             }
