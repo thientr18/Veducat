@@ -1598,6 +1598,9 @@ td.grading {
   border: solid 0.1rem var(--primary-color);
   cursor: pointer; }
 
+td#table-discussion {
+  white-space: pre-wrap; }
+
 @media (max-width: 1080px) {
   html {
     font-size: 55%; } }
