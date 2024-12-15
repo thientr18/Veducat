@@ -20,7 +20,6 @@
 </section>
 <script>
     let students = '<%- JSON.stringify(students) %>';
-    console.log(students);
     students = JSON.parse(students);
     const studentListed = document.querySelector('.student-listed table');
     students.forEach(student => {

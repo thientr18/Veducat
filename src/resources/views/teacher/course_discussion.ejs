@@ -72,7 +72,6 @@
 <script>
     let discussions = '<%- JSON.stringify(discussions) %>';
     discussions = JSON.parse(discussions);
-    console.log(discussions);
     let user = '<%- JSON.stringify(user) %>';
     user = JSON.parse(user);
     const userID = user.userID;
@@ -96,7 +95,6 @@
 
     let presentDiscussion = '<%- JSON.stringify(presentDiscussion).replace("/\\n/g", " ") %>';
     presentDiscussion = JSON.parse(presentDiscussion);
-    console.log(presentDiscussion);
 
     if(presentDiscussion) {
         document.querySelector(".topic-title").textContent = presentDiscussion.title + ": " + presentDiscussion.topic;
@@ -268,7 +266,6 @@
                 method: 'POST',
                 body: formData,
             });
-            console.log(res);
             const data = await res.json();
             if(res.status >= 200 && res.status < 300) {
                 location.reload();
@@ -288,7 +285,6 @@
         let messages = '<%- JSON.stringify(messages).replace(/\\n/g, " "); %>';
         messages = JSON.parse(messages);
         messages = messages.filter(message => message.discussionID === presentDiscussion._id);
-        console.log(messages);
 
         if (messages) {
             messages.forEach(message => {
@@ -414,7 +410,6 @@
                     'Content-Type': 'application/json',
                 }
             });
-            console.log(res);
             const data = await res.json();
             if(res.status >= 200 && res.status < 300) {
                 location.reload();

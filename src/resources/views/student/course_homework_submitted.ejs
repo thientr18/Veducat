@@ -23,7 +23,6 @@
 <script>
     let sDetails = '<%- JSON.stringify(submissionDetails).replace(/\\/g, "\\\\") %>';
     sDetails = JSON.parse(sDetails);
-    console.log(sDetails);
     const title = document.querySelector('.status-bar h3');
     const homeworkWriting = document.querySelector('.homework-writing p');
     const homeworkFile = document.querySelector('.homework-file');

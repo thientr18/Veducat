@@ -15,7 +15,6 @@
     let homeworks = '<%- JSON.stringify(homeworks).replace(/\\/g, "\\\\") %>';
     let progressingCourse = '<%- JSON.stringify(pCourse) %>';
     homeworks = JSON.parse(homeworks);
-    console.log(homeworks);
     progressingCourse = JSON.parse(progressingCourse);
 
     const homeworkListed = document.querySelector('.homework-listed ul');
