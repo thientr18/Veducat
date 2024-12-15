@@ -150,7 +150,6 @@
           body: JSON.stringify({ name, DoB, email }),
           headers: { 'Content-Type': 'application/json' },
         });
-        console.log(res);
         if (res.status >= 200 && res.status < 300) {
           alert(`Teacher '${teacherID.toUpperCase()}' updated successfully`);
           location.reload();

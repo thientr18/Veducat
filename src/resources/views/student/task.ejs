@@ -61,7 +61,6 @@
     <script>
         let tasks = '<%- JSON.stringify(tasks).replace(/\\/g, "\\\\") %>';
             tasks = JSON.parse(tasks);
-            console.log(tasks);
         const unsubmittedTable = document.querySelector('.homework-unsubmitted table');
         const submittedTable = document.querySelector('.homework-submitted table');
         tasks.forEach(task => {

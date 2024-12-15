@@ -14,7 +14,6 @@
 <script>
     let files = '<%- JSON.stringify(materialFiles).replace(/\\/g, "\\\\") %>';
     files = JSON.parse(files);
-    console.log(files);
     const materialContents = document.querySelector('.material-contents');
     files.forEach(file => {
         const a = document.createElement('a');
