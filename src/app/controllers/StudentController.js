@@ -11,7 +11,8 @@ const MaterialFile = require('../models/MaterialFile');
 const SubmissionFiles = require('../models/SubmissionFiles');
 const Submission = require('../models/Submission');
 const TaskforStudent = require('../models/TaskforStudent');
-
+const Message = require('../models/Message');
+const Discussion = require('../models/Discussion');
 const multer = require('multer');
 
 
@@ -54,6 +55,8 @@ class StudentController {
                     courseDescription: course?.description || null
                 };
             });
+
+            console.log(enrichedAnnouncements);
 
             res.render('student/index', { user, student, studentCourses, announcements: enrichedAnnouncements });
         } catch (error) {
@@ -238,6 +241,7 @@ class StudentController {
         const files = req.files;
 
         upload(req, res, async (err) => {
+            console.log("hello1")
             try {
                 const student = await Student.findOne({ studentID: user.userID });
                 const homework = await Task.findOne({ _id: hID });
@@ -316,23 +320,56 @@ class StudentController {
 
     async discussion_get(req, res, next) {
         const user = res.locals.user;
-        const { _id } = req.params;
+        const { _id, dID } = req.params;
         try {
             const student = await Student.findOne({ studentID: user.userID });
             if (!student) {
                 return res.status(404).json({ message: "Student not found" });
             }
-
-            /// Current course
-            let pCourse = await ProgressingCourse.findById(_id);
+            let pCourse = await ProgressingCourse.findById(_id)
             const course = await Course.findOne({ courseID: pCourse.courseID });
+            const teacher = await Teacher.findOne({ teacherID: pCourse.teacherID });
+            const discussions = await Discussion.find({ pCourseID: pCourse._id });
+            const presentDiscussion = await Discussion.findById(dID);   
+            const messages = await Message.find({ discussionID: { $in: discussions.map(d => d._id) } });
             pCourse = { ...pCourse._doc, courseName: course.name, courseDescription: course.description };
 
-            res.render('student/course_discussion', { user, student, pCourse});
-        } catch {
-            console.error(error);
-            res.status(500).send({ message: "An error occurred", error });
+            res.render('student/course_discussion', { user, student, pCourse, teacher, discussions, messages, presentDiscussion });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
         }
+    }
+    async discussion_save_chat (req, res, next) {
+        const user = res.locals.user;
+        const { _id, dID } = req.params;
+        const { message } = req.body;
+
+
+
+        try {
+            const student = await Student.findOne({ studentID: user.userID });
+            if (!student) {
+                return res.status(404).json({ message: "Student not found" });
+            }
+            console.log(student);
+
+            await Message.create(
+                { discussionID: dID, 
+                    message: message, 
+                    senderID: student.studentID, });  
+
+            let messages = await Message.find({ discussionID: dID });
+            messages = messages.map(m => {
+                return { ...m._doc, isSender: m.senderID === student.studentID };
+            });
+            const lastMessage = messages[messages.length - 1];
+            console.log(messages);
+
+            res.status(201).json({ message: lastMessage.message, senderID: lastMessage.senderID, createAt: lastMessage.createdAt });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+        
     }
 
     async grade_get(req, res, next) {
@@ -442,38 +479,6 @@ class StudentController {
             console.error(error);
             res.status(500).send({ message: "An error occurred", error });
         }
-    }
-    async discussion_save_chat (req, res, next) {
-        const user = res.locals.user;
-        const { _id, dID } = req.params;
-        const { message } = req.body;
-
-
-
-        try {
-            const student = await Student.findOne({ studentID: user.userID });
-            if (!student) {
-                return res.status(404).json({ message: "Student not found" });
-            }
-            console.log(student);
-
-            await Message.create(
-                { discussionID: dID, 
-                    message: message, 
-                    senderID: student.studentID, });  
-
-            let messages = await Message.find({ discussionID: dID });
-            messages = messages.map(m => {
-                return { ...m._doc, isSender: m.senderID === student.studentID };
-            });
-            const lastMessage = messages[messages.length - 1];
-            console.log(messages);
-
-            res.status(201).json({ message: lastMessage.message, senderID: lastMessage.senderID, createAt: lastMessage.createdAt });
-        } catch (error) {
-            res.status(500).json({ message: error.message });
-        }
-        
     }
 }
 const storage = multer.diskStorage({
