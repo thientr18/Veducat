@@ -346,7 +346,6 @@
         let messages = '<%- JSON.stringify(messages).replace(/\\n/g, " "); %>';
         messages = JSON.parse(messages);
         messages = messages.filter(message => message.discussionID === presentDiscussion._id);
-        console.log(messages);
 
         if (messages) {
             messages.forEach(message => {
@@ -472,7 +471,6 @@
                     'Content-Type': 'application/json',
                 }
             });
-            console.log(res);
             const data = await res.json();
             if(res.status >= 200 && res.status < 300) {
                 location.reload();
