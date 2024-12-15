@@ -64,6 +64,7 @@
             </thead>
             <tbody>
                 <% courses.forEach(course => { %>
+                    <% if (course.courseID === 'admin') return; %>
                     <tr>
                         <td><%= course.courseID.toUpperCase() %></td>
                         <td><%= course.name %></td>
