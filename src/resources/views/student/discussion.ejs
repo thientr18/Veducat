@@ -9,15 +9,44 @@
     <main id="main-in-discussion">
         <div class="container">
             <div class="header-discussion">
-                <h2>Recent Discussion</h2>
+                <h2>Discussion</h2>
             </div>
             <div class="discussion-list">
-                <ul>
-                    <li>
-                        <p>Discussion Title</p>
-                    </li>
+                <ul class="discussion-ul">
                 </ul>
             </div>
         </div>
     </main>
+    <script>
+        let discussions = '<%- JSON.stringify(discussions).replace("\\n"," ") %>';
+
+        discussions = JSON.parse(discussions);
+
+        discussions.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+        const discussionList = document.querySelector('.discussion-list');
+        const discussionUl = discussionList.querySelector('ul');
+
+        discussions.forEach(discussion => {
+            const li = document.createElement('li');
+            const a = document.createElement('a');
+            const span = document.createElement('span');
+
+            a.textContent = `${discussion.title}`;
+            a.href = `/student/course/${discussion.pCourseID}/discussion/${discussion._id}`;
+            span.textContent = `Course: ${discussion.courseName} | Posted on: ${new Date(discussion.createdAt).toLocaleString()}`;
+
+            li.classList.add('discussion-item');
+            li.appendChild(a);
+            li.appendChild(span);
+            discussionUl.appendChild(li);
+        });
+
+        if (discussions.length === 0) {
+            const li = document.createElement('li');
+            li.classList.add('empty-content');
+            li.textContent = 'No discussions yet';
+            discussionUl.appendChild(li);
+        }
+    </script>
 <%- include('../partials/main/footer.ejs'); -%>

@@ -1597,5 +1597,25 @@ td.fullname{
 td#table-discussion{
     white-space: pre-wrap;
   }
-  
+.discussion-ul li{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1rem;
+  }
+.discussion-ul li a{
+    font-size: 2rem;
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    text-decoration: none;
+    color: var(--primary-color);
+  }
+.discussion-ul li:hover a{
+    color: var(--white-color);
+    border-radius: 1rem;
+  }
+i{
+    padding: 1rem; 
+}
 @import 'responsive.scss';
