@@ -72,6 +72,7 @@
 <script>
     let discussions = '<%- JSON.stringify(discussions) %>';
     discussions = JSON.parse(discussions);
+    console.log(discussions);
     let user = '<%- JSON.stringify(user) %>';
     user = JSON.parse(user);
     const userID = user.userID;
@@ -95,6 +96,7 @@
 
     let presentDiscussion = '<%- JSON.stringify(presentDiscussion).replace("/\\n/g", " ") %>';
     presentDiscussion = JSON.parse(presentDiscussion);
+    console.log(presentDiscussion);
 
     if(presentDiscussion) {
         document.querySelector(".topic-title").textContent = presentDiscussion.title + ": " + presentDiscussion.topic;
@@ -204,8 +206,11 @@
             <label for="studentID">Student ID</label>
             <select name="studentID" id="id-selected">
                 <script>
-                    let students = '<%- JSON.stringify(students) %>';
+                    // Dữ liệu giả định của sinh viên
+                    let students = '<%- JSON.stringify(students) %>'; // Dữ liệu từ backend
                     students = JSON.parse(students);
+
+                    // Thêm các tùy chọn vào thẻ select
                     students.forEach(student => {
                         const option = document.createElement("option");
                         option.value = student.studentID;
@@ -214,26 +219,49 @@
                     });
                 </script>
             </select>
-            <script>
-                document.querySelector("#id-selected").addEventListener("change", function() {
-                    var id = document.querySelector("#id-selected").value;
-                    document.querySelector("#" + id).style.display = "block";
-                    document.querySelector(".students-info").style.display = "none";
-                });
-            </script>
-            <table>
-                <tr>
-                    <th>Student ID</th>
-                    <th>Student Name</th>
-                    <th>Discussion Contents</th>
-                    <th>Grade</th>
-                </tr>
+
+            <table id="student-table">
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Student Name</th>
+                        <th>Discussion Contents</th>
+                        <th>Grade</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr id="student-row">
+                        <td id="table-studentID"></td>
+                        <td id="table-studentName"></td>
+                        <td id="table-discussion"></td>
+                        <td id="table-grade"></td>
+                    </tr>
+                </tbody>
             </table>
+
             <script>
-                document.querySelector("#id-selected").addEventListener("change", function() {
-                    
-                });
-            </script>
+        let messages = '<%- JSON.stringify(messages).replace(/\\n/g, " "); %>';
+        messages = JSON.parse(messages);
+        messages = messages.filter(message => message.discussionID === presentDiscussion._id);
+        document.querySelector("#id-selected").addEventListener("change", function () {
+        const selectedID = this.value;
+        const student = students.find(s => s.studentID === selectedID); 
+        if (student) {
+            let messagesHasID = messages.filter(message => message.senderID === selectedID);
+            document.querySelector("#table-studentID").textContent = student.studentID;
+            document.querySelector("#table-studentName").textContent = student.name;
+            document.querySelector("#table-discussion").textContent = messagesHasID.map(message => message.message).join("\n");
+            const grade = document.querySelector("#table-grade")
+            grade.innerHTML = `<input type="number" name="grade" id="grade" min="0" max="10" step="0.1" required>`;
+        } else {
+            document.querySelector("#table-studentID").textContent = '';
+            document.querySelector("#table-studentName").textContent = '';
+            document.querySelector("#table-discussion").textContent = '';
+            document.querySelector("#table-grade").textContent = '';
+        }
+    });
+</script>
+
             <div class="button-form">
                 <button type="submit">
                     <i class="fas fa-paper-plane"></i>
@@ -251,55 +279,7 @@
     </div>
 </section>
 <script>
-    let message = '<%- JSON.stringify(list).replace(/\\/g, "\\\\") %>';
-    list = JSON.parse(list);
-    const studentSubmissionList = document.querySelector('.student-discussion-list table');
-    list.forEach(student => {
-        const sID = student._id;
-        const tr = document.createElement('tr');
-        const studentID = student.studentID;
-        const studentName = student.studentName;
-        const content = student.content;
-        const td1 = document.createElement('td');
-        const td2 = document.createElement('td');
-        const td3 = document.createElement('td');
-        const td4 = document.createElement('td');
-        const td5 = document.createElement('td');
-        const td6 = document.createElement('td');
-        td1.classList.add('id');
-        td2.classList.add('fullname');
-        td3.classList.add('writing');
-        td4.classList.add('attach');
-        td5.classList.add('time-submission');
-        td6.classList.add('grading');
-        td1.textContent = studentID;
-        td2.textContent = studentName;
-        td5.textContent = new Date(student.submittedAt).toLocaleDateString();
-        const input = document.createElement('input');
-        input.type = 'number';
-        input.name = 'grade';
-        input.id = 'grade';
-        input.min = '0';
-        input.max = '100';
-        td6.appendChild(input);
-        tr.appendChild(td1);
-        tr.appendChild(td2);
-        tr.appendChild(td3);
-        tr.appendChild(td4);
-        tr.appendChild(td5);
-        tr.appendChild(td6);
-        studentSubmissionList.appendChild(tr);
-
-    });
-    if (list.length === 0) {
-        const tr = document.createElement('tr');
-        tr.classList.add('empty-content');
-        const td = document.createElement('td');
-        td.colSpan = 6;
-        td.textContent = 'No submission yet';
-        tr.appendChild(td);
-        studentSubmissionList.appendChild(tr);
-    }
+   
 </script>
 <script> 
     let pCourse = '<%- JSON.stringify(pCourse) %>';
@@ -324,6 +304,7 @@
                 method: 'POST',
                 body: formData,
             });
+            console.log(res);
             const data = await res.json();
             if(res.status >= 200 && res.status < 300) {
                 location.reload();
@@ -343,6 +324,7 @@
         let messages = '<%- JSON.stringify(messages).replace(/\\n/g, " "); %>';
         messages = JSON.parse(messages);
         messages = messages.filter(message => message.discussionID === presentDiscussion._id);
+        console.log(messages);
 
         if (messages) {
             messages.forEach(message => {
@@ -468,6 +450,7 @@
                     'Content-Type': 'application/json',
                 }
             });
+            console.log(res);
             const data = await res.json();
             if(res.status >= 200 && res.status < 300) {
                 location.reload();
