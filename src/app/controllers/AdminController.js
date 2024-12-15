@@ -9,7 +9,9 @@ const Message = require('../models/Message');
 const ProgressingCourse = require('../models/ProgressingCourse');
 const Student = require('../models/Student');
 const Submission = require('../models/Submission');
+const SubmissionFiles = require('../models/SubmissionFiles');
 const Task = require('../models/Task');
+const TaskFile = require('../models/TaskFile');
 const TaskforStudent = require('../models/TaskforStudent');
 const Teacher = require('../models/Teacher');
 const User = require('../models/User');
@@ -108,9 +110,12 @@ class AdminController {
             await Student.deleteOne({ studentID: studentID })
             await User.deleteOne({ userID: studentID })
             await ProgressingCourse.updateMany({}, { $pull: { students: studentID } });
+            await TaskforStudent.deleteMany({ studentID: studentID });
             await Announcement.updateMany({}, { $pull: { receivers: studentID } });
-            await Discussion.updateMany({}, { $pull: { studentID: studentID } });
-            await Submission.deleteMany({ studentID: studentID });
+            const submissions = await Submission.deleteMany({ studentID: studentID });
+            for (let submission of submissions) {
+                await SubmissionFiles.deleteMany({ submissionID: submission._id });
+            }
             await Message.deleteMany({ senderID: studentID });
             await Grade.deleteMany({ studentID: studentID });
 
@@ -350,20 +355,26 @@ class AdminController {
         pCourseID = pCourseID.toLowerCase();
 
         try {
-            await Material.deleteMany({ pCourseID });
-            await Discussion.deleteMany({ pCourseID });
-            await Announcement.deleteMany({ source: pCourseID });
             const tasks = await Task.find({ pCourseID });
             for (let task of tasks) {
                 const submissions = await Submission.find({ taskID: task._id });
                 
                 for (let submission of submissions) {
-                    await Grade.deleteOne({ submissionID: submission._id });
+                    await SubmissionFiles.deleteMany({ submissionID: submission._id });
                 }
                 await Submission.deleteMany({ taskID: task._id });
                 await TaskforStudent.deleteMany({ taskID: task._id });
+                await TaskFile.deleteMany({ taskID: task._id });
             }
             await Task.deleteMany({ pCourseID });
+            await Announcement.deleteMany({ pCourseID });
+            await Material.deleteMany({ pCourseID });
+            const discussions = await Discussion.find({ pCourseID });
+            for (let discussion of discussions) {
+                await Grade.deleteMany({ discussionID: discussion._id });
+                await Message.deleteMany({ discussionID: discussion._id });
+            }
+            await Discussion.deleteMany({ pCourseID });
             await ProgressingCourse.deleteOne({ _id: pCourseID });
             res.status(200).json( { message: 'Delete progressing course successfully' })
         }
