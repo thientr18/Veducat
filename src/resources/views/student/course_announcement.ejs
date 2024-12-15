@@ -13,10 +13,10 @@
 
 <script>
     // Announcements
-    let announcements = '<%- JSON.stringify(announcements) %>';
+    let announcements = '<%- JSON.stringify(announcements).replace(/\\/g, "\\\\") %>';
     announcements = JSON.parse(announcements);
     // SORT ANNOUNCEMENTS BY DATE: newest to oldest
-    announcements.sort((a, b) => new Date(b.sentAt).getTime() - new Date(a.sentAt).getTime());
+    announcements.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
     const announcementList = document.querySelector('.announcement-listed');
     const announcementUl = announcementList.querySelector('ul');

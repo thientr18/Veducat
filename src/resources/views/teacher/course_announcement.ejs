@@ -78,9 +78,11 @@
 
 <!-- Script to render announcements -->
 <script>
-    let announcements = '<%- JSON.stringify(announcements) %>';
+    // Announcements
+    let announcements = '<%- JSON.stringify(announcements).replace(/\\/g, "\\\\") %>';
     announcements = JSON.parse(announcements);
-    announcements = announcements.reverse();
+    // SORT ANNOUNCEMENTS BY DATE: newest to oldest
+    announcements.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
     const announcementListed = document.querySelector(".announcement-listed ul");
 

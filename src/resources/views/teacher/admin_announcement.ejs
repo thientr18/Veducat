@@ -25,6 +25,7 @@
 <script>
     let announcements = '<%- JSON.stringify(announcements).replace(/\\/g, "\\\\") %>';
     announcements = JSON.parse(announcements);
+    
 
     const announcementList = document.querySelector('.announcement-listed');
     const announcementUl = announcementList.querySelector('ul');
@@ -38,7 +39,7 @@
         const announcementDescriptionSpan = document.createElement('span');
 
         announcementDate.classList.add('date');
-        announcementDate.textContent = `Posted on: ${new Date(announcement.sentAt).toLocaleString()}`;
+        announcementDate.textContent = `Posted on: ${new Date(announcement.createdAt).toLocaleString()}`;
         announcementContainer.classList.add('announcement-container');
         announcementLink.id = announcement._id;
         announcementLink.textContent = announcement.title;
