@@ -4,67 +4,43 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Insert Student API</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    form {
-      background-color: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-    table {
-      width: 100%;
-    }
-    td {
-      padding: 10px;
-    }
-    input[type="submit"], input[type="reset"] {
-      background-color: #f89b28;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      cursor: pointer;
-      border-radius: 4px;
-    }
-    input[type="submit"]:hover, input[type="reset"]:hover {
-      background-color: #e07b1f;
-    }
-  </style>
+  <%- include ('../partials/style.ejs'); -%>
 </head>
 <body>
-  <form class="form-insert-student" method="POST" action="/admin/manage_student/insert">
-    <table>
-      <tr>
-        <td>Student ID</td>
-        <td><input type="text" name="student_id" id="student_id" required></td>
-      </tr>
-      <tr>
-        <td>Student Name</td>
-        <td><input type="text" name="student_name" id="student_name" required></td>
-      </tr>
-      <tr>
-        <td>Student Birthday</td>
-        <td><input type="date" name="student_dob" id="student_dob"></td>
-      </tr>
-      <tr>
-        <td><input type="submit" value="Insert"></td>
-        <td><input type="reset" value="Reset"></td>
-      </tr>
-      <tr>
-        <td><a href="/admin">Back to Home</a></td>
-        <td><a href="/admin/manage_student/list">Go to Student List</a></td>
-      </tr>
-    </table>
-  </form>
+  <%- include ('../partials/navigation.ejs'); -%>
+  <div class="container">
+    <form class="form-insert form-insert-student" method="POST" action="/admin/manage_student/insert">
+      <table>
+        <tr>
+          <td>Student ID</td>
+          <td><input type="text" name="student_id" id="student_id" required></td>
+        </tr>
+        <tr>
+          <td>Student Name</td>
+          <td><input type="text" name="student_name" id="student_name" required></td>
+        </tr>
+        <tr>
+          <td>Student Birthday</td>
+          <td><input type="date" name="student_dob" id="student_dob"></td>
+        </tr>
+        <tr>
+          <td><input type="submit" value="Insert"></td>
+          <td><input type="reset" value="Reset"></td>
+        </tr>
+
+      </table>
+      <div class="return-back">
+        <a href="/admin/manage_teacher">
+          <i class="fas fa-angles-left"></i>
+        </a>
+      </div>
+      <div class="list-direct">
+        <a href="/admin/manage_teacher/list">
+          Go to Student's List
+        </a>
+      </div>
+    </form>
+  </div>
 
   <script>
     const form = document.querySelector('form');

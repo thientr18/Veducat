@@ -4,81 +4,60 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Insert Progressing Course API</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    form {
-      background-color: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-    table {
-      width: 100%;
-    }
-    td {
-      padding: 10px;
-    }
-    input[type="submit"], input[type="reset"] {
-      background-color: #f89b28;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      cursor: pointer;
-      border-radius: 4px;
-    }
-    input[type="submit"]:hover, input[type="reset"]:hover {
-      background-color: #e07b1f;
-    }
-  </style>
+  <%- include ('../../admin/partials/style.ejs'); -%>
 </head>
 <body>
-  <form class="form-insert-progessing-course" method="POST" action="/admin/manage_progressing_course/insert">
-    <table>
-      <tr>
-        <td>Course: </td>
-        <td>
-            <select id="course">
-                <option value="">Select a course</option>
-                <% courses.forEach(course => { %>
-                    <option value="<%= course.courseID %>"><%= course.courseID %> | <%= course.name %></option>
-                <% }); %>
-            </select>
-        </td>
-      </tr>
-      <tr>
-        <td>Teacher: </td>
-        <td>
-            <select id="teacher">
-                <option value="">Select a teacher</option>
-                <% teachers.forEach(teacher => { %>
-                    <option value="<%= teacher.teacherID %>"><%= teacher.teacherID %> | <%= teacher.name %></option>
-                <% }); %>
-            </select>
-        </td>
-      </tr>
-      <tr>
-        <td>Students: </td>
-        <td>                
-            <% students.forEach(student => { %>
-                <input type="checkbox" id="<%= student.studentID %>" name="student_ids" value="<%= student.studentID %>">
-                <label for="<%= student.studentID %>"><%= student.studentID %> | <%= student.name %></label><br>
-            <% }); %>
-        </td>
-      </tr>
-      <tr>
-        <td><input type="submit" value="Insert"></td>
-        <td><input type="reset" value="Reset"></td>
-    </table>
-  </form>
+  <%- include ('../../admin/partials/navigation.ejs'); -%>
+  <div class="nav-option">
+    <div class="option">
+      <a href="/admin/manage_progressing_course">Back to Manage</a>
+      <a href="/admin/manage_progressing_course/list">Go to List</a>
+    </div>
+    <h2>Insert Progressing Course</h2>
+  </div>
+  <div class="container">
+    <form class="form-insert form-insert-progessing-course" method="POST" action="/admin/manage_progressing_course/insert">
+      <table>
+        <tr>
+          <td>Course: </td>
+          <td>
+              <select id="course">
+                  <option value="">Select a course</option>
+                  <% courses.forEach(course => { %>
+                      <option value="<%= course.courseID %>"><%= course.courseID %> | <%= course.name %></option>
+                  <% }); %>
+              </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Teacher: </td>
+          <td>
+              <select id="teacher">
+                  <option value="">Select a teacher</option>
+                  <% teachers.forEach(teacher => { %>
+                      <option value="<%= teacher.teacherID %>"><%= teacher.teacherID %> | <%= teacher.name %></option>
+                  <% }); %>
+              </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Students: </td>
+          <td>                
+              <% students.forEach(student => { %>
+                  <input type="checkbox" id="<%= student.studentID %>" name="student_ids" value="<%= student.studentID %>">
+                  <label for="<%= student.studentID %>"><%= student.studentID %> | <%= student.name %></label><br>
+              <% }); %>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <input type="reset" value="Reset">
+          </td>
+          <td><input type="submit" value="Insert"></td>
+        </tr>
+      </table>
+    </form>
+  </div>
 
   <script>
     const form = document.querySelector('.form-insert-progessing-course');

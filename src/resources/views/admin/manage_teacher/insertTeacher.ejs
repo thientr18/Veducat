@@ -4,71 +4,54 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Insert Teacher API</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    form {
-      background-color: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-    table {
-      width: 100%;
-    }
-    td {
-      padding: 10px;
-    }
-    input[type="submit"], input[type="reset"] {
-      background-color: #f89b28;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      cursor: pointer;
-      border-radius: 4px;
-    }
-    input[type="submit"]:hover, input[type="reset"]:hover {
-      background-color: #e07b1f;
-    }
-  </style>
+  <%- include('../partials/style.ejs') %>
 </head>
 <body>
-  <form class="form-insert-teacher" method="POST" action="/admin/manage_teacher/insert">
-    <table>
-      <tr>
-        <td>Teacher ID</td>
-        <td><input type="text" name="teacher_id" id="teacher_id" required></td>
-      </tr>
-      <tr>
-        <td>Teacher Name</td>
-        <td><input type="text" name="teacher_name" id="teacher_name" required></td>
-      </tr>
-      <tr>
-        <td>Teacher Mail</td>
-        <td><input type="text" name="teacher_mail" id="teacher_mail" required></td>
-      </tr>
-      <tr>
-        <td>Teacher Birthday</td>
-        <td><input type="date" name="teacher_dob" id="teacher_dob"></td>
-      </tr>
-      <tr>
-        <td><input type="submit" value="Insert"></td>
-        <td><input type="reset" value="Reset"></td>
-      </tr>
-      <tr>
-        <td><a href="/admin">Back to Home</a></td>
-        <td><a href="/admin/manage_teacher/list">Go to Teacher List</a></td>
-      </tr>
-    </table>
-  </form>
+  <%- include('../partials/navigation') %>
+  <h1 style="text-align: center;">Insert Teacher</h1>
+
+  <div class="container">
+    <form class="form-insert form-insert-teacher" method="POST" action="/admin/manage_teacher/insert">
+      <table>
+        <tr>
+          <td>Teacher ID</td>
+          <td><input type="text" name="teacher_id" id="teacher_id" required></td>
+        </tr>
+        <tr>
+          <td>Teacher Name</td>
+          <td><input type="text" name="teacher_name" id="teacher_name" required></td>
+        </tr>
+        <tr>
+          <td>Teacher Mail</td>
+          <td><input type="text" name="teacher_mail" id="teacher_mail" required></td>
+        </tr>
+        <tr>
+          <td>Teacher Birthday</td>
+          <td><input type="date" name="teacher_dob" id="teacher_dob"></td>
+        </tr>
+        <tr>
+          <td><input type="submit" value="Insert"></td>
+          <td><input type="reset" value="Reset"></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+        </tr>
+      </table>
+      <div class="return-back">
+        <a href="/admin/manage_teacher">
+          <i class="fas fa-angles-left"></i>
+        </a>
+      </div>
+      <div class="list-direct">
+        <a href="/admin/manage_teacher/list">
+          Go to Teacher's List
+        </a>
+      </div>
+    </form>
+  </div>
+
+
 
   <script>
     const form = document.querySelector('.form-insert-teacher');

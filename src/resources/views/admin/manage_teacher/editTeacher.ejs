@@ -4,63 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Manage Teachers</title>
+  <%- include ('../partials/style.ejs'); -%>
   <style>
-    /* General Table Styling */
-    table {
-      width: 90%;
-      margin: 20px auto;
-      border-collapse: collapse;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    th, td {
-      padding: 10px;
-      border: 1px solid #ddd;
-      text-align: left;
-    }
-
-    /* Header Styling */
-    th {
-      background-color: #f89b28;
-      color: white;
-    }
-
-    /* Cell Styling */
-    td {
-      background-color: #fff;
-    }
-
-    /* Hover Effect for Table Rows */
-    tr:hover {
-      background-color: #f9f9f9;
-    }
-
-    /* Button Styling */
-    input[type="submit"], input[type="button"], button {
-      background-color: #f89b28;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      cursor: pointer;
-      border-radius: 4px;
-    }
-
-    button:hover, input[type="submit"]:hover, input[type="button"]:hover {
-      background-color: #e07b1f;
-    }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      table {
-        width: 100%;
-        margin: 10px;
-      }
-
-      .alert-box {
-        width: 90%;
-      }
-    }
-
     /* Initially hide the edit form */
     .alert-box {
       display: none;
@@ -74,7 +19,6 @@
       padding: 20px;
       z-index: 1000;
     }
-
     /* Overlay for background */
     .overlay {
       display: none;
@@ -104,37 +48,41 @@
   </style>
 </head>
 <body>
-  <h1>Teacher List</h1>
-  <table>
-    <tr>
-      <th>Teacher ID</th>
-      <th>Teacher Name</th>
-      <th>Teacher Birthday</th>
-      <th>Teacher Email</th>
-      <th>Action</th>
-    </tr>
-    <!-- Loop through teachers to display the teacher data dynamically -->
-    <% teachers.forEach(teacher => { %>
+  <%- include ('../partials/navigation.ejs'); -%>
+  <div class="nav-option">
+    <div class="option">
+      <a href="/admin/manage_teacher">Back to Manage</a>
+      <a href="/admin/manage_teacher/insert">Insert New Teacher</a>
+    </div>
+    <h2>Teacher's List</h2>
+  </div>
+  <div class="container">
+    <table class="table-list">
       <tr>
-        <td><%= teacher.teacherID.toUpperCase() %></td>
-        <td><%= teacher.name %></td>
-        <td><%= teacher.DoB ? new Date(teacher.DoB).toLocaleDateString('en-GB') : 'No data' %></td>
-        <td><%= teacher.email %></td>
-        <td>
-          <button onclick="openForm('<%= teacher.teacherID %>', '<%= teacher.name %>', '<%= teacher.DoB %>', '<%= teacher.email %>')">Edit</button>
-          <button onclick="deleteTeacher('<%= teacher.teacherID %>')">Delete</button>
-        </td>
+        <th>Teacher ID</th>
+        <th>Teacher Name</th>
+        <th>Teacher Birthday</th>
+        <th>Teacher Email</th>
+        <th>Action</th>
       </tr>
-    <% }); %>
-  </table>
+      <!-- Loop through teachers to display the teacher data dynamically -->
+      <% teachers.forEach(teacher => { %>
+        <tr>
+          <td><%= teacher.teacherID.toUpperCase() %></td>
+          <td><%= teacher.name %></td>
+          <td><%= teacher.DoB ? new Date(teacher.DoB).toLocaleDateString('en-GB') : 'No data' %></td>
+          <td><%= teacher.email %></td>
+          <td>
+            <button class="edit-btn" onclick="openForm('<%= teacher.teacherID %>', '<%= teacher.name %>', '<%= teacher.DoB %>', '<%= teacher.email %>')">Edit</button>
+            <button class="delete-btn" onclick="deleteTeacher('<%= teacher.teacherID %>')">Delete</button>
+          </td>
+        </tr>
+      <% }); %>
+    </table>
 
-  <br>
-  <table>
-    <tr>
-      <td><a href="/admin">Back to Home</a></td>
-      <td><a href="/admin/manage_teacher/insert">Insert New Teacher</a></td>
-    </tr>
-  </table>
+    <br>
+  </div>
+
 
   <!-- Edit Teacher Form (Initially hidden) -->
   <div class="overlay" id="overlay"></div>

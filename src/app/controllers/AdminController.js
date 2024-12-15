@@ -297,7 +297,15 @@ class AdminController {
             const students = await Student.find();
             const studentIDs = students.map(student => student.studentID); // Create an array of student IDs
 
-            res.render('admin/manage_progressing_course/editProgressingCourse', { pCourses, studentIDs });
+            const studentsInCourses = pCourses.flatMap(pCourse => pCourse.students); // Create an array of student IDs in progressing courses
+            const studentsNotInCourses = students.filter(student => !studentsInCourses.includes(student.studentID)); 
+
+            const pCoursesWithStudentsNotInCourse = pCourses.map(pCourse => {
+                const studentsNotInThisCourse = students.filter(student => !pCourse.students.includes(student.studentID));
+                return { ...pCourse._doc, studentsNotInThisCourse };
+            });
+
+            res.render('admin/manage_progressing_course/editProgressingCourse', { pCourses: pCoursesWithStudentsNotInCourse, studentIDs, studentsNotInCourses });
         }
         catch (err) {
             console.log(err)
@@ -466,6 +474,44 @@ class AdminController {
         }
     }
     /* END ANNOUNCEMENT */
+
+    // GET /admin/manage_teacher
+    async admin_manage_teacher_get(req, res, next) {
+        try {
+            const teachers = await Teacher.find();
+            res.render('admin/manage_teacher/index', { teachers });
+        } catch (err) {
+            console.log(err)
+            res.status(400).json( {err} )
+        }
+    }
+    async admin_manage_student_get(req, res, next) {
+        try {
+            const students = await Student.find();
+            res.render('admin/manage_student/index', { students });
+        } catch (err) {
+            console.log(err)
+            res.status(400).json( {err} )
+        }
+    }
+    async admin_manage_course_get(req, res, next) {
+        try {
+            const courses = await Course.find();
+            res.render('admin/manage_course/index', { courses });
+        } catch (err) {
+            console.log(err)
+            res.status(400).json( {err} )
+        }
+    }
+    async admin_manage_progressing_course_get(req, res, next) {
+        try {
+            const pCourses = await ProgressingCourse.find();
+            res.render('admin/manage_progressing_course/index', { pCourses });
+        } catch (err) {
+            console.log(err)
+            res.status(400).json( {err} )
+        }
+    }
 }
 
 module.exports = new AdminController()

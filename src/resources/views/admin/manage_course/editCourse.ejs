@@ -5,43 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Course List</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-top: 20px;
-        }
-        table {
-            width: 90%;
-            margin: 20px auto;
-            border-collapse: collapse;
-            background: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        th, td {
-            padding: 10px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
-        th {
-            background-color: #f89b28;
-            color: white;
-        }
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-        a {
-            color: #f89b28;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
         .alert-box {
             display: none;
             position: fixed;
@@ -69,17 +32,6 @@
             background: rgba(0, 0, 0, 0.5);
             z-index: 999;
         }
-        input[type="submit"], input[type="button"] {
-            background-color: #f89b28;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-        input[type="submit"]:hover, input[type="button"]:hover {
-            background-color: #e07b1f;
-        }
 
         .move-btns a {
             display: inline-block;
@@ -88,45 +40,44 @@
             text-decoration: none;
             font-size: 14px;
         }
-
-        @media (max-width: 600px) {
-            table, th, td {
-                font-size: 14px;
-            }
-        }
     </style>
+    <%- include ('../partials/style.ejs'); -%>
 </head>
 <body>
-    <h1>Course List</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Course ID</th>
-                <th>Course Name</th>
-                <th>Course Description</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% courses.forEach(course => { %>
-                <tr>
-                    <td><%= course.courseID.toUpperCase() %></td>
-                    <td><%= course.name %></td>
-                    <td><%= course.description %></td>
-                    <td>
-                        <button onclick="openForm('<%= course.courseID %>', '<%= course.name %>', '<%= course.description %>')">Edit</button>
-                        <button onclick="deleteCourse('<%= course.courseID %>')">Delete</button>
-                    </td>
-                </tr>
-            <% }); %>
-        </tbody>
-    </table>
-    <br>
-
-    <div class="move-btns">
-        <a class="move-btn" href="/admin">Back to Home</a> |
-        <a class="move-btn" href="/admin/manage_course/insert">Insert New Course</a>
+    <%- include ('../partials/navigation.ejs'); -%>
+    <div class="nav-option">
+        <div class="option">
+          <a href="/admin/manage_course">Back to Manage</a>
+          <a href="/admin/manage_course/insert">Insert New Course</a>
+        </div>
+        <h2>Course List </h2>
     </div>
+    <div class="container">
+        <table class="table-list">
+            <thead>
+                <tr>
+                    <th>Course ID</th>
+                    <th>Course Name</th>
+                    <th>Course Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% courses.forEach(course => { %>
+                    <tr>
+                        <td><%= course.courseID.toUpperCase() %></td>
+                        <td><%= course.name %></td>
+                        <td><%= course.description %></td>
+                        <td>
+                            <button onclick="openForm('<%= course.courseID %>', '<%= course.name %>', '<%= course.description %>')">Edit</button>
+                            <button onclick="deleteCourse('<%= course.courseID %>')">Delete</button>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+    
     <!-- Alert Box -->
     <div class="overlay" id="overlay"></div>
     <div class="alert-box" id="editForm">
