@@ -548,13 +548,19 @@ class TeacherController {
                 { discussionID: dID, 
                     message: message, 
                     senderID: teacher.teacherID });  
-   
-            res.status(201).json({ message: "Message uploaded successfully" });
+            let messages = await Message.find({ discussionID: dID });
+            messages = messages.map(m => {
+                return { ...m._doc, isSender: m.senderID === teacher.teacherID };
+            });
+            const lastMessage = messages[messages.length - 1];
+            console.log(messages);
+            res.status(201).json({ message : lastMessage.message, senderID: lastMessage.senderID, createdAt: lastMessage.createAt });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
         
     }
+
 
     async grade_all_get (req, res, next) {
         const user = res.locals.user;
@@ -770,12 +776,10 @@ class TeacherController {
             if (!teacher) {
                 return res.status(404).json({ message: "Teacher not found" });
             }
-            const pCourse = await ProgressingCourse.findById(_id);
-            const homework = await Task.findById(hID);
             grade.grades.forEach(async ({ studentID, content, grade }) => {
-                const presentGrade = await Grade.findOne({ submissionID: submissionID });
+                const presentGrade = await Grade.findOne({ discussionID: dID, studentID: studentID });
                 if (presentGrade) {
-                    await Grade.updateOne({ _id: submissionID }, { grade : grade });
+                    await Grade.updateOne({ discussionID: dID, studentID: studentID }, { grade : grade });
                 } else {
                     await Grade.create({
                         discussionID: dID,

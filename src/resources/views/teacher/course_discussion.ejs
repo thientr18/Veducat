@@ -23,26 +23,26 @@
                 <p class="topic-title"></p>
             </div>
         </div>
-        <div class="discussion-board">
+        <div class="discussion-board" id="discussion-board">
             <div class="other-msg">
                 <div class="user-name">
                     <i class="fas fa-user-circle"></i>
-                    <span>Student 1</span>
+                    <span></span>
                 </div>
                 <div class="msg">
-                    <p>Hi, I have a question about the homework.</p>
+                    <p></p>
                 </div>
                 <div class="time">
-                    <span>10:00 AM</span>
+                    <span></span>
                 </div>
             </div>
             <div class="owner-msg">
                 <div class="user-name">
                     <i class="fas fa-user-circle"></i>
-                    <span>Teacher 1</span>
+                    <span></span>
                 </div>
                 <div class="msg">
-                    <p>What is your question?</p>
+                    <p></p>
                 </div>
                 <div class="time">
                     <span>10:05 AM</span>
@@ -75,9 +75,8 @@
     console.log(discussions);
     let user = '<%- JSON.stringify(user) %>';
     user = JSON.parse(user);
-    const userID = user._id;
-    let messages = '<%- JSON.stringify(messages) %>';
-    messages = JSON.parse(messages);
+    const userID = user.userID;
+
 
     discussions.forEach(discussion => {
         const li = document.createElement("li");
@@ -95,7 +94,7 @@
         document.querySelector(".discussion-listed ul").appendChild(li);
     });
 
-    let presentDiscussion = '<%- JSON.stringify(presentDiscussion) %>';
+    let presentDiscussion = '<%- JSON.stringify(presentDiscussion).replace("/\\n/g", " ") %>';
     presentDiscussion = JSON.parse(presentDiscussion);
     console.log(presentDiscussion);
 
@@ -127,7 +126,7 @@
 </script>
 <section class="new-form new-discussion-form">
     <div class="form-container">
-        <form action = "teacher/course/<%=pCourse._id%>/discussion" method="POST" enctype="multipart/form-data">
+        <form id="form-container-new" action = "teacher/course/<%=pCourse._id%>/discussion" method="POST" enctype="multipart/form-data">
             <div class="exit-btn" id="exit-discussion">
                 <i class="fas fa-times"></i>
             </div>
@@ -193,7 +192,7 @@
 </section>
 <!-- end form -->
 <section class="new-form grading-discussion">
-    <div class="form-container">
+    <div class="form-container" id="form-container-grading">
         <form action="">
             <div class="exit-btn" id="exit-grading">
                 <i class="fas fa-times"></i>
@@ -250,11 +249,9 @@
     let pCourse = '<%- JSON.stringify(pCourse) %>';
     pCourse = JSON.parse(pCourse);
     // Get the form container and form
-    const formDiscussion = document.querySelector('.new-form new-discussion-form');
-    const formContainer = formDiscussion.querySelector('.form-container');
-    const form = formContainer.querySelector('form');
+    const formContainer = document.querySelector('#form-container-new');
 
-    form.addEventListener('submit', async (e) => {
+    formContainer.addEventListener('submit', async (e) => {
         e.preventDefault();
         
         const pCourseID = pCourse._id;
@@ -287,20 +284,37 @@
     crossorigin="anonymous"
 ></script>
  <script >
+    document.addEventListener('DOMContentLoaded', () => {
+        let messages = '<%- JSON.stringify(messages).replace(/\\n/g, " "); %>';
+        messages = JSON.parse(messages);
+        messages = messages.filter(message => message.discussionID === presentDiscussion._id);
+        console.log(messages);
+
+        if (messages) {
+            messages.forEach(message => {
+                if (message.senderID === userID) {
+                    ownerMessage(message);
+                } else {
+                    othersMessage(message);
+                }
+            });
+        }
+        document.querySelector('#discussion-board').scrollTop = document.querySelector('#discussion-board').scrollHeight;
+    });
     const socket = io('/user');
+    let pCourseIO = '<%- JSON.stringify(pCourse) %>';
+    pCourseIO = JSON.parse(pCourseIO);
 
-
-    const formChatContainer = document.querySelector('.chat-form-container');
-    const formChat = formChatContainer.querySelector('form');
+    let teacher = '<%- JSON.stringify(teacher) %>';
+    teacher = JSON.parse(teacher);
+    const formChat = document.querySelector('.chat-form-teacher');
     formChat.addEventListener('submit', async (e) => {
         e.preventDefault();
         const message = formChat.querySelector('textarea').value;
         try {
             if(message) {
-                socket.emit('message', message);
                 // outputMessage(message);
-
-                const res = await fetch(`/teacher/course/${pCourse._id}/discussion/${presentDiscussion._id}/saveChat`, {
+                const res = await fetch(`/teacher/course/${pCourseIO._id}/discussion/${presentDiscussion._id}/saveChat`, {
                     method: 'POST',
                     body: JSON.stringify({
                         message: message
@@ -309,24 +323,25 @@
                         'Content-Type': 'application/json'
                     }
                 });
-                message.value = '';
-                socket.emit('message', message);
                 
                 const data = await res.json();
                 if(res.status >= 200 && res.status < 300) {
+                    socket.emit('message', data);
                     const div = document.createElement('div');
+                    formChat.querySelector('textarea').value = '';
                     div.classList.add('owner-msg');
                     div.innerHTML = `<div class="user-name">
                             <i class="fas fa-user-circle"></i>
-                            <span>${user.name}</span>
+                            <span>${data.senderID}</span>
                             </div>
                             <div class="msg">
-                                <p>${message}</p>
+                                <p>${data.message}</p>
                             </div>
                             <div class="time">
-                                <span>${moment(data.dateTime).fromNow()}</span>
+                                <span>${moment(data.createAt).fromNow()}</span>
                             </div>`;
                     document.querySelector('.discussion-board').appendChild(div);
+                    document.querySelector('#discussion-board').scrollTop = document.querySelector('#discussion-board').scrollHeight;
                 }
 
             }
@@ -336,29 +351,46 @@
         }
     });
 
-    function outputMessage(message) {
+    socket.on('chat-message', (message) => {
+        othersMessage(message);
+    });
+    function ownerMessage(message) {
+        const div = document.createElement('div');
+        div.classList.add('owner-msg');
+        div.innerHTML = `<div class="user-name">
+                            <i class="fas fa-user-circle"></i>
+                            <span>${message.senderID}</span>
+                        </div>
+                        <div class="msg">
+                            <p>${message.message}</p>
+                        </div>
+                        <div class="time">
+                            <span>${moment(message.createAt).fromNow()}</span>
+                        </div>`;
+        document.querySelector('.discussion-board').appendChild(div);
+        document.querySelector('#discussion-board').scrollTop = document.querySelector('#discussion-board').scrollHeight;
+    }
+    function othersMessage(message) {
         const div = document.createElement('div');
         div.classList.add('other-msg');
         div.innerHTML = `<div class="user-name">
                             <i class="fas fa-user-circle"></i>
-                            <span>${user.name}</span>
+                            <span>${message.senderID}</span>
                         </div>
                         <div class="msg">
-                            <p>${message}</p>
+                            <p>${message.message}</p>
                         </div>
                         <div class="time">
-                            <span>${moment(data.dateTime).fromNow()}</span>
+                            <span>${moment(message.createAt).fromNow()}</span>
                         </div>`;
         document.querySelector('.discussion-board').appendChild(div);
+        document.querySelector('#discussion-board').scrollTop = document.querySelector('#discussion-board').scrollHeight;
     }
-    socket.on('chat-message', (message) => {
-        outputMessage(message);
-    });
 
  </script>
  <script>
-    const formGrade = document.querySelector('.form-container');
-    const gradeForm = formContainer.querySelector('form');
+    const formGrade = document.querySelector('#form-container-grading');
+    const gradeForm = formGrade.querySelector('form');
 
     gradeForm.addEventListener('submit', async (e) => {
         e.preventDefault();

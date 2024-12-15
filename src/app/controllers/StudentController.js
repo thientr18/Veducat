@@ -443,6 +443,38 @@ class StudentController {
             res.status(500).send({ message: "An error occurred", error });
         }
     }
+    async discussion_save_chat (req, res, next) {
+        const user = res.locals.user;
+        const { _id, dID } = req.params;
+        const { message } = req.body;
+
+
+
+        try {
+            const student = await Student.findOne({ studentID: user.userID });
+            if (!student) {
+                return res.status(404).json({ message: "Student not found" });
+            }
+            console.log(student);
+
+            await Message.create(
+                { discussionID: dID, 
+                    message: message, 
+                    senderID: student.studentID, });  
+
+            let messages = await Message.find({ discussionID: dID });
+            messages = messages.map(m => {
+                return { ...m._doc, isSender: m.senderID === student.studentID };
+            });
+            const lastMessage = messages[messages.length - 1];
+            console.log(messages);
+
+            res.status(201).json({ message: lastMessage.message, senderID: lastMessage.senderID, createAt: lastMessage.createdAt });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+        
+    }
 }
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
