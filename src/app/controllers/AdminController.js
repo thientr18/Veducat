@@ -78,7 +78,6 @@ class AdminController {
                 };
             });
 
-            console.log(updatedStudents);
             res.render('admin/manage_student/editStudent', { students: updatedStudents });
         }
         catch (err) {

@@ -565,7 +565,6 @@ class TeacherController {
                 return { ...m._doc, isSender: m.senderID === teacher.teacherID };
             });
             const lastMessage = messages[messages.length - 1];
-            console.log(messages);
             res.status(201).json({ message : lastMessage.message, senderID: lastMessage.senderID, createdAt: lastMessage.createAt });
         } catch (error) {
             res.status(500).json({ message: error.message });
@@ -673,7 +672,6 @@ class TeacherController {
                         assignedBy: teacher.teacherID,
                         createdAt: Date.now(),
                     });
-                    console.log(students);
                     students.forEach(async student => {
                         await TaskforStudent.create({
                             studentID: student.studentID, taskID: homework._id});
@@ -738,12 +736,9 @@ class TeacherController {
         const {title, description,deadline} = req.body;
         const files = req.files;
 
-        console.log(files, title, description, deadline);
-
         upload(req, res, async (err) => {
             try {
                 const homework = await Task.findById( hID);
-                console.log(homework);
                 if(files.file == null){
                     await Task.updateOne(
                         {_id : hID},

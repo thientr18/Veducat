@@ -56,8 +56,6 @@ class StudentController {
                 };
             });
 
-            console.log(enrichedAnnouncements);
-
             res.render('student/index', { user, student, studentCourses, announcements: enrichedAnnouncements });
         } catch (error) {
             console.error(error);
