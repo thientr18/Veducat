@@ -44,6 +44,10 @@ router.get('/course/:_id/announcement', requireAuthZ('student'), studentControll
 router.get('/course/:_id/contact', requireAuthZ('student'), studentController.contact_get);
 router.get('/course/:_id/grade', requireAuthZ('student'), studentController.grade_get);
 router.get('/course/:_id/discussion', requireAuthZ('student'), studentController.discussion_get);
+
+router.get('/course/:_id/discussion/:dID', requireAuthZ('student'), studentController.discussion_get);
+router.post('/course/:_id/discussion/:dID/saveChat', requireAuthZ('student'), studentController.discussion_save_chat);
+
 router.get('/course/:_id/material/:mID', requireAuthZ('student'), studentController.material_detail_get);
 router.get('/course/:_id/material', requireAuthZ('student'), studentController.material_get);
 router.get('/course/:_id/homework/:hID/submission', requireAuthZ('student'), studentController.homework_submission_get);
