@@ -205,9 +205,16 @@
             <h2>Grading Form</h2>
             <label for="studentID">Student ID</label>
             <select name="studentID" id="id-selected">
-                <option value="null">--Select Student ID--</option>
-                <option value="ITITIU21284">ITITIU21284</option>
-                <option value="ITITIU21285">ITITIU21285</option>
+                <script>
+                    let students = '<%- JSON.stringify(students) %>';
+                    students = JSON.parse(students);
+                    students.forEach(student => {
+                        const option = document.createElement("option");
+                        option.value = student.studentID;
+                        option.textContent = student.studentID;
+                        document.querySelector("#id-selected").appendChild(option);
+                    });
+                </script>
             </select>
             <script>
                 document.querySelector("#id-selected").addEventListener("change", function() {
@@ -245,6 +252,57 @@
         </form>
     </div>
 </section>
+<script>
+    let message = '<%- JSON.stringify(list).replace(/\\/g, "\\\\") %>';
+    list = JSON.parse(list);
+    const studentSubmissionList = document.querySelector('.student-discussion-list table');
+    list.forEach(student => {
+        const sID = student._id;
+        const tr = document.createElement('tr');
+        const studentID = student.studentID;
+        const studentName = student.studentName;
+        const content = student.content;
+        const td1 = document.createElement('td');
+        const td2 = document.createElement('td');
+        const td3 = document.createElement('td');
+        const td4 = document.createElement('td');
+        const td5 = document.createElement('td');
+        const td6 = document.createElement('td');
+        td1.classList.add('id');
+        td2.classList.add('fullname');
+        td3.classList.add('writing');
+        td4.classList.add('attach');
+        td5.classList.add('time-submission');
+        td6.classList.add('grading');
+        td1.textContent = studentID;
+        td2.textContent = studentName;
+        td5.textContent = new Date(student.submittedAt).toLocaleDateString();
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.name = 'grade';
+        input.id = 'grade';
+        input.min = '0';
+        input.max = '100';
+        td6.appendChild(input);
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        tr.appendChild(td3);
+        tr.appendChild(td4);
+        tr.appendChild(td5);
+        tr.appendChild(td6);
+        studentSubmissionList.appendChild(tr);
+
+    });
+    if (list.length === 0) {
+        const tr = document.createElement('tr');
+        tr.classList.add('empty-content');
+        const td = document.createElement('td');
+        td.colSpan = 6;
+        td.textContent = 'No submission yet';
+        tr.appendChild(td);
+        studentSubmissionList.appendChild(tr);
+    }
+</script>
 <script> 
     let pCourse = '<%- JSON.stringify(pCourse) %>';
     pCourse = JSON.parse(pCourse);

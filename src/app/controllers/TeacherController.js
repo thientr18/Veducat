@@ -338,13 +338,25 @@ class TeacherController {
             }
             let pCourse = await ProgressingCourse.findById(_id)
             const course = await Course.findOne({ courseID: pCourse.courseID });
-            const student = await Student.findOne({ studentID: pCourse.students });
+            const students = await Student.find({ studentID: pCourse.students });
             const discussions = await Discussion.find({ pCourseID: pCourse._id });
             const presentDiscussion = await Discussion.findById(dID);   
             const messages = await Message.find({ discussionID: { $in: discussions.map(d => d._id) } });
             pCourse = { ...pCourse._doc, courseName: course.name, courseDescription: course.description };
+            console.log(messages);
 
-            res.render('teacher/course_discussion', { user, teacher, pCourse, student, discussions, messages, presentDiscussion });
+            const list = await Promise.all(messages.map(async msg => {
+                const student = students.find(s => s.studentID === msg.senderID);
+                const message = await Message.find({ senderID: student.studentID });
+                console.log(messages);
+                return {
+                    ...msg._doc,
+                    studentName: student?.name || null,
+                    studentID: student?.studentID || null,
+                };
+            }));
+
+            res.render('teacher/course_discussion', { user, teacher, pCourse, students, discussions, messages, presentDiscussion, list });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
