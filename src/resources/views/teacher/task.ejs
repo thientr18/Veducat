@@ -80,4 +80,37 @@
             courseSelect.appendChild(option);
         });
     </script>
+
+<script>
+    
+    // Get the form container and form
+    const formContainer = document.querySelector('.form-container');
+    const form = formContainer.querySelector('form');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const pCourseID = form.querySelector('select[name="course"]').value;
+        const title = form.querySelector('input[name="title"]').value;
+        const description = form.querySelector('textarea').value;
+        const files = form.querySelector('input[type="file"]').files;
+        const courseID = pCourseID;
+        const deadline = form.querySelector('input[type="datetime-local"]').value;
+        const formData = new FormData(e.target);
+
+        formData.append('courseID', courseID);
+        formData.append('description', description);
+        try {
+            const res = await fetch(`/teacher/course/${pCourseID}/homework`, {
+                method: 'POST',
+                body: formData,
+            });
+            const data = await res.json();
+            if(res.status >= 200 && res.status < 300) {
+                window.location.href = `/teacher/course/${pCourseID}/homework`;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    });
+</script>
     <%- include ('../partials/main/footer.ejs'); -%>
