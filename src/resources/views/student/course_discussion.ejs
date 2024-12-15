@@ -173,7 +173,6 @@
         let messages = '<%- JSON.stringify(messages).replace(/\\n/g, " "); %>';
         messages = JSON.parse(messages);
         messages = messages.filter(message => message.discussionID === presentDiscussion._id);
-
         if (messages) {
             messages.forEach(message => {
                 if (message.senderID === userID) {
