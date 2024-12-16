@@ -41,9 +41,11 @@ mongoose.connect(process.env.MONGO_DB)
     usp.on('connection', onConnected)
     function onConnected(socket) {
       console.log('Socket connected')
+
     
       socket.on('disconnect', () => {
         console.log('Socket disconnected')
+
       })
     
       socket.on('message', (data) => {
