@@ -85,6 +85,7 @@ class StudentController {
         }
     }
 
+    // GET /student/course/:_id/announcement
     async announcement_get(req, res, next) {
         const user = res.locals.user;
         const { _id } = req.params;

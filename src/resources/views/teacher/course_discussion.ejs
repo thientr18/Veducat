@@ -15,6 +15,11 @@
             </ul>
         </div>
     </div>
+    <script>
+        document.querySelector("#discussion-form").addEventListener("click", function() {
+            document.querySelector(".new-discussion-form").classList.add("show");
+        });
+    </script>
     <!-- Container -->
     <div class="right-side" id="discussion-content-id">
         <div class="topic-header">
@@ -134,7 +139,7 @@
             </div>
             <script>
                 document.querySelector("#exit-discussion").addEventListener("click", function() {
-                    document.querySelector(".new-discussion-form").style.display = "none";
+                    document.querySelector(".new-discussion-form").classList.remove("show");
                 });
             </script>
             <h2>Discussion Creation Form</h2>
@@ -293,10 +298,10 @@
         e.preventDefault();
         
         const pCourseID = pCourse._id;
-        const topic = form.querySelector('input[name="topic"]').value;
-        const description = form.querySelector('textarea').value;
-        const title = form.querySelector('input[name="title"]').value;
-        const files = form.querySelector('input[type="file"]').files;
+        const topic = formContainer.querySelector('input[name="topic"]').value;
+        const description = formContainer.querySelector('textarea').value;
+        const title = formContainer.querySelector('input[name="title"]').value;
+        const files = formContainer.querySelector('input[type="file"]').files;
         const formData = new FormData(e.target);
 
         formData.append('description', description);
