@@ -433,6 +433,9 @@ ul li p {
   width: 100%;
   height: 100%; }
 
+.new-form.show {
+  display: block; }
+
 .new-form .form-container {
   display: flex;
   justify-content: center;
