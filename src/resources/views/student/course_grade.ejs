@@ -19,21 +19,57 @@
                     <th>Grade</th>
                     <th>Feedback</th>
                 </tr>
-                <tr>
-                    <td>Homework 1</td>
-                    <td>Write a program that reads a string from the user containing a date in the form mm/dd/yyyy. It should print the date in the form March 12, 2014.</td>
-                    <td>
-                        <a href="#">Homework1.pdf</a>
-                    </td>
-                    <td>100</td>
-                    <td>
-                        <a href="mailto:k@mail.com?subject=FEEDBACK ABOUT THE HOMEWORK 1 - COURSENAME
-                        &body=Full Name: Ung Huynh Phuc - ID: ITITIU21284">Send Feedback</a>
-                    </td>
-                </tr>
             </table>
         </div>
     </div>
 </section>
+<script>
+    let submissions = '<%- JSON.stringify(submissions).replace(/\\/g, "\\\\") %>';
+    submissions = JSON.parse(submissions);
+
+    const gradedListed = document.querySelector('.graded-listed table');
+
+    console.log(submissions);
+    submissions.forEach(submission => {
+        const sID = submission._id;
+        const tr = document.createElement('tr');
+        const homework = submission.taskName;
+        const writing = submission.description;
+        const attach = submission.files;
+        const grade = submission.graded;
+        const feedback = submission.feedback;
+        const td1 = document.createElement('td');
+        const td2 = document.createElement('td');
+        const td3 = document.createElement('td');
+        const td4 = document.createElement('td');
+        const td5 = document.createElement('td');
+        td1.textContent = homework;
+        td2.textContent = writing;
+        attach.forEach(file => {
+            const div = document.createElement('div');
+            div.classList.add('submission-file');
+            const a = document.createElement('a');
+            a.href = `\\..\\..\\${file.filePath}`;
+            a.textContent = file.fileName;
+            div.appendChild(a);
+            td3.appendChild(div);
+        });
+        if (grade){
+            td4.textContent = grade;
+        } else {
+            td4.textContent = 'Not Graded Yet';
+        }
+        const a = document.createElement('a');
+        a.href = `mailto:${submission.taskID}?subject=FEEDBACK ABOUT THE HOMEWORK ${homework} - COURSENAME&body=Full Name: ${submission.studentName} - ID: ${submission.studentID}`;
+        a.textContent = 'Send Feedback';
+        td5.appendChild(a);
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        tr.appendChild(td3);
+        tr.appendChild(td4);
+        tr.appendChild(td5);
+        gradedListed.appendChild(tr);
+    });
+</script>
 
 <%- include('partials/footer.ejs'); -%>
