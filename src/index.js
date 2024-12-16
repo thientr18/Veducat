@@ -51,7 +51,6 @@ mongoose.connect(process.env.MONGO_DB)
       socket.on('message', (data) => {
         socket.broadcast.emit('chat-message', data)
       })
-
     }
 
   })
