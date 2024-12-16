@@ -386,8 +386,15 @@ class StudentController {
             let pCourse = await ProgressingCourse.findById(_id);
             const course = await Course.findOne({ courseID: pCourse.courseID });
             pCourse = { ...pCourse._doc, courseName: course.name, courseDescription: course.description };
+            let submissions = await Submission.find({ studentID: student.studentID });
+            const submissionsFiles = await SubmissionFiles.find({ submissionID: { $in: submissions.map(s => s._id) } });
+            submissions = submissions.map(submission => {
+                const files = submissionsFiles.filter(f => f.submissionID.toString() === submission._id.toString());
+                return { ...submission._doc, files };
+            });
+            console.log(submissions);
 
-            res.render('student/course_grade', { user, student, pCourse});
+            res.render('student/course_grade', { user, student, pCourse, submissions });
         } catch {
             console.error(error);
             res.status(500).send({ message: "An error occurred", error });
