@@ -54,11 +54,7 @@ Veducat has three main user roles:
    ```sh
    npm install
    ```
-4. **Install dotenv for environment management:** 🔧
-   ```sh
-   npm install dotenv
-   ```
-5. **Create an `.env` file in the root directory** and add the following:
+4. **Create an `.env` file in the root directory** and add the following:
    ```sh
    PORT=3000
    MONGO_DB=<your_database_link>
@@ -67,11 +63,11 @@ Veducat has three main user roles:
    OUTLOOK_EMAIL=<your_outlook_email>
    OUTLOOK_PASSWORD=<your_outlook_password>
    ```
-6. **Start the server:** 🚀
+5. **Start the server:** 🚀
    ```sh
    npm start
    ```
-7. **Initialize the Database:** 🗄️
+6. **Initialize the Database:** 🗄️
    - Since there is no data in your database yet, create an initial admin account.
    - Open the `users` collection in the `Veducat` database.
    - Click **Insert Document**, click the bracket icon `{}` and add the following:
@@ -97,7 +93,7 @@ Veducat has three main user roles:
    }
    ```
    
-8. **Access the Application:** 🌐
+7. **Access the Application:** 🌐
    - Open your browser and go to `http://localhost:3000`
    - Login with:
      - **Username:** `admin`
